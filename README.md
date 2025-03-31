@@ -42,3 +42,7 @@ Główne funkcjonalności obejmują:
 
 ## :dart: Cel Projektu
 Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzędzia do podejmowania trafnych decyzji inwestycyjnych poprzez efektywną analizę oraz prognozowanie trendów na rynku nieruchomości w Polsce.
+
+## :newspaper: Templates
+![logo_realestate](https://github.com/user-attachments/assets/3e490acc-2581-4537-99e5-dd5e59b1368f)
+![makieta_stona_główna](https://github.com/user-attachments/assets/281210fe-bcdf-44ff-9b5f-949c46e5f5a5)
