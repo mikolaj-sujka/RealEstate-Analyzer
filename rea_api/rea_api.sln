@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35913.81 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rea_api", "rea_api\rea_api.csproj", "{E9ADC14D-58C5-42FC-BB89-71AD117D136F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4C4CE7F8-0BD0-4F4A-9E4F-2DC8B4E7B50A}
+	EndGlobalSection
+EndGlobal
