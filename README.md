@@ -46,3 +46,10 @@ Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzęd
 ## :newspaper: Templates
 ![logo_realestate](https://github.com/user-attachments/assets/3e490acc-2581-4537-99e5-dd5e59b1368f)
 ![makieta_stona_główna](https://github.com/user-attachments/assets/281210fe-bcdf-44ff-9b5f-949c46e5f5a5)
+
+
+## :bangbang: Kluczowe funkcjonalności wraz z diagramami
+
+### :closed_lock_with_key: Auth 
+
+### :arrows_counterclockwise: Web scrapping wraz z cyklicznym pobieraniem danych
