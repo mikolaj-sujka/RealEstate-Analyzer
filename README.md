@@ -7,8 +7,6 @@ Główne funkcjonalności obejmują:
 
 - Szczegółową analizę geograficzną oraz czasową danych rynkowych.
 
-- Inteligentny system rekomendacyjny wykorzystujący algorytm k-NN.
-
 - Zaawansowane modele predykcyjne oparte na uczeniu maszynowym.
 
 - Monitoring rynku w czasie rzeczywistym z interaktywnymi wizualizacjami danych.
@@ -34,7 +32,7 @@ Główne funkcjonalności obejmują:
 - MSSQL
 
 #### DevOps i hosting
-- Azure (App Services, SQL Database, Application Insights)
+- Firebase
 
 - Docker
 
