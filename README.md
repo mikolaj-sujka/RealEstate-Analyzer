@@ -42,8 +42,10 @@ Główne funkcjonalności obejmują:
 Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzędzia do podejmowania trafnych decyzji inwestycyjnych poprzez efektywną analizę oraz prognozowanie trendów na rynku nieruchomości w Polsce.
 
 ## :newspaper: Templates
-![logo_realestate](https://github.com/user-attachments/assets/3e490acc-2581-4537-99e5-dd5e59b1368f)
-![makieta_stona_główna](https://github.com/user-attachments/assets/281210fe-bcdf-44ff-9b5f-949c46e5f5a5)
+![ChatGPT Image Apr 27, 2025, 06_46_07 PM](https://github.com/user-attachments/assets/f0ccf635-077c-4f68-bf36-8b0d2659374f)
+![ChatGPT Image Apr 27, 2025, 06_49_08 PM](https://github.com/user-attachments/assets/1083c819-23cd-4780-a70a-9477f08efe7b)
+![ciekawe_liczby_fixed](https://github.com/user-attachments/assets/a01e3754-1218-486b-b0e2-966df3093ba3)
+![ChatGPT Image Apr 27, 2025, 09_59_33 PM](https://github.com/user-attachments/assets/a4acb2dc-69fc-4df5-8727-120e23a20386)
 
 
 ## :bangbang: Kluczowe funkcjonalności wraz z diagramami
