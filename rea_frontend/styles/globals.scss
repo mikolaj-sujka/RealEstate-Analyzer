@@ -1,0 +1,20 @@
+@layer theme, base, mantine, components, utilities;
+
+@import 'tailwindcss';
+
+@import '@mantine/core/styles.layer.css';
+@import "./navigation";
+
+$primary: #040813;
+
+:root {
+  --navbar-button-color: #21283b;
+}
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+  font-family: sans-serif;
+  background-color: $primary;
+}
