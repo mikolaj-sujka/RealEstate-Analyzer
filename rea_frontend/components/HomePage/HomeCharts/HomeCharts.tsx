@@ -43,6 +43,12 @@ const HomeCharts = () => {
             legendProps={{ verticalAlign: "bottom", height: 50 }}
             withDots={false}
             withTooltip={false}
+            lineProps={{
+              isAnimationActive: true,
+              animationBegin: 0,
+              animationDuration: 2000,
+              animationEasing: "ease-out",
+            }}
           />
         </div>
         <div className="flex flex-row justify-center w-full gap-4">
@@ -76,7 +82,13 @@ const HomeCharts = () => {
                 tickLine: { stroke: "#555" },
                 tick: { fill: "#aaa" },
               }}
-              barProps={{ barSize: 25 }}
+              barProps={{
+                barSize: 25,
+                isAnimationActive: true,
+                animationBegin: 0,
+                animationDuration: 2000,
+                animationEasing: "ease-out",
+              }}
             />
           </div>
           <div className="chart-card">
@@ -89,8 +101,14 @@ const HomeCharts = () => {
               h={110}
               data={rdiTrend}
               trendColors={{ positive: "teal.6", negative: "red.6" }}
-              fillOpacity={0}
+              fillOpacity={0.1}
               curveType="natural"
+              areaProps={{
+                isAnimationActive: true,
+                animationBegin: 0,
+                animationDuration: 2000,
+                animationEasing: "ease-out",
+              }}
             />
           </div>
         </div>
