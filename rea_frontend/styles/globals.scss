@@ -1,16 +1,15 @@
 @layer theme, base, mantine, components, utilities;
-
 @import "tailwindcss";
+@import "./UI/styles.scss";
 
 @import url("https://fonts.googleapis.com/css2?family=Indie+Flower&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
-
 @import "@mantine/core/styles.layer.css";
-@import "./navigation";
 
 $primary: #040813;
 
 :root {
-  --navbar-button-color: #21283b;
+  --primary: #040813;
+  --secondary: #141927;
 }
 
 html,

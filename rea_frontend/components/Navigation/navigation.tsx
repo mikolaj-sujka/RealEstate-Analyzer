@@ -41,7 +41,7 @@ const Navigation: FC<NavigationProps> = ({ children }) => {
         <div className="flex items-center space-x-4">
           <Link
             href="/app"
-            className="bg-[var(--navbar-button-color)]
+            className="bg-[var(--secondary)] shadow-md border border-white/20
             hover:bg-[var(--navbar-button-hover)] text-white px-4 py-2 rounded-md transition-colors"
           >
             Przejdź do Real Estate Analyzer
