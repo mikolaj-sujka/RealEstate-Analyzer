@@ -17,13 +17,14 @@ const Navigation: FC<NavigationProps> = ({ children }) => {
 
   return (
     <header className="bg-[#040813] text-white">
-      <div className="container mx-auto px-4 flex items-center justify-between h-16">
+      <div className="mx-10 px-4 flex items-center justify-around h-16">
         <Link href="/" className="flex items-center space-x-2">
           <Image src="/logo.png" alt="REAL ESTATE" width={60} height={60} />
           <span className="text-xl font-semibold">REAL ESTATE</span>
         </Link>
 
-        <nav className="hidden md:flex space-x-6">
+        {/* To fix ml-30 */}
+        <nav className="hidden md:flex space-x-6 ml-30">
           {NAV_ITEMS.map((item) => (
             <Link
               key={item.href}

@@ -1,7 +1,8 @@
-import '../styles/globals.scss';
+import "../styles/globals.scss";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { Navigation } from "@/components/Navigation";
 import { MantineProvider } from "@mantine/core";
+import { HomePage } from "@/components/HomePage";
 
 export const Home = () => {
   return (
@@ -10,6 +11,7 @@ export const Home = () => {
         <Navigation>
           <LanguageToggle />
         </Navigation>
+        <HomePage />
       </MantineProvider>
     </>
   );

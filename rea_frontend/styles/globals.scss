@@ -1,8 +1,10 @@
 @layer theme, base, mantine, components, utilities;
 
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@import '@mantine/core/styles.layer.css';
+@import url("https://fonts.googleapis.com/css2?family=Indie+Flower&family=Raleway:ital,wght@0,100..900;1,100..900&display=swap");
+
+@import "@mantine/core/styles.layer.css";
 @import "./navigation";
 
 $primary: #040813;
@@ -15,6 +17,6 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: sans-serif;
   background-color: $primary;
+  font-family: "Raleway", sans-serif;
 }
