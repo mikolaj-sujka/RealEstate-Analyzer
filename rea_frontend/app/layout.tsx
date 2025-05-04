@@ -1,4 +1,7 @@
+import { MantineProvider } from "@mantine/core";
 import type { Metadata } from "next";
+import { SplashScreen } from "@/components/SplashScreen/SplashScreen";
+import "../styles/globals.scss";
 
 export const metadata: Metadata = {
   title: "Real Estate Analyzer",
@@ -12,7 +15,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <MantineProvider>
+          <SplashScreen>{children}</SplashScreen>
+        </MantineProvider>
+      </body>
     </html>
   );
 }
