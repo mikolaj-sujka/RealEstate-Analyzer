@@ -1,14 +1,15 @@
-import { HomeCharts } from "./HomeCharts";
+"use client";
 
-const HomePage = () => {
-  return (
-    <>
-      <div className="flex items-center justify-center w-full h-16 text-white my-4">
-        <h1 className="text-5xl">Przejdź do Real Estate</h1>
-      </div>
-      <HomeCharts />
-    </>
-  );
-};
+import { HomeCharts } from "./HomeCharts";
+import { PageHeader, PageHeaderTitle } from "./HomePage.styled";
+
+const HomePage: React.FC = () => (
+  <>
+    <PageHeader>
+      <PageHeaderTitle>Przejdź do Real Estate</PageHeaderTitle>
+    </PageHeader>
+    <HomeCharts />
+  </>
+);
 
 export default HomePage;

@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import React, { FC } from "react";
 import { NavigationProps } from "@/models/navigation";
+import * as S from "./Navigation.styled";
+import LanguageToggle from "./LanguageToggle/LanguageToggle";
 
 export const NAV_ITEMS = [
   { label: "Start", href: "/" },
@@ -12,44 +13,39 @@ export const NAV_ITEMS = [
   { label: "Moduły", href: "/modules" },
 ];
 
-const Navigation: FC<NavigationProps> = ({ children }) => {
+const Navigation: FC<NavigationProps> = ({ }) => {
   const pathname = usePathname();
 
   return (
-    <header className="bg-[#040813] text-white">
-      <div className="mx-10 px-4 flex items-center justify-around h-16">
-        <Link href="/" className="flex items-center space-x-2">
+    <S.Header>
+      <S.Container>
+        <S.LogoLink href="/">
           <Image src="/logo.png" alt="REAL ESTATE" width={60} height={60} />
-          <span className="text-xl font-semibold">REAL ESTATE</span>
-        </Link>
+          <span style={{ fontSize: "1.25rem", fontWeight: 600 }}>
+            REAL ESTATE
+          </span>
+        </S.LogoLink>
 
-        {/* To fix ml-30 */}
-        <nav className="hidden md:flex space-x-6 ml-30">
+        <S.Nav>
           {NAV_ITEMS.map((item) => (
-            <Link
+            <S.NavLink
               key={item.href}
               href={item.href}
-              className={`hover:text-gray-300 transition-colors ${
-                pathname === item.href ? "text-white" : "text-gray-400"
-              }`}
+              $active={pathname === item.href}
             >
               {item.label}
-            </Link>
+            </S.NavLink>
           ))}
-        </nav>
+        </S.Nav>
 
-        <div className="flex items-center space-x-4">
-          <Link
-            href="/app"
-            className="bg-[var(--secondary)] shadow-md border border-white/20
-            hover:bg-[var(--navbar-button-hover)] text-white px-4 py-2 rounded-md transition-colors"
-          >
+        <S.RightActions>
+          <S.ButtonLink href="/app">
             Przejdź do Real Estate Analyzer
-          </Link>
-          {children}
-        </div>
-      </div>
-    </header>
+          </S.ButtonLink>
+          <LanguageToggle />
+        </S.RightActions>
+      </S.Container>
+    </S.Header>
   );
 };
 
