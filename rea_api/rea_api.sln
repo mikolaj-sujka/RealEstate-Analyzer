@@ -1,9 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35913.81 d17.13
+VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rea_api", "rea_api\rea_api.csproj", "{E9ADC14D-58C5-42FC-BB89-71AD117D136F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Api", "rea_api\RealEstateAnalyzer.Api.csproj", "{E9ADC14D-58C5-42FC-BB89-71AD117D136F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Domain", "RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj", "{6D6D1AB2-A948-4290-A293-3D15DB0A0893}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.WebScrapping", "RealEstateAnalyzer.WebScrapping\RealEstateAnalyzer.WebScrapping.csproj", "{1C3F8906-CD64-43B0-831B-5F37387533B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Application", "RealEstateAnalyzer.Application\RealEstateAnalyzer.Application.csproj", "{9280C8FA-30E9-4191-994E-C02F60A94EED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +21,18 @@ Global
 		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D6D1AB2-A948-4290-A293-3D15DB0A0893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D6D1AB2-A948-4290-A293-3D15DB0A0893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D6D1AB2-A948-4290-A293-3D15DB0A0893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D6D1AB2-A948-4290-A293-3D15DB0A0893}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C3F8906-CD64-43B0-831B-5F37387533B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C3F8906-CD64-43B0-831B-5F37387533B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C3F8906-CD64-43B0-831B-5F37387533B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C3F8906-CD64-43B0-831B-5F37387533B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9280C8FA-30E9-4191-994E-C02F60A94EED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9280C8FA-30E9-4191-994E-C02F60A94EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9280C8FA-30E9-4191-994E-C02F60A94EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9280C8FA-30E9-4191-994E-C02F60A94EED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
