@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.WebScrap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Application", "RealEstateAnalyzer.Application\RealEstateAnalyzer.Application.csproj", "{9280C8FA-30E9-4191-994E-C02F60A94EED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure", "RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj", "{31E6C7D7-AF54-4910-B2AA-BE53568260CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{9280C8FA-30E9-4191-994E-C02F60A94EED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9280C8FA-30E9-4191-994E-C02F60A94EED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9280C8FA-30E9-4191-994E-C02F60A94EED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31E6C7D7-AF54-4910-B2AA-BE53568260CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31E6C7D7-AF54-4910-B2AA-BE53568260CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31E6C7D7-AF54-4910-B2AA-BE53568260CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31E6C7D7-AF54-4910-B2AA-BE53568260CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

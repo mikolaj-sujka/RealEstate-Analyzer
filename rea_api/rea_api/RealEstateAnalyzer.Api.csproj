@@ -15,15 +15,13 @@
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.18" />
     <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.3.1" />
     <PackageReference Include="SqlAlias" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\RealEstateAnalyzer.Application\RealEstateAnalyzer.Application.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

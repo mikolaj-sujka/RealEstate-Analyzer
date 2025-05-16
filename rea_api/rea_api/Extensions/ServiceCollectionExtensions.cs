@@ -77,6 +77,11 @@ public static class ServiceCollectionExtensions
             });
         });
     }
+
+    public static void AddMediatR(this IServiceCollection services)
+    {
+        // services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(typeof(GetListingsByStatusQuery).Assembly));
+    }
 }
 
 public class JobExpirationTimeAttribute : JobFilterAttribute, IApplyStateFilter
