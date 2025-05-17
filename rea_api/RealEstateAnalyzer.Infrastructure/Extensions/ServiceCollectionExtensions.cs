@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SqlAlias;
 
-namespace RealEstateAnalyzer.Infrastructure;
+namespace RealEstateAnalyzer.Infrastructure.Extensions;
 
 public static class ServiceCollectionExtensions
 {
