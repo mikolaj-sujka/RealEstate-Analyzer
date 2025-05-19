@@ -7,17 +7,17 @@ namespace RealEstateAnalyzer.Domain.Entities;
 
 public sealed class Listing : AuditableAggregateRoot
 {
-    public string Title { get; private set; }
-    public Uri Url { get; private set; }
-    public Money Price { get; private set; }
+    public string Title { get; private set; } = null!;
+    public Uri Url { get; private set; } = null!;
+    public Money Price { get; private set; } = null!;
     public decimal AreaM2 { get; private set; }
     public uint Rooms { get; private set; }
     public uint Floor { get; private set;  }
-    public Location Location { get; private set; }
-
-    private readonly List<Uri> _images = new();
-    public IReadOnlyCollection<Uri> Images => _images;
+    public Location Location { get; private set; } = null!;
+    public IList<ListingImage> Images { get; } = null!;
     public MarketType MarketType { get; private set; }
+
+    private Listing() {}
 
     private Listing(string title, Uri url, decimal areaM2, uint rooms, uint floor, decimal amount, string currency,
         string city, string district, string street, string postalCode, decimal? latitude, decimal? longitude, 
@@ -34,6 +34,8 @@ public sealed class Listing : AuditableAggregateRoot
         MarketType = marketType;
 
         CreatedAt = DateTimeOffset.UtcNow;
+
+        Images = new List<ListingImage>();
 
         AddDomainEvent(new ListingCreated(Id));
     }
@@ -62,15 +64,16 @@ public sealed class Listing : AuditableAggregateRoot
         AddDomainEvent(new ListingChanged(Id));
     }
 
-    public void AddImage(Uri image)
+    public void AddImage(ListingImage listingImage)
     {
-        _images.Add(image);
+        Images.Add(listingImage);
     }
 
-    public void RemoveImage(Uri image)
+    public void RemoveImage(Guid listingImageId)
     {
-        _images.Remove(image);
-
+        Images.Remove(Images.FirstOrDefault(x => x.Id == listingImageId) 
+                      ?? throw new ArgumentNullException(nameof(listingImageId)));
+        
         AddDomainEvent(new ListingChanged(Id));
     }
 
@@ -81,7 +84,30 @@ public sealed class Listing : AuditableAggregateRoot
 
     public void ClearImages()
     {
-        _images.Clear();
+        Images.Clear();
         AddDomainEvent(new ListingChanged(Id));
+    }
+}
+
+public sealed class ListingImage : Entity
+{
+    public Guid ListingId { get; private set; }
+    public Uri ImageUrl { get; private set; }
+
+    private ListingImage(Guid listingId, Uri imageUrl)
+    {
+        Id = Guid.NewGuid();
+        ListingId = listingId;
+        ImageUrl = imageUrl;
+    }
+
+    public static ListingImage Create(Guid listingId, Uri image)
+    {
+        return new ListingImage(listingId, image);
+    }
+
+    public void Update(Uri imageUrl)
+    {
+        ImageUrl = imageUrl;
     }
 }

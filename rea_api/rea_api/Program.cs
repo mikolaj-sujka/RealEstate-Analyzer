@@ -1,13 +1,14 @@
-using Microsoft.AspNetCore.Builder;
 using RealEstateAnalyzer.Api.Extensions;
-using RealEstateAnalyzer.Infrastructure;
+using RealEstateAnalyzer.Infrastructure.Extensions;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddOpenApi();
 
-// builder.Services.AddDataLayer(builder.Configuration);
+builder.Services.AddControllers();
+
+builder.Services.AddDataLayer(builder.Configuration);
 
 builder.Services.AddHangfire(builder.Configuration);
 
