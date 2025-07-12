@@ -1,7 +1,7 @@
 "use client"
 
-import SimpleChart from "@/chart-component"
-import Sparkline from "@/sparkline-component"
+import SimpleChart from "@/components/ui/chart-component"
+import Sparkline from "@/components/ui/sparkline-component"
 import AdvancedDataTable from "@/components/advanced-data-table"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"

@@ -4,12 +4,11 @@ import { useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import { MarketData } from "../../models";
 
-interface MarketChartProps {
+type TrendChartProps = {
   data: MarketData[];
-  height?: number;
 }
 
-export const MarketChart = ({ data, height = 400 }: MarketChartProps) => {
+export const TrendChart = ({ data }: TrendChartProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -19,52 +18,52 @@ export const MarketChart = ({ data, height = 400 }: MarketChartProps) => {
       backgroundColor: "transparent",
       tooltip: { trigger: "axis", axisPointer: { type: "cross" } },
       legend: {
-        data: ["Average Price", "New Listings", "Sales Volume", "Inventory"],
+        data: ["Prices", "Transactions", "Inventory", "Demand Index"],
+        top: 10,
       },
+      grid: { left: "3%", right: "4%", bottom: "3%", containLabel: true },
       xAxis: { type: "category", data: data.map((d) => d.month) },
       yAxis: [
-        { type: "value", name: "Price (PLN)" },
-        { type: "value", name: "Count", position: "right" },
+        { type: "value", name: "Prices" },
+        { type: "value", name: "Count/Index", position: "right" },
       ],
       series: [
         {
-          name: "Average Price",
+          name: "Prices",
           type: "line",
           yAxisIndex: 0,
-          data: data.map((d) => d.averagePrice),
+          data: data.map((d) => d.prices),
           smooth: true,
         },
         {
-          name: "New Listings",
+          name: "Transactions",
           type: "bar",
           yAxisIndex: 1,
-          data: data.map((d) => d.listings),
-        },
-        {
-          name: "Sales Volume",
-          type: "line",
-          yAxisIndex: 1,
-          data: data.map((d) => d.sales),
-          smooth: true,
+          data: data.map((d) => d.totalTransactions),
         },
         {
           name: "Inventory",
           type: "line",
           yAxisIndex: 1,
-          data: data.map((d) => d.totalInventory),
+          data: data.map((d) => d.inventory),
           smooth: true,
           lineStyle: { type: "dashed" },
+        },
+        {
+          name: "Demand Index",
+          type: "line",
+          yAxisIndex: 1,
+          data: data.map((d) => d.demand),
+          smooth: true,
         },
       ],
     };
     chart.setOption(option);
-    const resize = () => chart.resize();
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", () => chart.resize());
     return () => {
-      window.removeEventListener("resize", resize);
       chart.dispose();
     };
   }, [data]);
 
-  return <div ref={ref} style={{ width: "100%", height: `${height}px` }} />;
+  return <div ref={ref} style={{ width: "100%", height: 400 }} />;
 }
