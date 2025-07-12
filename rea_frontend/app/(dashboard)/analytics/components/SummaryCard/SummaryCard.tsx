@@ -1,6 +1,5 @@
-// src/features/analytics/components/SummaryCard.tsx
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { LucideIcon } from "lucide-react";
+import { Paper, Group, Text } from "@mantine/core";
+import { type LucideIcon, TrendingUp, TrendingDown } from "lucide-react";
 
 type SummaryCardProps = {
   title: string;
@@ -18,26 +17,26 @@ export const SummaryCard = ({
   Icon,
 }: SummaryCardProps) => {
   return (
-    <Card className="hover:shadow-lg transition-shadow">
-      <CardHeader className="flex items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-muted-foreground" />
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-        <p
-          className={`text-xs flex items-center ${
-            deltaPositive ? "text-green-500" : "text-red-500"
-          }`}
-        >
-          {deltaPositive ? (
-            <span className="mr-1">▲</span>
-          ) : (
-            <span className="mr-1">▼</span>
-          )}
+    <Paper shadow="sm" p="lg" radius="md" withBorder>
+      <Group justify="space-between" mb="xs">
+        <Text fw={500} size="sm">
+          {title}
+        </Text>
+        <Icon size={16} />
+      </Group>
+      <Text size="2rem" fw={700} mb="xs">
+        {value}
+      </Text>
+      <Group gap="xs">
+        {deltaPositive ? (
+          <TrendingUp size={14} color="var(--mantine-color-green-6)" />
+        ) : (
+          <TrendingDown size={14} color="var(--mantine-color-red-6)" />
+        )}
+        <Text size="xs" c={deltaPositive ? "green" : "red"}>
           {delta} from last month
-        </p>
-      </CardContent>
-    </Card>
+        </Text>
+      </Group>
+    </Paper>
   );
 };

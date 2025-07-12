@@ -1,4 +1,3 @@
-// src/features/analytics/AnalyticsPage.tsx
 "use client";
 
 import { Container } from "@mantine/core";

@@ -1,34 +1,39 @@
-"use client"
+"use client";
 
-import { useState, useEffect, type ReactNode } from "react"
-import Sidebar from "@/components/layout/sidebar"
-import Header from "@/components/layout/header"
-import PageLoader from "@/components/page-loader"
+import { useState, useEffect, type ReactNode } from "react";
+import { AppShell } from "@mantine/core";
+import { PageLoader } from "@/components/PageLoader";
+import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsLoading(false)
-    }, 2000)
+      setIsLoading(false);
+    }, 1500); 
 
-    return () => clearTimeout(timer)
-  }, [])
+    return () => clearTimeout(timer);
+  }, []);
 
   if (isLoading) {
-    return <PageLoader />
+    return <PageLoader />;
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-secondary/50">
-      <Sidebar />
-      <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
+    <AppShell
+      header={{ height: 60 }}
+      navbar={{ width: 250, breakpoint: "sm" }}
+      padding="md"
+    >
+      <AppShell.Header>
         <Header />
-        <main className="flex-1 p-4 md:p-6 lg:p-8">
-          <div className="mx-auto w-full max-w-screen-2xl">{children}</div>
-        </main>
-      </div>
-    </div>
-  )
+      </AppShell.Header>
+      <AppShell.Navbar>
+        <Sidebar />
+      </AppShell.Navbar>
+      <AppShell.Main>{children}</AppShell.Main>
+    </AppShell>
+  );
 }

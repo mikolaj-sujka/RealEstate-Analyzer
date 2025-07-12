@@ -1,46 +1,56 @@
 "use client";
 
-import { Card, CardHeader, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { MapPin, Home, TrendingUp } from "lucide-react";
-import { DistrictData } from "../../models";
+import { Paper, Group, Text, Badge, Box } from "@mantine/core";
+import { MapPin, Home, TrendingUp, TrendingDown } from "lucide-react";
+
+type DistrictData = {
+  district: string;
+  avgPrice: number;
+  properties: number;
+  change: string;
+  trend: "up" | "down";
+};
 
 type DistrictCardProps = {
   item: DistrictData;
 };
 
 export const DistrictCard = ({ item }: DistrictCardProps) => {
-  const TrendIcon = TrendingUp;
-  const variant = item.trend === "up" ? "default" : "destructive";
-  const rotateClass = item.trend === "down" ? "rotate-180" : "";
+  const TrendIcon = item.trend === "up" ? TrendingUp : TrendingDown;
+  const trendColor = item.trend === "up" ? "green" : "red";
 
   return (
-    <Card className="p-4">
-      <CardHeader className="flex justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <MapPin className="h-4 w-4 text-blue-500" />
-          <h3 className="font-semibold">{item.district}</h3>
-        </div>
-        <Badge variant={variant}>
-          <TrendIcon className={`h-3 w-3 mr-1 ${rotateClass}`} />
-          {item.change}
+    <Paper shadow="sm" p="md" radius="md" withBorder>
+      <Group justify="space-between" mb="md">
+        <Group gap="xs">
+          <MapPin size={16} color="var(--mantine-color-blue-6)" />
+          <Text fw={600}>{item.district}</Text>
+        </Group>
+        <Badge color={trendColor} variant="light">
+          <Group gap={4}>
+            <TrendIcon size={12} />
+            <Text size="xs">{item.change}</Text>
+          </Group>
         </Badge>
-      </CardHeader>
-      <CardContent className="space-y-2">
-        <div className="flex justify-between">
-          <span className="text-sm text-muted-foreground">Avg Price:</span>
-          <span className="font-medium">
-            {item.avgPrice.toLocaleString()} PLN/m²
-          </span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-sm text-muted-foreground">Properties:</span>
-          <span className="font-medium flex items-center gap-1">
-            <Home className="h-3 w-3" />
-            {item.properties}
-          </span>
-        </div>
-      </CardContent>
-    </Card>
+      </Group>
+
+      <Box style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <Group justify="space-between">
+          <Text size="sm" c="dimmed">
+            Avg Price:
+          </Text>
+          <Text fw={500}>{item.avgPrice.toLocaleString()} PLN/m²</Text>
+        </Group>
+        <Group justify="space-between">
+          <Text size="sm" c="dimmed">
+            Properties:
+          </Text>
+          <Group gap="xs">
+            <Home size={12} />
+            <Text fw={500}>{item.properties}</Text>
+          </Group>
+        </Group>
+      </Box>
+    </Paper>
   );
 };

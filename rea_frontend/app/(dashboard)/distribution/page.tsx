@@ -1,5 +1,9 @@
-import PropertyDistributionCard from "@/components/dashboard/property-distribution-card"
+"use client";
 
-export default function DistributionPage() {
-  return <PropertyDistributionCard />
+import { usePropertyDistribution } from "./_hooks";
+import { DistributionCard } from "./components";
+
+export default function PropertyDistribution() {
+  const { data } = usePropertyDistribution();
+  return <DistributionCard data={data} />;
 }
