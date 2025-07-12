@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+@import "@mantine/core/styles.css";
+@import "@mantine/dates/styles.css";
+@import "@mantine/notifications/styles.css";
+
 @layer base {
   :root {
     --background: 240 10% 99%;
@@ -24,6 +28,8 @@
     --input: 240 5.9% 90%;
     --ring: 240 5.9% 10%;
     --radius: 0.5rem;
+    --mantine-color-body: #ffffff;
+    --mantine-color-text: #000000;
   }
 
   .dark {
@@ -48,6 +54,11 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
   }
+
+  [data-mantine-color-scheme="dark"] {
+    --mantine-color-body: #1a1b1e;
+    --mantine-color-text: #ffffff;
+  }
 }
 
 @layer base {
@@ -56,5 +67,7 @@
   }
   body {
     @apply bg-background text-foreground;
+    background-color: var(--mantine-color-body);
+    color: var(--mantine-color-text);
   }
 }
