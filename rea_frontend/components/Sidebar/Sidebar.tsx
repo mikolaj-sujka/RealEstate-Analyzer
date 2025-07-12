@@ -130,7 +130,7 @@ export const Sidebar = () => {
                     }}
                     styles={{
                       root: {
-                        "&[data-active]": {
+                        "&[dataActive]": {
                           backgroundColor: "var(--mantine-color-gray-1)",
                           color: "var(--mantine-color-dark-7)",
                         },
@@ -169,7 +169,7 @@ export const Sidebar = () => {
               }}
               styles={{
                 root: {
-                  "&[data-active]": {
+                  "&[dataActive]": {
                     backgroundColor: "var(--mantine-color-gray-1)",
                     color: "var(--mantine-color-dark-7)",
                   },

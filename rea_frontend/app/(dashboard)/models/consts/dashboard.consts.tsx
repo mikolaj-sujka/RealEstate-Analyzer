@@ -1,5 +1,5 @@
-import { ChartData, Column, SparklineData, TransactionData } from "@/models";
-import { Badge } from "@/components/ui/badge";
+import { ChartData, Column, SparklineData, TransactionData } from "@/models/types";
+import { Badge } from "@mantine/core";
 
 export const priceData: ChartData[] = [
   { month: "Sty '24", price: 7000, prediction: 9500 },

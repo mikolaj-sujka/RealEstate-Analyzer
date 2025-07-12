@@ -1,8 +1,5 @@
 "use client";
 
-import { Chart } from "@/components/UI/chart";
-import { DataTable } from "@/components/UI/data-table";
-import Sparkline from "@/components/UI/sparkline-component";
 import { Container, Grid, Paper, Text, Group, Title, Box } from "@mantine/core";
 import {
   IconArrowUpRight,
@@ -16,6 +13,9 @@ import {
   tableColumns,
   transactionsSparkline,
 } from "./models/consts/dashboard.consts";
+import Sparkline from "@/components/Sparkline/Sparkline";
+import { Chart } from "@/components/Chart";
+import { DataTable } from "@/components/DataTable";
 
 export default function DashboardPage() {
   return (

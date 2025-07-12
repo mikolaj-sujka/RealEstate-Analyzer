@@ -2,7 +2,7 @@
 
 import { Card, Container, Grid, Title, Text } from "@mantine/core";
 import { Map } from "lucide-react";
-import { CardContent, CardHeader } from "@/components/ui/card";
+import { CardContent, CardHeader } from "@/components/Card/Card";
 import { usePropertyMap } from "./_hooks";
 import { DistrictCard, MapPlaceholder } from "./components";
 

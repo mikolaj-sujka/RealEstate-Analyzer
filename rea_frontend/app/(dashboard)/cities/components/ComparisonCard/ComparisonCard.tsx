@@ -1,4 +1,5 @@
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { CardHeader, CardTitle, CardContent } from "@/components/Card/Card";
+import { Card } from "@mantine/core";
 
 type ComparisonCardProps = {
   title: string;
