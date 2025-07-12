@@ -66,7 +66,15 @@ export default function DashboardPage() {
             </Text>
             <Box h={40} mt="sm">
               <Sparkline
-                data={[4, 6, 8, 7, 9, 8, 10]}
+                data={[
+                  { value: 4 },
+                  { value: 6 },
+                  { value: 8 },
+                  { value: 7 },
+                  { value: 9 },
+                  { value: 8 },
+                  { value: 10 },
+                ]}
                 color="var(--mantine-color-blue-6)"
               />
             </Box>
@@ -89,7 +97,15 @@ export default function DashboardPage() {
             </Text>
             <Box h={40} mt="sm">
               <Sparkline
-                data={[8, 6, 7, 5, 4, 6, 5]}
+                data={[
+                  { value: 8 },
+                  { value: 6 },
+                  { value: 7 },
+                  { value: 5 },
+                  { value: 4 },
+                  { value: 6 },
+                  { value: 5 },
+                ]}
                 color="var(--mantine-color-orange-6)"
               />
             </Box>
@@ -112,7 +128,15 @@ export default function DashboardPage() {
             </Text>
             <Box h={40} mt="sm">
               <Sparkline
-                data={[3, 5, 7, 8, 9, 11, 12]}
+                data={[
+                  { value: 3 },
+                  { value: 5 },
+                  { value: 7 },
+                  { value: 8 },
+                  { value: 9 },
+                  { value: 11 },
+                  { value: 12 },
+                ]}
                 color="var(--mantine-color-violet-6)"
               />
             </Box>

@@ -1,10 +1,9 @@
 "use client";
 import { Container, Grid, Flex, Title, Button } from "@mantine/core";
 import { IconDeviceFloppy, IconEdit } from "@tabler/icons-react";
-import { ProfileCard } from "./components/ProfileCard";
-import { PersonalInfoForm } from "./components/PersonalInfoForm";
-import { NotificationSettingsCard } from "./components/NotificationSettings";
 import { useAccountPage } from "./_hooks";
+import { NotificationSettingsCard, PersonalInfoForm, ProfileCard } from "./components";
+import * as classes from "./styles";
 
 export const AccountPage = () => {
   const { profile, notifications, isEditing, toggleEdit, setNotifications } =
@@ -13,8 +12,8 @@ export const AccountPage = () => {
   if (!profile) return <p>Loading…</p>;
 
   return (
-    <Container size="xl" py="xl">
-      <Flex justify="space-between" align="center" mb="xl">
+    <Container className={classes.container}>
+      <Flex className={classes.header}>
         <Title order={1}>My Account</Title>
         <Button
           onClick={toggleEdit}
@@ -26,7 +25,7 @@ export const AccountPage = () => {
           {isEditing ? "Save Changes" : "Edit Profile"}
         </Button>
       </Flex>
-      <Grid>
+      <Grid className={classes.grid}>
         <Grid.Col span={{ base: 12, lg: 4 }}>
           <ProfileCard profile={profile} isEditing={isEditing} />
         </Grid.Col>
