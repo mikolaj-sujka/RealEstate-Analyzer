@@ -1,10 +1,24 @@
-import CityComparison from "@/city-comparison"
+"use client";
 
-export default function CitiesPage() {
+import { BarChart } from "./components/BarChart";
+import { LineChart } from "./components/LineChart";
+import { ComparisonCard } from "./components/ComparisonCard";
+import { Stack } from "@mantine/core";
+import { useCityData } from "./_hooks";
+
+export default function CityComparison() {
+  const { cityData, historyData, loading } = useCityData();
+  if (loading) return <p>Loading…</p>;
+
   return (
-    <CityComparison
-      title="Porównanie rynków nieruchomości"
-      description="Analiza porównawcza cen i trendów w różnych miastach"
-    />
-  )
+    <Stack gap="lg">
+      <ComparisonCard title="City comparison" description="Average price vs. transactions">
+        <BarChart data={cityData} />
+      </ComparisonCard>
+
+      <ComparisonCard title="Price History by City">
+        <LineChart data={historyData} />
+      </ComparisonCard>
+    </Stack>
+  );
 }

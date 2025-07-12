@@ -4,7 +4,7 @@ import { IconDeviceFloppy, IconEdit } from "@tabler/icons-react";
 import { ProfileCard } from "./components/ProfileCard";
 import { PersonalInfoForm } from "./components/PersonalInfoForm";
 import { NotificationSettingsCard } from "./components/NotificationSettings";
-import { useAccountPage } from "./_hooks/useAccountPage";
+import { useAccountPage } from "./_hooks";
 
 export const AccountPage = () => {
   const { profile, notifications, isEditing, toggleEdit, setNotifications } =
