@@ -1,21 +1,14 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
 import { AppShell } from "@mantine/core";
 import { PageLoader } from "@/components/PageLoader";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
+import { usePageLoader } from "@/hooks";
+import { ReactNode } from "react";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1500); 
-
-    return () => clearTimeout(timer);
-  }, []);
+  const isLoading = usePageLoader(1500);
 
   if (isLoading) {
     return <PageLoader />;
