@@ -1,0 +1,12 @@
+{
+    "Dashboard": {
+        "ostatnieTransakcje": "Ostatnie Transakcje",
+        "generujRaport": "Generuj Raport",
+        "gotowyNaPodsumowanie": "Gotowy na podsumowanie?",
+        "podsumowanieTekst": "Wygeneruj szczegółowy raport PDF na podstawie aktualnych filtrów i analiz.",
+        "suma": "Suma",
+        "rozkładTypówNieruchomości": "Rozkład Typów Nieruchomości",
+        "analizaHistoryczna": "Analiza Historyczna",
+        "zakresCzasu": "Zakres Czasu"
+    }
+}

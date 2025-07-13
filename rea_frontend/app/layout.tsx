@@ -1,8 +1,11 @@
 import type React from "react";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/providers/ThemeProvider";
+import { I18nProvider } from "@/providers";
+import { Inter } from "next/font/google";
+import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Real Estate Analyzer",
@@ -18,16 +21,12 @@ export default function RootLayout({
     <html lang="pl" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" href="/images/logo_realestate.png" />
+        <ColorSchemeScript defaultColorScheme="auto" />
       </head>
-      <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+      <body className={inter.className}>
+        <MantineProvider defaultColorScheme="auto">
+          <I18nProvider>{children}</I18nProvider>
+        </MantineProvider>
       </body>
     </html>
   );

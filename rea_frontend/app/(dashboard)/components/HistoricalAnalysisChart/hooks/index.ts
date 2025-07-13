@@ -1,1 +1,1 @@
-export * from './useDateRange';
+export * from './useHistoricalAnalysis';

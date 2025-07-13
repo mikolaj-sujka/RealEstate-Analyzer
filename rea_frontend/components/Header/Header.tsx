@@ -8,7 +8,6 @@ import {
   Breadcrumbs,
   Anchor,
   Text,
-  Box,
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import {
@@ -25,69 +24,54 @@ import Link from "next/link";
 
 const breadcrumbNameMap: { [key: string]: { section: string; page: string } } =
   {
-    "/": { section: "Overview", page: "Dashboard" },
-    "/analytics": { section: "Overview", page: "Analytics" },
-    "/trends": { section: "Overview", page: "Trends" },
-    "/distribution": { section: "Overview", page: "Distribution" },
-    "/map": { section: "Overview", page: "Map" },
-    "/cities": { section: "Overview", page: "Cities" },
-    "/account": { section: "Account", page: "Profile" },
+    "/dashboard": { section: "Przegląd", page: "Pulpit" },
+    "/analytics": { section: "Przegląd", page: "Analityka" },
+    "/trends": { section: "Analiza", page: "Porównanie Trendów" },
+    "/map": { section: "Analiza", page: "Mapa Nieruchomości" },
+    "/cities": { section: "Analiza", page: "Porównanie Miast" },
+    "/account": { section: "Konto", page: "Moje Konto" },
+    "/settings": { section: "Konto", page: "Ustawienia" },
+    "/help": { section: "Pomoc", page: "Centrum Pomocy" },
   };
 
 export const Header = () => {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const pathname = usePathname();
   const breadcrumbInfo = breadcrumbNameMap[pathname] || {
-    section: "Overview",
-    page: "dashboard",
+    section: "Przegląd",
+    page: "Pulpit",
   };
 
   const items = [
-    <Anchor
-      href="/"
-      key="section"
-      c="dimmed"
-      size="sm"
-      style={{ textDecoration: "none" }}
-    >
+    <Anchor href="/dashboard" key="section" c="dimmed">
       {breadcrumbInfo.section}
     </Anchor>,
-    <Text key="page" size="sm" fw={500}>
+    <Text key="page" fw={500}>
       {breadcrumbInfo.page}
     </Text>,
   ];
 
   return (
-    <Box
-      h={60}
-      px="xl"
+    <Group
+      justify="space-between"
+      h="100%"
+      px="md"
       style={{
-        borderBottom: "1px solid var(--mantine-color-gray-2)",
-        backgroundColor: "var(--mantine-color-white)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
+        backgroundColor: "var(--mantine-color-paper)",
+        borderBottom: "1px solid var(--mantine-color-border)",
       }}
     >
-      <Breadcrumbs
-        separator={
-          <IconChevronRight size={12} color="var(--mantine-color-gray-5)" />
-        }
-        separatorMargin="xs"
-      >
+      <Breadcrumbs separator={<IconChevronRight size={14} />}>
         {items}
       </Breadcrumbs>
-
-      <Group gap="sm">
-        <ActionIcon variant="subtle" size="lg" radius="md" color="gray">
+      <Group>
+        <ActionIcon variant="default" size="lg" radius="xl">
           <IconBell size={18} />
         </ActionIcon>
-
         <ActionIcon
-          variant="subtle"
+          variant="default"
           size="lg"
-          radius="md"
-          color="gray"
+          radius="xl"
           onClick={() =>
             setColorScheme(colorScheme === "dark" ? "light" : "dark")
           }
@@ -98,33 +82,42 @@ export const Header = () => {
             <IconMoon size={18} />
           )}
         </ActionIcon>
-
-        <Menu shadow="sm" width={200} position="bottom-end">
+        <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon variant="subtle" size="lg" radius="md" color="gray">
+            <ActionIcon variant="default" size="lg" radius="xl">
               <IconUser size={18} />
             </ActionIcon>
           </Menu.Target>
           <Menu.Dropdown>
-            <Menu.Label>My Account</Menu.Label>
+            <Menu.Label>Moje Konto</Menu.Label>
             <Menu.Item
               component={Link}
               href="/account"
               leftSection={<IconUser size={14} />}
             >
-              Profile
+              Profil
             </Menu.Item>
-            <Menu.Item leftSection={<IconSettings size={14} />}>
-              Settings
+            <Menu.Item
+              component={Link}
+              href="/account"
+              leftSection={<IconSettings size={14} />}
+            >
+              Ustawienia
             </Menu.Item>
-            <Menu.Item leftSection={<IconHelp size={14} />}>Support</Menu.Item>
+            <Menu.Item
+              component={Link}
+              href="/help"
+              leftSection={<IconHelp size={14} />}
+            >
+              Pomoc
+            </Menu.Item>
             <Menu.Divider />
             <Menu.Item color="red" leftSection={<IconLogout size={14} />}>
-              Logout
+              Wyloguj
             </Menu.Item>
           </Menu.Dropdown>
         </Menu>
       </Group>
-    </Box>
+    </Group>
   );
 }

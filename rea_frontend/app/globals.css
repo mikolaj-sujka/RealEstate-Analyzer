@@ -1,63 +1,371 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import "@mantine/core/styles.css";
 @import "@mantine/dates/styles.css";
 @import "@mantine/notifications/styles.css";
 
 @layer base {
   :root {
-    --background: 240 10% 99%;
-    --foreground: 240 5.9% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 5.9% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 5.9% 10%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-    --mantine-color-body: #ffffff;
-    --mantine-color-text: #000000;
-  }
+    --mantine-font-family: "Inter", sans-serif;
 
-  .dark {
-    /* Dark theme can be configured here if needed later */
-    --background: 240 5.9% 10%;
-    --foreground: 0 0% 98%;
-    --card: 240 5.9% 10%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 5.9% 10%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
+    /* Primary Colors */
+    --mantine-color-primary-filled: #228be6;
+    --mantine-color-primary-light: #d0ebff;
+    --mantine-color-primary-hover: #1c7ed6;
+
+    /* Text Colors */
+    --mantine-color-text: #212529;
+    --mantine-color-text-secondary: #495057;
+    --mantine-color-dimmed: #868e96;
+
+    /* Background Colors */
+    --mantine-color-body: #f8f9fa;
+    --mantine-color-paper: #ffffff;
+    --mantine-color-default: #ffffff;
+    --mantine-color-default-hover: #f1f3f5;
+
+    /* Border Colors */
+    --mantine-color-border: #e9ecef;
+    --mantine-color-border-light: #f1f3f5;
+
+    /* Status Colors */
+    --mantine-color-success: #51cf66;
+    --mantine-color-error: #ff6b6b;
+    --mantine-color-warning: #ffd43b;
+    --mantine-color-info: #339af0;
+
+    /* Chart Colors */
+    --chart-color-1: #228be6;
+    --chart-color-2: #0ca678;
+    --chart-color-3: #f76707;
+    --chart-color-4: #e64980;
+    --chart-color-5: #7048e8;
+
+    /* Shadow */
+    --mantine-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+    --mantine-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --mantine-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+    /* Sidebar */
+    --sidebar-bg: #ffffff;
+    --sidebar-border: #e9ecef;
+    --sidebar-text: #495057;
+    --sidebar-text-active: #228be6;
+    --sidebar-hover: #f8f9fa;
+
+    /* Header */
+    --header-bg: #ffffff;
+    --header-border: #e9ecef;
+    --header-text: #495057;
+
+    /* Cards */
+    --card-bg: #ffffff;
+    --card-border: #e9ecef;
+    --card-shadow: var(--mantine-shadow-sm);
   }
 
   [data-mantine-color-scheme="dark"] {
-    --mantine-color-body: #1a1b1e;
-    --mantine-color-text: #ffffff;
+    /* Primary Colors */
+    --mantine-color-primary-filled: #339af0;
+    --mantine-color-primary-light: #1971c21a;
+    --mantine-color-primary-hover: #228be6;
+
+    /* Text Colors */
+    --mantine-color-text: #e9ecef;
+    --mantine-color-text-secondary: #ced4da;
+    --mantine-color-dimmed: #adb5bd;
+
+    /* Background Colors */
+    --mantine-color-body: #0a0b0d;
+    --mantine-color-paper: #141517;
+    --mantine-color-default: #1a1b1e;
+    --mantine-color-default-hover: #25262b;
+
+    /* Border Colors */
+    --mantine-color-border: #2c2e33;
+    --mantine-color-border-light: #373a40;
+
+    /* Status Colors */
+    --mantine-color-success: #51cf66;
+    --mantine-color-error: #ff6b6b;
+    --mantine-color-warning: #ffd43b;
+    --mantine-color-info: #339af0;
+
+    /* Chart Colors - Adjusted for dark mode */
+    --chart-color-1: #339af0;
+    --chart-color-2: #20c997;
+    --chart-color-3: #fd7e14;
+    --chart-color-4: #e64980;
+    --chart-color-5: #845ef7;
+
+    /* Shadow - Darker shadows for dark mode */
+    --mantine-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    --mantine-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+    --mantine-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+    /* Sidebar */
+    --sidebar-bg: #1a1b1e;
+    --sidebar-border: #2c2e33;
+    --sidebar-text: #ced4da;
+    --sidebar-text-active: #339af0;
+    --sidebar-hover: #25262b;
+
+    /* Header */
+    --header-bg: #1a1b1e;
+    --header-border: #2c2e33;
+    --header-text: #ced4da;
+
+    /* Cards */
+    --card-bg: #1a1b1e;
+    --card-border: #2c2e33;
+    --card-shadow: var(--mantine-shadow-sm);
   }
+}
+
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: var(--mantine-color-body);
   color: var(--mantine-color-text);
+  overflow-x: hidden;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  font-family: var(--mantine-font-family);
+  line-height: 1.6;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mantine-color-dimmed);
+  border-radius: 4px;
+  opacity: 0.5;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mantine-color-text-secondary);
+  opacity: 0.8;
+}
+
+[data-mantine-color-scheme="dark"] ::-webkit-scrollbar-thumb {
+  background: #495057;
+}
+
+[data-mantine-color-scheme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #6c757d;
+}
+
+/* Custom Table Scrollbar */
+.mantine-ScrollArea-scrollbar {
+  background: transparent !important;
+}
+
+.mantine-ScrollArea-thumb {
+  background: var(--mantine-color-dimmed) !important;
+  opacity: 0.6 !important;
+}
+
+.mantine-ScrollArea-thumb:hover {
+  background: var(--mantine-color-text-secondary) !important;
+  opacity: 0.8 !important;
+}
+
+/* Landing Page Styles */
+.landing-background {
+  background: linear-gradient(180deg, #1a1d29 0%, #16213e 50%, #0f172a 100%);
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.landing-background::before {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 70% 80%, rgba(168, 85, 247, 0.08) 0%, transparent 50%);
+  z-index: 1;
+}
+
+.landing-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40' width='40' height='40' fill='none' stroke='rgb(255 255 255 / 0.02)'%3E%3Cpath d='M0 .5H39.5V40'/%3E%3C/svg%3E");
+  z-index: 2;
+}
+
+/* Hover Effects */
+.hover-text-white:hover {
+  color: white !important;
+}
+
+.hover-text-blue:hover {
+  color: #93c5fd !important;
+}
+
+/* Card Hover Effects */
+.mantine-Paper-root {
+  transition: all 0.2s ease;
+}
+
+.mantine-Paper-root:hover {
+  box-shadow: var(--mantine-shadow-md);
+  transform: translateY(-1px);
+}
+
+/* Button Transitions */
+.mantine-Button-root {
+  transition: all 0.2s ease;
+}
+
+/* Navigation Link Styles */
+.mantine-NavLink-root {
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.mantine-NavLink-root:hover {
+  background-color: var(--sidebar-hover);
+}
+
+.mantine-NavLink-root[data-active="true"] {
+  background-color: var(--mantine-color-primary-light);
+  color: var(--sidebar-text-active);
+  font-weight: 600;
+}
+
+/* Chart Container Styles */
+.chart-container {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: var(--card-shadow);
+}
+
+/* Loading States */
+.loading-shimmer {
+  background: linear-gradient(90deg,
+      var(--mantine-color-default) 25%,
+      var(--mantine-color-default-hover) 50%,
+      var(--mantine-color-default) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Focus Styles */
+*:focus-visible {
+  outline: 2px solid var(--mantine-color-primary-filled);
+  outline-offset: 2px;
+}
+
+/* Selection Styles */
+::selection {
+  background-color: var(--mantine-color-primary-light);
+  color: var(--mantine-color-text);
+}
+
+[data-mantine-color-scheme="dark"] ::selection {
+  background-color: var(--mantine-color-primary-filled);
+  color: white;
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+  }
+
+  .mantine-Paper-root {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+  }
+}
+
+/* Mobile Responsive Adjustments */
+@media (max-width: 768px) {
+  .landing-background {
+    background-attachment: scroll;
+  }
+
+  .mantine-AppShell-navbar {
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+  }
+}
+
+/* High Contrast Mode Support */
+@media (prefers-contrast: high) {
+  :root {
+    --mantine-color-border: #000000;
+    --mantine-color-text: #000000;
+  }
+
+  [data-mantine-color-scheme="dark"] {
+    --mantine-color-border: #ffffff;
+    --mantine-color-text: #ffffff;
+  }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Custom Utilities */
+.text-gradient {
+  background: linear-gradient(135deg, var(--mantine-color-primary-filled), var(--chart-color-3));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+[data-mantine-color-scheme="dark"] .glass-effect {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }

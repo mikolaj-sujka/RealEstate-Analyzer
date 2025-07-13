@@ -1,6 +1,7 @@
 "use client";
 
 import { SegmentedControl, Text } from "@mantine/core";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   value: string;
@@ -8,10 +9,11 @@ interface Props {
 }
 
 export const TimeRangeControl = ({ value, onChange }: Props) => {
+  const { t } = useTranslation();
   return (
     <>
       <Text size="sm" fw={500} mb={4}>
-        Zakres Czasu
+        {t("Dashboard.zakresCzasu")}
       </Text>
       <SegmentedControl
         value={value}

@@ -16,26 +16,25 @@ import { usePathname } from "next/navigation";
 
 const navSections = [
   {
-    title: "Overview",
+    title: "Przegląd",
     items: [
-      { href: "/", label: "Dashboard", icon: LayoutDashboard },
-      { href: "/analytics", label: "Analytics", icon: BarChart3 },
+      { href: "/", label: "Pulpit", icon: LayoutDashboard },
+      { href: "/analytics", label: "Analityka", icon: BarChart3 },
     ],
   },
   {
-    title: "Analysis",
+    title: "Analityka",
     items: [
-      { href: "/trends", label: "Trend Comparison", icon: TrendingUp },
-      { href: "/distribution", label: "Distribution", icon: PieChart },
-      { href: "/map", label: "Property Map", icon: MapPin },
-      { href: "/cities", label: "City Comparison", icon: BarChartHorizontal },
+      { href: "/trends", label: "Porównanie Trendów", icon: TrendingUp },
+      { href: "/map", label: "Mapa Nieruchomości", icon: MapPin },
+      { href: "/cities", label: "Porównanie Miast", icon: BarChartHorizontal },
     ],
   },
 ];
 
 const bottomNav = [
-  { href: "/settings", label: "Settings", icon: IconSettings },
-  { href: "/help", label: "Help", icon: IconHelp },
+  { href: "/settings", label: "Ustawienia", icon: IconSettings },
+  { href: "/help", label: "Pomoc", icon: IconHelp },
 ];
 
 export const Sidebar = () => {
@@ -95,9 +94,9 @@ export const Sidebar = () => {
               K
             </Text>
           </Box>
-            <Text fw={500} size="md" c="dark">
-                Real Estate Analyzer
-            </Text>
+          <Text fw={500} size="md" c="dark">
+            Real Estate Analyzer
+          </Text>
         </Group>
       </Box>
 
