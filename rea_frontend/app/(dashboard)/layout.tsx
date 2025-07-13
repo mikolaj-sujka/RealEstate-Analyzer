@@ -1,6 +1,6 @@
 "use client";
 
-import { AppShell } from "@mantine/core";
+import { AppShell, Paper } from "@mantine/core";
 import { PageLoader } from "@/components/PageLoader";
 import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
@@ -17,7 +17,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   return (
     <AppShell
       header={{ height: 60 }}
-      navbar={{ width: 250, breakpoint: "sm" }}
+      navbar={{ width: 280, breakpoint: "sm" }}
       padding="md"
     >
       <AppShell.Header>
@@ -26,7 +26,11 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <AppShell.Navbar>
         <Sidebar />
       </AppShell.Navbar>
-      <AppShell.Main>{children}</AppShell.Main>
+      <AppShell.Main>
+        <Paper p="md" radius="md" bg="var(--mantine-color-body)">
+          {children}
+        </Paper>
+      </AppShell.Main>
     </AppShell>
   );
 }
