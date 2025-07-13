@@ -1,15 +1,11 @@
-"use client";
+'use client'
 
-import { Container, Paper, Title, Box } from "@mantine/core";
-import {
-  metrics,
-  recentTransactions,
-  tableColumns,
-} from "./models/consts/dashboard.consts";
-import { DataTable } from "@/components/DataTable";
-import { MetricsGridCard } from "@/components/MetricsGridCard";
-import { HistoricalAnalysisChart, PropertyDistributionCard } from "./components";
 import { useTranslate } from "@/hooks/useTranslate";
+import { Box, Container, Paper, Title } from "@mantine/core";
+import { metrics, recentTransactions, tableColumns } from "./models/consts";
+import { HistoricalAnalysisChart, PropertyDistributionCard } from "./components";
+import { MetricsGridCard } from "@/components/MetricsGridCard";
+import { DataTable } from "@/components/DataTable";
 
 export default function DashboardPage() {
   const { t } = useTranslate();

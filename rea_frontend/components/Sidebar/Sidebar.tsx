@@ -1,15 +1,14 @@
 "use client";
-
 import { NavLink, Stack, Group, Text, Box } from "@mantine/core";
-import { IconSettings, IconHelp } from "@tabler/icons-react";
 import {
-  LayoutDashboard,
-  BarChart3,
-  TrendingUp,
-  PieChart,
-  BarChartHorizontal,
-  MapPin,
-} from "lucide-react";
+  IconSettings,
+  IconHelp,
+  IconDashboard,
+  IconChartBar,
+  IconTrendingUp,
+  IconMap,
+  IconBuildingStore,
+} from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -18,22 +17,22 @@ const navSections = [
   {
     title: "Przegląd",
     items: [
-      { href: "/", label: "Pulpit", icon: LayoutDashboard },
-      { href: "/analytics", label: "Analityka", icon: BarChart3 },
+      { href: "/dashboard", label: "Pulpit", icon: IconDashboard },
+      { href: "/analytics", label: "Analityka", icon: IconChartBar },
     ],
   },
   {
-    title: "Analityka",
+    title: "Analiza",
     items: [
-      { href: "/trends", label: "Porównanie Trendów", icon: TrendingUp },
-      { href: "/map", label: "Mapa Nieruchomości", icon: MapPin },
-      { href: "/cities", label: "Porównanie Miast", icon: BarChartHorizontal },
+      { href: "/trends", label: "Porównanie Trendów", icon: IconTrendingUp },
+      { href: "/map", label: "Mapa Nieruchomości", icon: IconMap },
+      { href: "/cities", label: "Porównanie Miast", icon: IconBuildingStore },
     ],
   },
 ];
 
 const bottomNav = [
-  { href: "/settings", label: "Ustawienia", icon: IconSettings },
+  { href: "/account", label: "Konto", icon: IconSettings },
   { href: "/help", label: "Pomoc", icon: IconHelp },
 ];
 
@@ -42,148 +41,71 @@ export const Sidebar = () => {
 
   return (
     <Box
-      w={240}
-      h="100vh"
+      w={280}
+      p="md"
       style={{
-        backgroundColor: "var(--mantine-color-gray-0)",
-        borderRight: "1px solid var(--mantine-color-gray-2)",
         display: "flex",
         flexDirection: "column",
+        height: "100vh",
+        backgroundColor: "var(--mantine-color-default)",
+        borderRight: "1px solid var(--mantine-color-border)",
       }}
     >
-      <Box
+      <Group
         h={60}
         px="md"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          borderBottom: "1px solid var(--mantine-color-gray-2)",
-        }}
+        style={{ borderBottom: "1px solid var(--mantine-color-border)" }}
       >
-        <Group gap="sm">
-          <Box
-            w={32}
-            h={32}
-            style={{
-              borderRadius: "6px",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              position: "relative",
-            }}
-          >
-            <Image
-              src="images/logo.png"
-              alt="RealEstate Analyzer Logo"
-              width={64}
-              height={64}
-              style={{ borderRadius: "2px" }}
-              onError={(e) => {
-                e.currentTarget.style.display = "none";
-              }}
-            />
-            <Text
-              c="white"
-              fw={700}
-              size="sm"
-              style={{
-                position: "absolute",
-                display: "none", // Will be shown if image fails
-              }}
-            >
-              K
-            </Text>
-          </Box>
-          <Text fw={500} size="md" c="dark">
-            Real Estate Analyzer
-          </Text>
-        </Group>
-      </Box>
-
-      <Box style={{ flex: 1, overflowY: "auto" }} p="md">
-        <Stack gap="xl">
+        <Link
+          href="/dashboard"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            textDecoration: "none",
+          }}
+        >
+          <Image src="/images/logo.png" alt="Logo" width={60} height={60} />
+        </Link>
+      </Group>
+      <Stack
+        justify="space-between"
+        style={{ flex: 1, overflowY: "auto" }}
+        mt="md"
+      >
+        <Box>
           {navSections.map((section) => (
-            <Box key={section.title}>
-              <Text
-                size="xs"
-                c="dimmed"
-                fw={600}
-                tt="uppercase"
-                mb="sm"
-                pl="xs"
-              >
+            <Stack key={section.title} gap="xs" mb="lg">
+              <Text size="xs" c="dimmed" fw={700} tt="uppercase" px="md">
                 {section.title}
               </Text>
-              <Stack gap={2}>
-                {section.items.map((item) => (
-                  <NavLink
-                    key={item.label}
-                    href={item.href}
-                    label={item.label}
-                    leftSection={<item.icon size={16} />}
-                    active={pathname === item.href}
-                    component={Link}
-                    style={{
-                      borderRadius: "6px",
-                      fontWeight: pathname === item.href ? 500 : 400,
-                    }}
-                    styles={{
-                      root: {
-                        "&[dataActive]": {
-                          backgroundColor: "var(--mantine-color-gray-1)",
-                          color: "var(--mantine-color-dark-7)",
-                        },
-                        "&:hover": {
-                          backgroundColor: "var(--mantine-color-gray-1)",
-                        },
-                      },
-                      label: {
-                        fontSize: "14px",
-                      },
-                    }}
-                  />
-                ))}
-              </Stack>
-            </Box>
+              {section.items.map((item) => (
+                <NavLink
+                  key={item.label}
+                  href={item.href}
+                  label={item.label}
+                  leftSection={<item.icon size={18} />}
+                  active={pathname === item.href}
+                  component={Link}
+                  variant="subtle"
+                />
+              ))}
+            </Stack>
           ))}
-        </Stack>
-      </Box>
-
-      <Box
-        p="md"
-        style={{ borderTop: "1px solid var(--mantine-color-gray-2)" }}
-      >
-        <Stack gap={2}>
+        </Box>
+        <Box>
           {bottomNav.map((item) => (
             <NavLink
               key={item.label}
               href={item.href}
               label={item.label}
-              leftSection={<item.icon size={16} />}
+              leftSection={<item.icon size={18} />}
               active={pathname === item.href}
               component={Link}
-              style={{
-                borderRadius: "6px",
-                fontWeight: pathname === item.href ? 500 : 400,
-              }}
-              styles={{
-                root: {
-                  "&[dataActive]": {
-                    backgroundColor: "var(--mantine-color-gray-1)",
-                    color: "var(--mantine-color-dark-7)",
-                  },
-                  "&:hover": {
-                    backgroundColor: "var(--mantine-color-gray-1)",
-                  },
-                },
-                label: {
-                  fontSize: "14px",
-                },
-              }}
+              variant="subtle"
             />
           ))}
-        </Stack>
-      </Box>
+        </Box>
+      </Stack>
     </Box>
   );
 };
