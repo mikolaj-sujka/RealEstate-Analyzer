@@ -14,7 +14,7 @@ import {
   Menu,
   Pagination,
 } from "@mantine/core";
-import { Column, TableProps } from "@/models";
+import { Column, TableProps } from "@/models/types";
 
 export function DataTable({
   data,

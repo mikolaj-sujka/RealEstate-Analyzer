@@ -1,5 +1,12 @@
-import { ChartData, Column, SparklineData, TransactionData } from "@/models/types";
+import {
+  ChartData,
+  Column,
+  MetricGridCardData,
+  SparklineData,
+  TransactionData,
+} from "@/models/types";
 import { Badge } from "@mantine/core";
+import { IconArrowUpRight, IconCurrencyDollar, IconHome, IconUsers } from "@tabler/icons-react"
 
 export const priceData: ChartData[] = [
   { month: "Sty '24", price: 7000, prediction: 9500 },
@@ -120,5 +127,68 @@ export const tableColumns: Column[] = [
         {value}
       </Badge>
     ),
+  },
+];
+
+export const metrics: MetricGridCardData[] = [
+  {
+    label: "Transakcje",
+    value: "1,748",
+    change: "+5.2%",
+    changeColor: "green",
+    icon: IconArrowUpRight,
+    sparklineData: transactionsSparkline,
+    sparklineColor: "var(--mantine-color-green-6)",
+  },
+  {
+    label: "Średnia Cena",
+    value: "8,450 PLN/m²",
+    change: "+2.1%",
+    changeColor: "green",
+    icon: IconCurrencyDollar,
+    sparklineData: [
+      { value: 4 },
+      { value: 6 },
+      { value: 8 },
+      { value: 7 },
+      { value: 9 },
+      { value: 8 },
+      { value: 10 },
+    ],
+    sparklineColor: "var(--mantine-color-blue-6)",
+  },
+  {
+    label: "Nowe Oferty",
+    value: "342",
+    change: "-1.3%",
+    changeColor: "red",
+    icon: IconHome,
+    sparklineData: [
+      { value: 8 },
+      { value: 6 },
+      { value: 7 },
+      { value: 5 },
+      { value: 4 },
+      { value: 6 },
+      { value: 5 },
+    ],
+    sparklineColor: "var(--mantine-color-orange-6)",
+  },
+  {
+    label: "Aktywni Użytkownicy",
+    value: "2,847",
+    change: "+12.5%",
+    changeColor: "green",
+    icon: IconUsers,
+    sparklineData: [
+      { value: 3 },
+      { value: 5 },
+      { value: 7 },
+      { value: 8 },
+      { value: 9 },
+      { value: 11 },
+      { value: 12 },
+    ],
+    sparklineColor: "var(--mantine-color-violet-6)",
   },
 ];

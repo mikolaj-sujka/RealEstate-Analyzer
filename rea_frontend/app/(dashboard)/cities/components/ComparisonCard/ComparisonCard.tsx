@@ -1,4 +1,3 @@
-import { CardHeader, CardTitle, CardContent } from "@/components/Card/Card";
 import { Card } from "@mantine/core";
 
 type ComparisonCardProps = {
@@ -14,13 +13,11 @@ export const ComparisonCard = ({
 }: ComparisonCardProps) => {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
+        {title}
         {description && (
           <p className="text-sm text-muted-foreground">{description}</p>
         )}
-      </CardHeader>
-      <CardContent>{children}</CardContent>
+      {children}
     </Card>
   );
 }
