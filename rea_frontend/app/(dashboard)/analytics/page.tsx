@@ -1,58 +1,78 @@
 "use client";
-
-import { Container } from "@mantine/core";
-import { SummaryCard } from "./components/SummaryCard";
-import { MarketChart } from "./components/MarketChart";
-import { DollarSign, Home, BarChart3, Users } from "lucide-react";
-import { useMarketData } from "./_hooks";
+import { useState } from "react";
+import { Container, Grid, Select, Title, Group, Paper } from "@mantine/core";
+import {
+  IconCurrencyDollar,
+  IconHome,
+  IconChartBar,
+  IconUsers,
+} from "@tabler/icons-react";
+import { useMarketAnalytics } from "./hooks";
+import { StatisticsCardData } from "@/components/StatisticsCardData";
+import { MarketAnalyticsChart } from "./components";
+import { voivodeshipMarketData } from "./models";
+import { useTranslation } from "react-i18next";
 
 export default function AnalyticsPage() {
-  const { data, loading } = useMarketData();
+  const [voivodeship, setVoivodeship] = useState("Cała Polska");
+  const { marketData, lastMonth, changes } = useMarketAnalytics(voivodeship);
+  const { t } = useTranslation();
 
-  if (loading) return <p>Loading market analytics…</p>;
-
-  // obliczenia statystyk dla kafelków
-  const latest = data[data.length - 1];
-  const prev = data[data.length - 2] || latest;
-  const delta = (current: number, previous: number) =>
-    (((current - previous) / previous) * 100).toFixed(1) + "%";
+  const cards = [
+    {
+      label: "Średnia Cena",
+      value: lastMonth?.averagePrice.toLocaleString("pl-PL") + " PLN/m²",
+      change: changes.price,
+      icon: (
+        <IconCurrencyDollar size={16} color="var(--mantine-color-dimmed)" />
+      ),
+    },
+    {
+      label: "Nowe Oferty",
+      value: lastMonth?.listings.toLocaleString("pl-PL") || "–",
+      change: changes.listings,
+      icon: <IconHome size={16} color="var(--mantine-color-dimmed)" />,
+    },
+    {
+      label: "Wolumen Sprzedaży",
+      value: lastMonth?.sales.toLocaleString("pl-PL") || "–",
+      change: changes.sales,
+      icon: <IconChartBar size={16} color="var(--mantine-color-dimmed)" />,
+    },
+    {
+      label: "Zapasy Rynkowe",
+      value: lastMonth?.totalInventory.toLocaleString("pl-PL") || "–",
+      change: changes.inventory,
+      icon: <IconUsers size={16} color="var(--mantine-color-dimmed)" />,
+    },
+  ];
 
   return (
-    <Container size="xl" className="space-y-6">
-      <h1 className="text-2xl font-bold">Market Analytics</h1>
+    <Container size="xl" py="xl">
+      <Group justify="space-between" mb="xl">
+        <Title order={1}>{t("Analytics.analitykaRynku")}</Title>
+        <Select
+          label={t("Analytics.wybierzWojewództwo")}
+          data={Object.keys(voivodeshipMarketData)}
+          value={voivodeship}
+          onChange={(v) => setVoivodeship(v!)}
+        />
+      </Group>
 
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <SummaryCard
-          title="Average Price"
-          value={`${latest.averagePrice} PLN/m²`}
-          delta={delta(latest.averagePrice, prev.averagePrice)}
-          deltaPositive={latest.averagePrice >= prev.averagePrice}
-          Icon={DollarSign}
-        />
-        <SummaryCard
-          title="New Listings"
-          value={latest.listings.toString()}
-          delta={delta(latest.listings, prev.listings)}
-          deltaPositive={latest.listings >= prev.listings}
-          Icon={Home}
-        />
-        <SummaryCard
-          title="Sales Volume"
-          value={latest.sales.toString()}
-          delta={delta(latest.sales, prev.sales)}
-          deltaPositive={latest.sales >= prev.sales}
-          Icon={BarChart3}
-        />
-        <SummaryCard
-          title="Market Inventory"
-          value={latest.totalInventory.toString()}
-          delta={delta(latest.totalInventory, prev.totalInventory)}
-          deltaPositive={latest.totalInventory >= prev.totalInventory}
-          Icon={Users}
-        />
-      </div>
+      <Grid mb="xl">
+        {cards.map((c) => (
+          <Grid.Col key={c.label} span={{ base: 12, sm: 6, lg: 3 }}>
+            <StatisticsCardData {...c} />
+          </Grid.Col>
+        ))}
+      </Grid>
 
-      <MarketChart data={data} height={400} />
+      <Paper shadow="sm" p="lg" radius="md" withBorder>
+        <Title order={3} mb="md">
+          {t("Analytics.wydajnośćRynkuWCzasie")}
+        </Title>
+        <MarketAnalyticsChart data={marketData} />
+      </Paper>
     </Container>
   );
 }

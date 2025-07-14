@@ -1,4 +1,4 @@
-export type MarketData = {
+export type MarketAnalyticsData = {
   month: string;
   averagePrice: number;
   listings: number;

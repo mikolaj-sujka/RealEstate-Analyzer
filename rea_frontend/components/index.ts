@@ -6,3 +6,4 @@ export * from "./DataTable";
 export * from "./Sparkline";
 export * from "./MetricsGridCard";
 export * from "./LandingPage";
+export * from "./StatisticsCardData";

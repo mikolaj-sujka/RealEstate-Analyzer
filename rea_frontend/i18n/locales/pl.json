@@ -8,5 +8,10 @@
         "rozkładTypówNieruchomości": "Rozkład Typów Nieruchomości",
         "analizaHistoryczna": "Analiza Historyczna",
         "zakresCzasu": "Zakres Czasu"
+    },
+    "Analytics": {
+        "analitykaRynku": "Analityka Rynku",
+        "wydajnośćRynkuWCzasie": "Wydajność Rynku w Czasie",
+        "wybierzWojewództwo": "Wybierz Województwo"
     }
 }
