@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { MarketData, voivodeshipMarketData } from "../models";
+import { voivodeshipMarketData } from "../models";
 import { MarketAnalyticsData } from "../models/types/MarketAnalyticsData";
 
 

@@ -1,6 +1,6 @@
 import { useState, useCallback } from "react";
 
-export function useSelectedMetrics(defaults: string[] = []) {
+export const useSelectedMetrics = (defaults: string[] = []) => {
   const [selected, setSelected] = useState<string[]>(defaults);
 
   const toggleMetric = useCallback((metric: string) => {

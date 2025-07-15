@@ -12,6 +12,7 @@ import { StatisticsCardData } from "@/components/StatisticsCardData";
 import { MarketAnalyticsChart } from "./components";
 import { voivodeshipMarketData } from "./models";
 import { useTranslation } from "react-i18next";
+import { ReportGenerator } from "@/components/ReportGenerator/ReportGenerator";
 
 export default function AnalyticsPage() {
   const [voivodeship, setVoivodeship] = useState("Cała Polska");
@@ -73,6 +74,15 @@ export default function AnalyticsPage() {
         </Title>
         <MarketAnalyticsChart data={marketData} />
       </Paper>
+
+      {/* To add data visualization and report generation */}
+      <ReportGenerator
+        chartInstance={null}
+        transactions={[]}
+        selectedCities={[]}
+        title={t("ReportGenerator.tytułGeneratoraRaportów")}
+        description={t("ReportGenerator.opisRaportu")}
+      />
     </Container>
   );
 }

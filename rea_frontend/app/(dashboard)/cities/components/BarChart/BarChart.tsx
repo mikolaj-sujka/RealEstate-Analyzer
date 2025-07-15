@@ -18,24 +18,24 @@ export const BarChart = ({ data, height = 400 }: BarChartProps) => {
     chart.setOption({
       backgroundColor: "transparent",
       tooltip: { trigger: "axis" },
-      legend: { data: ["Avg Price", "Transactions"], top: 10 },
+      legend: { data: ["Średnia Cena", "Transakcje"], top: 10 },
       xAxis: {
         type: "category",
         data: data.map(d => d.city),
       },
       yAxis: [
-        { type: "value", name: "Price" },
-        { type: "value", name: "Transactions", position: "right" },
+        { type: "value", name: "Cena" },
+        { type: "value", name: "Transakcje", position: "right" },
       ],
       series: [
         {
-          name: "Avg Price",
+          name: "Średnia Cena",
           type: "bar",
           yAxisIndex: 0,
           data: data.map(d => d.averagePrice),
         },
         {
-          name: "Transactions",
+          name: "Transakcje",
           type: "bar",
           yAxisIndex: 1,
           data: data.map(d => d.totalTransactions),

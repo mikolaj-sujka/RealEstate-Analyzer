@@ -1,47 +1,45 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import * as echarts from "echarts";
-import { PriceHistoryData } from "../../models";
+import { useRef } from "react";
+import {
+  cityColors,
+  cityNameMap,
+  extendedPriceHistoryData,
+} from "../../models";
+import { useECharts } from "@/hooks";
 
 type LineChartProps = {
-  data: PriceHistoryData[];
-  height?: number;
-}
+  selectedCities: string[];
+};
 
-export const LineChart = ({ data, height = 400 }: LineChartProps) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const cities = data.length
-    ? Object.keys(data[0]).filter((k) => k !== "month")
-    : [];
+export function LineChart({ selectedCities }: LineChartProps) {
+  const ref = useRef<HTMLDivElement>(null!);
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const chart = echarts.init(ref.current);
-    chart.setOption({
+  useECharts(
+    ref,
+    () => ({
       backgroundColor: "transparent",
-      tooltip: { trigger: "axis" },
-      legend: { data: cities, top: 10 },
+      tooltip: {},
+      legend: { data: selectedCities.map((c) => cityNameMap[c]), top: 10 },
       xAxis: {
         type: "category",
         boundaryGap: false,
-        data: data.map((d) => d.month),
+        data: extendedPriceHistoryData.map((i) => i.month),
       },
-      yAxis: { type: "value" },
-      series: cities.map((city, idx) => ({
-        name: city,
+      yAxis: {
+      },
+      series: selectedCities.map((city, idx) => ({
+        name: cityNameMap[city],
         type: "line",
+        data: extendedPriceHistoryData.map((i) => i[city]),
         smooth: true,
-        data: data.map((d) => d[city as keyof PriceHistoryData] as number),
+        lineStyle: { color: cityColors[city], width: 3 },
+        animationDelay: idx * 200,
       })),
-    });
-    const resize = () => chart.resize();
-    window.addEventListener("resize", resize);
-    return () => {
-      window.removeEventListener("resize", resize);
-      chart.dispose();
-    };
-  }, [data, cities]);
+      animationEasing: "cubicOut",
+    }),
+    [selectedCities]
+  );
 
-  return <div ref={ref} style={{ width: "100%", height: `${height}px` }} />;
+  return <div ref={ref} style={{ width: "100%", height: 400 }} />;
 }

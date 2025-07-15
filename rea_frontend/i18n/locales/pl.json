@@ -13,5 +13,18 @@
         "analitykaRynku": "Analityka Rynku",
         "wydajnośćRynkuWCzasie": "Wydajność Rynku w Czasie",
         "wybierzWojewództwo": "Wybierz Województwo"
+    },
+    "ReportGenerator": {
+        "generujRaport": "Generuj Raport",
+        "tytułGeneratoraRaportów": "Gotowy na podsumowanie analityczne?",
+        "opisRaportu": "Wygeneruj szczegółowy raport PDF na podstawie aktualnych filtrów i analiz."
+    },
+    "CityComparison": {
+        "porównanieMiast": "Porównanie Miast",
+        "wybierzMiasta": "Wybierz Miasta",
+        "wybierzWojewództwo": "Wybierz Województwo",
+        "analizaCen": "Analiza Cen",
+        "historiaCenWedlugMiast": "Historia Cen według Miast",
+        "wykresLiniowy": "Wykres Liniowy"
     }
 }
