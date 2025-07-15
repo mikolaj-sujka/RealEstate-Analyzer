@@ -1,56 +1,36 @@
-"use client";
-
-import { Paper, Group, Text, Badge, Box } from "@mantine/core";
-import { MapPin, Home, TrendingUp, TrendingDown } from "lucide-react";
-
-type DistrictData = {
-  district: string;
-  avgPrice: number;
-  properties: number;
-  change: string;
-  trend: "up" | "down";
-};
+import { DistrictData } from "@/models";
+import { Group, Paper, ThemeIcon, Text } from "@mantine/core";
+import { IconHome, IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
 
 type DistrictCardProps = {
-  item: DistrictData;
-};
+  district: DistrictData;
+}
 
-export const DistrictCard = ({ item }: DistrictCardProps) => {
-  const TrendIcon = item.trend === "up" ? TrendingUp : TrendingDown;
-  const trendColor = item.trend === "up" ? "green" : "red";
-
+export const DistrictCard = ({ district }: DistrictCardProps) => {
   return (
     <Paper shadow="sm" p="md" radius="md" withBorder>
-      <Group justify="space-between" mb="md">
-        <Group gap="xs">
-          <MapPin size={16} color="var(--mantine-color-blue-6)" />
-          <Text fw={600}>{item.district}</Text>
+      <Group justify="space-between" mb="xs">
+        <Group>
+          <ThemeIcon variant="light" radius="md">
+            <IconHome size={18} />
+          </ThemeIcon>
+          <Text fw={500}>{district.district}</Text>
         </Group>
-        <Badge color={trendColor} variant="light">
-          <Group gap={4}>
-            <TrendIcon size={12} />
-            <Text size="xs">{item.change}</Text>
-          </Group>
-        </Badge>
+        {district.trend === "up" ? (
+          <IconTrendingUp size={16} color="var(--mantine-color-green-6)" />
+        ) : (
+          <IconTrendingDown size={16} color="var(--mantine-color-red-6)" />
+        )}
       </Group>
-
-      <Box style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <Group justify="space-between">
-          <Text size="sm" c="dimmed">
-            Avg Price:
-          </Text>
-          <Text fw={500}>{item.avgPrice.toLocaleString()} PLN/m²</Text>
-        </Group>
-        <Group justify="space-between">
-          <Text size="sm" c="dimmed">
-            Properties:
-          </Text>
-          <Group gap="xs">
-            <Home size={12} />
-            <Text fw={500}>{item.properties}</Text>
-          </Group>
-        </Group>
-      </Box>
+      <Text size="xl" fw={700} mb="xs">
+        {district.averagePrice.toLocaleString("pl-PL")} PLN/m²
+      </Text>
+      <Text size="sm" c="dimmed" mb="xs">
+        {district.properties} nieruchomości
+      </Text>
+      <Text size="sm" c={district.trend === "up" ? "green" : "red"}>
+        {district.change} w tym miesiącu
+      </Text>
     </Paper>
   );
-};
+}

@@ -7,3 +7,4 @@ export * from "./Sparkline";
 export * from "./MetricsGridCard";
 export * from "./LandingPage";
 export * from "./StatisticsCardData";
+export * from "./Filters";

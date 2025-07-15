@@ -59,7 +59,7 @@ export interface PropertyTypeData {
 
 export interface DistrictData {
   district: string;
-  avgPrice: number;
+  averagePrice: number;
   properties: number;
   trend: "up" | "down";
   change: string;

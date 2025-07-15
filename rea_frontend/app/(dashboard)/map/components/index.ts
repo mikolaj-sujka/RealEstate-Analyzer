@@ -1,2 +1,2 @@
-export * from "./MapPlaceholder";
 export * from "./DistrictCard";
+export * from "./MapChart";
