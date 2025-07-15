@@ -1,6 +1,7 @@
-export type CityData = {
-  city: string;
+export type CityComparisonData = {
+  name: string;
   averagePrice: number;
   totalTransactions: number;
-  growthOfTotalTransactions: number;
+  trend: 'up' | 'down';
+  growth: number;
 };

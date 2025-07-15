@@ -8,6 +8,7 @@ import {
   IconTrendingUp,
   IconMap,
   IconBuildingStore,
+  IconCalculator,
 } from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -27,6 +28,7 @@ const navSections = [
       { href: "/trends", label: "Porównanie Trendów", icon: IconTrendingUp },
       { href: "/map", label: "Mapa Nieruchomości", icon: IconMap },
       { href: "/cities", label: "Porównanie Miast", icon: IconBuildingStore },
+      { href: "/investment-score", label: "Kalkulator Potencjału Inwestycyjnego", icon: IconCalculator },
     ],
   },
 ];

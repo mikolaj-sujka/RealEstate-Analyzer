@@ -8,3 +8,5 @@ export * from "./MetricsGridCard";
 export * from "./LandingPage";
 export * from "./StatisticsCardData";
 export * from "./Filters";
+export * from "./ParameterForm";
+export * from "./GaugeChart";

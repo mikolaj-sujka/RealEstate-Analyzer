@@ -1,54 +1,48 @@
 "use client";
-
-import { useEffect, useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import * as echarts from "echarts";
-import { CityData } from "../../models";
+import { CityComparisonData } from "../../models";
 
 type BarChartProps = {
-  data: CityData[];
-  height?: number;
-}
+  data: CityComparisonData[];
+  selectedCities: string[];
+};
 
-export const BarChart = ({ data, height = 400 }: BarChartProps) => {
+export const BarChart = ({ data, selectedCities }: BarChartProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
     const chart = echarts.init(ref.current);
+
+    const chartData = data.filter((d) => selectedCities.includes(d.name));
+
     chart.setOption({
       backgroundColor: "transparent",
       tooltip: { trigger: "axis" },
-      legend: { data: ["Średnia Cena", "Transakcje"], top: 10 },
-      xAxis: {
-        type: "category",
-        data: data.map(d => d.city),
-      },
-      yAxis: [
-        { type: "value", name: "Cena" },
-        { type: "value", name: "Transakcje", position: "right" },
-      ],
+      xAxis: { type: "category", data: chartData.map((d) => d.name) },
+      yAxis: [{ type: "value" }, { type: "value" }],
       series: [
         {
-          name: "Średnia Cena",
+          name: "Cena",
           type: "bar",
-          yAxisIndex: 0,
-          data: data.map(d => d.averagePrice),
+          data: chartData.map((d) => d.averagePrice),
         },
         {
           name: "Transakcje",
           type: "bar",
-          yAxisIndex: 1,
-          data: data.map(d => d.totalTransactions),
+          data: chartData.map((d) => d.totalTransactions),
         },
       ],
     });
-    const resize = () => chart.resize();
-    window.addEventListener("resize", resize);
+
+    const handleResize = () => chart.resize();
+    window.addEventListener("resize", handleResize);
     return () => {
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("resize", handleResize);
       chart.dispose();
     };
-  }, [data]);
+  }, [data, selectedCities]);
 
-  return <div ref={ref} style={{ width: "100%", height: `${height}px` }} />;
-}
+  return <div ref={ref} style={{ width: "100%", height: 400 }} />;
+};

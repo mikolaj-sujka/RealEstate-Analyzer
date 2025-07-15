@@ -1,0 +1,1 @@
+export type PropertyType = "Mieszkanie" | "Dom" | "Lokal użytkowy";

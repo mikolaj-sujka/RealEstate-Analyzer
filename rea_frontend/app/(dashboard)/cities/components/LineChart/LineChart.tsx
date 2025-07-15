@@ -1,45 +1,37 @@
 "use client";
-
-import { useRef } from "react";
-import {
-  cityColors,
-  cityNameMap,
-  extendedPriceHistoryData,
-} from "../../models";
-import { useECharts } from "@/hooks";
+import React, { useRef, useEffect } from "react";
+import * as echarts from "echarts";
+import { PriceHistoryData } from "../../models";
 
 type LineChartProps = {
-  selectedCities: string[];
+  months: PriceHistoryData[];
+  cities: string[];
+  colors: Record<string, string>;
 };
 
-export function LineChart({ selectedCities }: LineChartProps) {
-  const ref = useRef<HTMLDivElement>(null!);
+export function LineChart({ months, cities, colors }: LineChartProps) {
+  const ref = useRef<HTMLDivElement>(null);
 
-  useECharts(
-    ref,
-    () => ({
+  useEffect(() => {
+    if (!ref.current) return;
+    const chart = echarts.init(ref.current);
+
+    chart.setOption({
       backgroundColor: "transparent",
-      tooltip: {},
-      legend: { data: selectedCities.map((c) => cityNameMap[c]), top: 10 },
-      xAxis: {
-        type: "category",
-        boundaryGap: false,
-        data: extendedPriceHistoryData.map((i) => i.month),
-      },
-      yAxis: {
-      },
-      series: selectedCities.map((city, idx) => ({
-        name: cityNameMap[city],
+      tooltip: { trigger: "axis" },
+      xAxis: { type: "category", data: months.map((m) => m.month) },
+      yAxis: { type: "value" },
+      series: cities.map((city, i) => ({
+        name: city,
         type: "line",
-        data: extendedPriceHistoryData.map((i) => i[city]),
-        smooth: true,
-        lineStyle: { color: cityColors[city], width: 3 },
-        animationDelay: idx * 200,
+        data: months.map((m) => m[city]),
+        lineStyle: { color: colors[city] },
       })),
-      animationEasing: "cubicOut",
-    }),
-    [selectedCities]
-  );
+    });
+
+    window.addEventListener("resize", () => chart.resize());
+    return () => chart.dispose();
+  }, [months, cities, colors]);
 
   return <div ref={ref} style={{ width: "100%", height: 400 }} />;
 }

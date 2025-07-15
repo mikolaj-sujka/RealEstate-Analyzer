@@ -1,54 +1,38 @@
-"use client";
-
-import { Container, MultiSelect, Paper, Text, Title } from "@mantine/core";
-import { BarChart } from "./components/BarChart";
-import { LineChart } from "./components/LineChart";
-import { useCityComparison } from "./hooks";
-import { cityNameMap } from "./models";
-import { useTranslation } from "react-i18next";
+'use client';
+import React from 'react';
+import { Container, Paper, Title, Text } from '@mantine/core';
+import { useCityComparison } from './hooks';
+import { BarChart, FiltersWrapper, LineChart } from './components';
 
 type CityComparisonProps = {
   title?: string;
   description?: string;
 };
 
-export default function CityComparison({
-  title = "Porównanie miast",
-  description,
-}: CityComparisonProps) {
-  const { selectedCities, setSelectedCities, filteredCityData } =
-    useCityComparison();
-
-  const { t } = useTranslation();
-
-  const options = Object.entries(cityNameMap).map(([value, label]) => ({
-    value,
-    label: label
-  }));
+export default function CityComparison({ title = 'Porównanie miast', description }: CityComparisonProps) {
+  const {
+    filteredData,
+    selectedCities,
+    extendedPriceHistoryData,
+    cityColors,
+    filterConfig,
+    handleFilterChange,
+  } = useCityComparison();
 
   return (
-    <Container size="xl" py="xl">
-      <Paper shadow="sm" p="lg" radius="md" withBorder mb="xl">
+    <Container size='xl' py='xl'>
+      <Paper shadow='sm' p='lg' radius='md' withBorder mb='xl'>
         <Title order={2}>{title}</Title>
-        {description && (
-          <Text size="sm" c="dimmed">
-            {description}
-          </Text>
-        )}
-        <MultiSelect
-          label={t("CityComparison.wybierzMiasta")}
-          placeholder={t("CityComparison.wybierzMiasta")}
-          data={options}
-          value={selectedCities}
-          onChange={setSelectedCities}
-          searchable
-          clearable
-        />
-        <BarChart data={filteredCityData} />
+        {description && <Text size='sm' c='dimmed' mb='md'>{description}</Text>}
+
+        <FiltersWrapper config={filterConfig} onChange={handleFilterChange} />
+
+        <BarChart data={filteredData} selectedCities={selectedCities} />
       </Paper>
-      <Paper shadow="sm" p="lg" radius="md" withBorder>
-        <Title order={3}>{t("CityComparison.historiaCenWedlugMiast")}</Title>
-        <LineChart selectedCities={selectedCities} />
+
+      <Paper shadow='sm' p='lg' radius='md' withBorder>
+        <Title order={3}>Historia Cen według Miast</Title>
+        <LineChart months={extendedPriceHistoryData} cities={selectedCities} colors={cityColors} />
       </Paper>
     </Container>
   );
