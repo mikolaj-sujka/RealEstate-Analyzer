@@ -1,71 +1,80 @@
-import { Grid, Box, Text, RangeSlider, Select } from "@mantine/core";
+"use client";
+
 import React from "react";
+import {
+  Paper,
+  Grid,
+  Group,
+  Button,
+  Collapse,
+  ActionIcon,
+  Text,
+} from "@mantine/core";
+import { IconFilter, IconChevronDown, IconX } from "@tabler/icons-react";
+import { FilterConfig } from "@/models";
+import { useFilters } from "@/hooks";
+import { FilterItem } from "./components";
 
-type FiltersProps = {
-  cityOptions: { value: string; label: string }[];
-  selectedCity: string;
-  onCityChange: (city: string) => void;
-  priceConfig: { min: number; max: number };
-  priceRange: [number, number];
-  onPriceChange: (range: [number, number]) => void;
-  propertiesConfig: { min: number; max: number };
-  propertiesRange: [number, number];
-  onPropertiesChange: (range: [number, number]) => void;
-};
+type FilterProps = {
+  config: FilterConfig[];
+  onFilterChange: (vals: Record<string, any>) => void;
+  title?: string;
+  defaultExpanded?: boolean;
+}
 
-export const Filters = ({
-  cityOptions,
-  selectedCity,
-  onCityChange,
-  priceConfig,
-  priceRange,
-  onPriceChange,
-  propertiesConfig,
-  propertiesRange,
-  onPropertiesChange,
-}: FiltersProps) => {
+export function Filter({
+  config,
+  onFilterChange,
+  title = "Filtry",
+  defaultExpanded = true,
+}: FilterProps) {
+  const { values, setFilter, clearAll, expanded, setExpanded } = useFilters({
+    config,
+    onChange: onFilterChange,
+  });
+
   return (
-    <>
-      <Grid align="flex-end" mb="xl">
-        <Grid.Col span={{ base: 12, md: 6 }}>
-          <Box>
-            <Text size="sm" fw={500} mb="xs">
-              Zakres cenowy (PLN/m²): {priceRange[0].toLocaleString()} -{" "}
-              {priceRange[1].toLocaleString()}
-            </Text>
-            <RangeSlider
-              value={priceRange}
-              onChange={onPriceChange}
-              min={priceConfig.min}
-              max={priceConfig.max}
-              step={100}
-              thumbSize={16}
-            />
-          </Box>
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 6 }}>
-          <Box>
-            <Text size="sm" fw={500} mb="xs">
-              Liczba nieruchomości: {propertiesRange[0]} - {propertiesRange[1]}
-            </Text>
-            <RangeSlider
-              value={propertiesRange}
-              onChange={onPropertiesChange}
-              min={propertiesConfig.min}
-              max={propertiesConfig.max}
-              step={10}
-              thumbSize={16}
-            />
-          </Box>
-        </Grid.Col>
-      </Grid>
-      <Select
-        label="Wybierz miasto"
-        data={cityOptions}
-        value={selectedCity}
-        onChange={(value) => value && onCityChange(value)}
-        allowDeselect={false}
-      />
-    </>
+    <Paper shadow="sm" p="md" radius="md" withBorder mb="lg">
+      <Group style={{ justifyContent: "space-between" }} mb={expanded ? "md" : 0}>
+        <Group>
+          <IconFilter size={20} />
+          <Text>{title}</Text>
+        </Group>
+        <Group gap="xs">
+          <Button
+            variant="subtle"
+            size="xs"
+            leftSection={<IconX size={14} />}
+            onClick={clearAll}
+          >
+            Wyczyść
+          </Button>
+          <ActionIcon
+            variant="subtle"
+            onClick={() => setExpanded(!expanded)}
+            style={{
+              transform: expanded ? "rotate(180deg)" : undefined,
+              transition: "transform 0.2s",
+            }}
+          >
+            <IconChevronDown size={16} />
+          </ActionIcon>
+        </Group>
+      </Group>
+
+      <Collapse in={expanded}>
+        <Grid>
+          {config.map((f, i) => (
+            <Grid.Col key={f.id} span={{ base: 12, sm: 6, md: 4 }} pt="xs">
+              <FilterItem
+                filter={f}
+                value={values[f.id]}
+                onChange={(val) => setFilter(f.id, val)}
+              />
+            </Grid.Col>
+          ))}
+        </Grid>
+      </Collapse>
+    </Paper>
   );
-};
+}

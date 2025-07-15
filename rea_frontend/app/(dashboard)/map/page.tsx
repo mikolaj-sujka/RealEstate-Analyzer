@@ -1,44 +1,32 @@
-'use client'
+"use client";
+
 import React from "react";
-import { Container, Paper, Title, Grid } from "@mantine/core";
-import { usePropertyMap } from "./hooks";
-import { cityMapData } from "./models";
-import { Filters } from "@/components/Filters";
+import { Container, Paper, Title, Grid, Text } from "@mantine/core";
+import { usePropertyMap } from "./hooks/usePropertyMap";
+import { Filter } from "@/components/Filters";
 import { DistrictCard, MapChart } from "./components";
 
 export default function PropertyMap() {
-  const {
-    selectedCity,
-    setSelectedCity,
-    priceConfig,
-    propertiesConfig,
-    priceRange,
-    setPriceRange,
-    propertiesRange,
-    setPropertiesRange,
-    filteredData,
-  } = usePropertyMap();
+  const { setSelectedCity, setPriceRange, setPropertiesRange, filteredData, filterConfig } =
+    usePropertyMap();
 
-  const cityOptions = Object.keys(cityMapData).map((city) => ({
-    value: city,
-    label: city,
-  }));
+  const handleFilters = (vals: Record<string, any>) => {
+    if (vals.selectedCity) setSelectedCity(vals.selectedCity);
+    if (vals.priceRange) setPriceRange(vals.priceRange);
+    if (vals.propertiesRange) setPropertiesRange(vals.propertiesRange);
+  };
 
   return (
     <Container size="xl" py="xl">
       <Paper shadow="sm" p="lg" radius="md" withBorder mb="xl">
         <Title order={2}>Mapa Nieruchomości - Dzielnice</Title>
-        <Filters
-          cityOptions={cityOptions}
-          selectedCity={selectedCity}
-          onCityChange={setSelectedCity}
-          priceConfig={priceConfig}
-          priceRange={priceRange}
-          onPriceChange={setPriceRange}
-          propertiesConfig={propertiesConfig}
-          propertiesRange={propertiesRange}
-          onPropertiesChange={setPropertiesRange}
+
+        <Filter
+          config={filterConfig}
+          onFilterChange={handleFilters}
+          defaultExpanded
         />
+
         <MapChart data={filteredData} />
       </Paper>
 
@@ -51,9 +39,7 @@ export default function PropertyMap() {
           ))
         ) : (
           <Grid.Col span={12}>
-            <Paper p="xl" withBorder style={{ textAlign: "center" }}>
-              Brak danych spełniających wybrane kryteria filtrowania.
-            </Paper>
+            <Text style={{ textAlign: "center" }}>Brak danych spełniających kryteria.</Text>
           </Grid.Col>
         )}
       </Grid>

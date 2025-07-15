@@ -1,6 +1,7 @@
-'use client'
+"use client";
 import { useState, useEffect, useMemo } from "react";
 import { cityMapData } from "../models";
+import { FilterConfig } from "@/models";
 
 export const usePropertyMap = (initialCity: string = "Warszawa") => {
   const [selectedCity, setSelectedCity] = useState<string>(initialCity);
@@ -13,7 +14,6 @@ export const usePropertyMap = (initialCity: string = "Warszawa") => {
     0, 1,
   ]);
 
-  // initialize slider 
   useEffect(() => {
     if (!mapData.length) return;
     const prices = mapData.map((d) => d.averagePrice);
@@ -40,6 +40,37 @@ export const usePropertyMap = (initialCity: string = "Warszawa") => {
     [mapData, priceRange, propertiesRange]
   );
 
+  const filterConfig: FilterConfig[] = [
+    {
+      id: "selectedCity",
+      type: "select",
+      label: "Miasto",
+      options: Object.keys(cityMapData).map((city) => ({
+        value: city,
+        label: city,
+      })),
+      defaultValue: "Warszawa",
+    },
+    {
+      id: "priceRange",
+      type: "range",
+      label: "Zakres cen (PLN/m²)",
+      min: 0,
+      max: 20000,
+      step: 100,
+      defaultValue: [0, 20000],
+    },
+    {
+      id: "propertiesRange",
+      type: "range",
+      label: "Liczba nieruchomości",
+      min: 0,
+      max: 500,
+      step: 5,
+      defaultValue: [0, 500],
+    },
+  ];
+
   return {
     selectedCity,
     setSelectedCity,
@@ -50,5 +81,6 @@ export const usePropertyMap = (initialCity: string = "Warszawa") => {
     propertiesRange,
     setPropertiesRange,
     filteredData,
+    filterConfig,
   };
 };

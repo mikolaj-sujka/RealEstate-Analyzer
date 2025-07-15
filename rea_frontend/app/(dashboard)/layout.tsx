@@ -27,9 +27,9 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         <Sidebar />
       </AppShell.Navbar>
       <AppShell.Main>
-        <Paper p="md" radius="md" bg="var(--mantine-color-body)">
+        {/* <Paper p="md" radius="md" bg="var(--mantine-color-body)"> */}
           {children}
-        </Paper>
+        {/* </Paper> */}
       </AppShell.Main>
     </AppShell>
   );

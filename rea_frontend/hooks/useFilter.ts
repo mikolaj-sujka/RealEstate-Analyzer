@@ -1,42 +1,46 @@
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
 import { FilterConfig, FilterValues } from "@/models";
-import { buildFilterSchema } from "@/utils";
+import { useState, useCallback, useEffect } from "react";
 
 type UseFiltersProps = {
   config: FilterConfig[];
-  defaultValues?: FilterValues;
   onChange: (values: FilterValues) => void;
 }
 
-export const useFilters = ({
-  config,
-  defaultValues = {},
-  onChange,
-}: UseFiltersProps) => {
-  const schema = buildFilterSchema(config);
+export const useFilters = ({ config, onChange }: UseFiltersProps) => {
+  const getDefaults = useCallback((): FilterValues => {
+    const defs: FilterValues = {};
+    config.forEach((f) => {
+      if (f.defaultValue !== undefined) {
+        defs[f.id] = f.defaultValue;
+      }
+    });
+    return defs;
+  }, [config]);
 
-  const { control, watch, reset, handleSubmit } = useForm<FilterValues>({
-    resolver: zodResolver(schema),
-    defaultValues,
-  });
+  const [values, setValues] = useState<FilterValues>(getDefaults());
+  const [expanded, setExpanded] = useState<boolean>(true);
 
   useEffect(() => {
-    const subscription = watch((values) => {
-      onChange(values as FilterValues);
-    });
-    return () => subscription.unsubscribe();
-  }, [watch, onChange]);
+    onChange(values);
+  }, []); 
 
-  const handleReset = () => {
-    reset(defaultValues);
-    onChange(defaultValues);
+  const setFilter = (id: string, val: any) => {
+    const next = { ...values, [id]: val };
+    setValues(next);
+    onChange(next);
+  };
+
+  const clearAll = () => {
+    const defs = getDefaults();
+    setValues(defs);
+    onChange(defs);
   };
 
   return {
-    control,
-    handleSubmit,
-    handleReset,
+    values,
+    setFilter,
+    clearAll,
+    expanded,
+    setExpanded,
   };
 }
