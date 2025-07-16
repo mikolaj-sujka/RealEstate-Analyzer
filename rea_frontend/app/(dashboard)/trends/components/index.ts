@@ -1,4 +1,3 @@
-export * from "./TrendCard";
-export * from "./TrendChart";
-export * from "./HeatmapChart";
-export * from "./CorrelationChart";
+export * from "./InvestmentSimulator";
+export * from "./TrendComparisonHeader";
+export * from "./AnalysisChart";

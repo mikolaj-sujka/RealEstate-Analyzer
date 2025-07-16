@@ -16,5 +16,5 @@ export const useECharts = (
       window.removeEventListener("resize", resize);
       chart.dispose();
     };
-  }, deps);
+  }, [ref, getOption]);
 };

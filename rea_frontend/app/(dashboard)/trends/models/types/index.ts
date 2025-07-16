@@ -1,3 +1,4 @@
-export * from './MarketData';
-export * from './HeatmapData';
-export * from './CorrelationData';
+export * from './TrendPoint';
+export * from './AdvancedTrendMetric';
+export * from './InvestmentTrendMetric';
+export * from './RiskData';
