@@ -1,8 +1,8 @@
+import { NotificationSettings } from "@/models";
 import { Card, Group, Box, Text, Switch, Stack } from "@mantine/core";
 import { IconBell } from "@tabler/icons-react";
-import { NotificationSettings } from "../types";
 
-interface NotificationSettingsCardProps {
+type NotificationSettingsCardProps = {
   notifications: NotificationSettings;
   setNotifications: React.Dispatch<React.SetStateAction<NotificationSettings>>;
 }

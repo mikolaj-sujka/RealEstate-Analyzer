@@ -15,10 +15,7 @@ import { useInvestmentCalculator } from "./hooks";
 import { cityInvestmentData } from "./models";
 import { ParameterForm } from "@/components/ParameterForm";
 import { GaugeChart } from "@/components/GaugeChart";
-
-// type InvestmentScoreCalculatorProps = {
-//   cityInvestmentData: Record<string, CityInvestmentFactors>;
-// };
+import { useTranslate } from "@/hooks/useTranslate";
 
 export default function InvestmentScoreCalculator() {
   const {
@@ -36,13 +33,15 @@ export default function InvestmentScoreCalculator() {
     calculate,
   } = useInvestmentCalculator(cityInvestmentData);
 
+  const { t } = useTranslate();
+
   return (
     <Paper shadow="sm" p="lg" withBorder>
-      <Group justify="space-between" mb="xl">
-        <Title order={2}>Kalkulator Potencjału Inwestycyjnego</Title>
+      <Group justify="space-between" mb="sm">
+        <Title order={2}>{t("InvestmentScore.kalkulatorPotencjałuInwestycyjnego")}</Title>
       </Group>
-      <Text mb="xl" c="dimmed">
-        Narzędzie AHP do oceny atrakcyjności inwestycyjnej.
+      <Text mb="md" c="dimmed">
+        {t("InvestmentScore.narzędzieAHP")}
       </Text>
 
       <ParameterForm
@@ -76,7 +75,7 @@ export default function InvestmentScoreCalculator() {
           <>
             <GaugeChart score={result.totalScore} />
             <Title order={3} mt="md" mb={"md"}>
-              Wyniki cząstkowe
+              {t("InvestmentScore.wynikiCzastkowe")}
             </Title>
             <PartialScores partial={result.partialScores} />
           </>

@@ -1,20 +1,16 @@
 "use client";
 
 import { useTranslate } from "@/hooks/useTranslate";
-import { Box, Container, Paper, Title } from "@mantine/core";
-import { metrics, recentTransactions, tableColumns } from "./models/consts";
-import {
-  HistoricalAnalysisChart,
-} from "./components";
-import { MetricsGridCard } from "@/components/MetricsGridCard";
+import { Box, Paper, Title } from "@mantine/core";
+import { recentTransactions, tableColumns } from "./models/consts";
+import { HistoricalAnalysisChart } from "./components";
 import { DataTable } from "@/components/DataTable";
+import { DashboardSection } from "@/components/DashboardSection";
 
 export default function DashboardPage() {
   const { t } = useTranslate();
   return (
-    <Container fluid>
-      <MetricsGridCard data={metrics} />
-
+    <DashboardSection>
       <Box mt="xl">
         <HistoricalAnalysisChart />
       </Box>
@@ -29,6 +25,6 @@ export default function DashboardPage() {
           pageSize={5}
         />
       </Paper>
-    </Container>
+    </DashboardSection>
   );
 }

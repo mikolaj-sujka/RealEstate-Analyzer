@@ -14,24 +14,34 @@ import {
 import { IconShieldCheck, IconChartBar } from "@tabler/icons-react";
 import type * as echarts from "echarts";
 import { cityTrendData } from "./models";
-import { CorrelationChart, InvestmentSimulator, MainAnalysisChart, RiskAnalysisChart, TrendComparisonHeader } from "./components";
+import {
+  CorrelationChart,
+  InvestmentSimulator,
+  MainAnalysisChart,
+  RiskAnalysisChart,
+  TrendComparisonHeader,
+} from "./components";
 import { ReportGenerator } from "@/components/ReportGenerator";
 import { recentTransactions } from "../dashboard/models/consts";
-
+import { useTranslate } from "@/hooks/useTranslate";
 
 type TrendComparisonProps = {
   title?: string;
   description?: string;
-}
+};
 
 export default function TrendComparison({
   title = "Porównanie trendów",
   description,
 }: TrendComparisonProps) {
   const [selectedCity, setSelectedCity] = useState("Warszawa");
-  const [analysisType, setAnalysisType] = useState<"basic" | "advanced" | "investment">("basic");
+  const [analysisType, setAnalysisType] = useState<
+    "basic" | "advanced" | "investment"
+  >("basic");
   const [isSwitching, setIsSwitching] = useState(false);
   const trendChartInstanceRef = useRef<echarts.ECharts | null>(null);
+
+  const { t } = useTranslate();
 
   const handleAnalysisTypeChange = (value: string) => {
     setIsSwitching(true);
@@ -97,11 +107,11 @@ export default function TrendComparison({
           <Paper shadow="sm" p="lg" radius="md" withBorder h="100%">
             <Group mb="md">
               <IconShieldCheck size={20} />
-              <Title order={3}>Analiza Ryzyka Inwestycyjnego</Title>
+              <Title order={3}>{t("Trends.analizaRyzykaInwestycyjnego")}</Title>
             </Group>
             <Text size="sm" c="dimmed" mb="md">
-              Ogólny wskaźnik ryzyka dla {selectedCity}. Niższa wartość oznacza
-              mniejsze ryzyko.
+              {t("Trends.ogólnyWskaźnikRyzykaDla", { city: selectedCity })}.{" "}
+              {t("Trends.nizszaWartośćOznaczaMniejszeRyzyko")}
             </Text>
             <RiskAnalysisChart city={selectedCity} />
           </Paper>
@@ -110,7 +120,7 @@ export default function TrendComparison({
           <Paper shadow="sm" p="lg" radius="md" withBorder h="100%">
             <Group mb="md">
               <IconChartBar size={20} />
-              <Title order={3}>Analiza Korelacji</Title>
+              <Title order={3}>{t("Trends.analizaKorelacji")}</Title>
             </Group>
             <CorrelationChart />
           </Paper>
@@ -121,8 +131,8 @@ export default function TrendComparison({
         chartInstance={trendChartInstanceRef.current}
         transactions={recentTransactions}
         selectedCities={[selectedCity]}
-        title="Gotowy na podsumowanie trendów?"
-        description="Wygeneruj szczegółowy raport PDF na podstawie aktualnych danych o trendach dla wybranego miasta."
+        title={t("ReportGenerator.generujRaport")}
+        description={t("ReportGenerator.opisRaportu")}
       />
     </Container>
   );

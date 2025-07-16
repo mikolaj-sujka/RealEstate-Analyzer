@@ -6,7 +6,12 @@ import {
   TransactionData,
 } from "@/models/types";
 import { Badge } from "@mantine/core";
-import { IconArrowUpRight, IconCurrencyDollar, IconHome, IconUsers } from "@tabler/icons-react"
+import {
+  IconArrowUpRight,
+  IconCurrencyDollar,
+  IconHome,
+  IconUsers,
+} from "@tabler/icons-react";
 
 export const priceData: ChartData[] = [
   { month: "Sty '24", price: 7000, prediction: 9500 },
@@ -91,6 +96,76 @@ export const recentTransactions: TransactionData[] = [
     pricePerM2: 11667,
     type: "Wynajem",
     status: "Zakończona",
+  },
+  {
+    id: 4,
+    property: "Mieszkanie 60m²",
+    location: "Czechów",
+    date: "09 cze 2025",
+    price: "480,000 zł",
+    pricePerM2: 8000,
+    type: "Sprzedaż",
+    status: "W trakcie",
+  },
+  {
+    id: 5,
+    property: "Lokal użytkowy 100m²",
+    location: "Północ",
+    date: "08 cze 2025",
+    price: "900,000 zł",
+    pricePerM2: 9000,
+    type: "Sprzedaż",
+    status: "Zakończona",
+  },
+  {
+    id: 6,
+    property: "Działka budowlana 500m²",
+    location: "Zemborzyce",
+    date: "07 cze 2025",
+    price: "250,000 zł",
+    pricePerM2: 500,
+    type: "Sprzedaż",
+    status: "W trakcie",
+  },
+  {
+    id: 7,
+    property: "Apartament 90m²",
+    location: "Wrotków",
+    date: "06 cze 2025",
+    price: "850,000 zł",
+    pricePerM2: 9444,
+    type: "Wynajem",
+    status: "Zakończona",
+  },
+  {
+    id: 8,
+    property: "Dom szeregowy 120m²",
+    location: "Dziesiąta",
+    date: "05 cze 2025",
+    price: "1,200,000 zł",
+    pricePerM2: 10000,
+    type: "Sprzedaż",
+    status: "W trakcie",
+  },
+  {
+    id: 9,
+    property: "Kawalerka 35m²",
+    location: "Lublin",
+    date: "04 cze 2025",
+    price: "400,000 zł",
+    pricePerM2: 11429,
+    type: "Wynajem",
+    status: "Zakończona",
+  },
+  {
+    id: 10,
+    property: "Mieszkanie 80m²",
+    location: "Szerokie",
+    date: "03 cze 2025",
+    price: "600,000 zł",
+    pricePerM2: 7500,
+    type: "Sprzedaż",
+    status: "W trakcie",
   },
 ];
 

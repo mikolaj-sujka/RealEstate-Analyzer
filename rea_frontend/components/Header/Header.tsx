@@ -25,9 +25,9 @@ import Link from "next/link";
 const breadcrumbNameMap: { [key: string]: { section: string; page: string } } =
   {
     "/dashboard": { section: "Przegląd", page: "Pulpit" },
-    "/analytics": { section: "Przegląd", page: "Analityka" },
+    "/analytics": { section: "Analiza", page: "Analityka Rynku" },
     "/trends": { section: "Analiza", page: "Porównanie Trendów" },
-    "/map": { section: "Analiza", page: "Mapa Nieruchomości" },
+    "/map": { section: "Przegląd", page: "Mapa Nieruchomości" },
     "/cities": { section: "Analiza", page: "Porównanie Miast" },
     "/account": { section: "Konto", page: "Moje Konto" },
     "/settings": { section: "Konto", page: "Ustawienia" },

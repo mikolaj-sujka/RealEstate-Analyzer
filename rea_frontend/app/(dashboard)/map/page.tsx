@@ -5,10 +5,18 @@ import { Container, Paper, Title, Grid, Text } from "@mantine/core";
 import { usePropertyMap } from "./hooks/usePropertyMap";
 import { Filter } from "@/components/Filters";
 import { DistrictCard, MapChart } from "./components";
+import { useTranslate } from "@/hooks";
 
 export default function PropertyMap() {
-  const { setSelectedCity, setPriceRange, setPropertiesRange, filteredData, filterConfig } =
-    usePropertyMap();
+  const {
+    setSelectedCity,
+    setPriceRange,
+    setPropertiesRange,
+    filteredData,
+    filterConfig,
+  } = usePropertyMap();
+
+  const { t } = useTranslate();
 
   const handleFilters = (vals: Record<string, any>) => {
     if (vals.selectedCity) setSelectedCity(vals.selectedCity);
@@ -19,7 +27,9 @@ export default function PropertyMap() {
   return (
     <Container size="xl" py="xl">
       <Paper shadow="sm" p="lg" radius="md" withBorder mb="xl">
-        <Title order={2}>Mapa Nieruchomości - Dzielnice</Title>
+        <Title mb="md" order={2}>
+          {t("CityMap.mapaNieruchomościDzielnice")}
+        </Title>
 
         <Filter
           config={filterConfig}
@@ -39,7 +49,9 @@ export default function PropertyMap() {
           ))
         ) : (
           <Grid.Col span={12}>
-            <Text style={{ textAlign: "center" }}>Brak danych spełniających kryteria.</Text>
+            <Text style={{ textAlign: "center" }}>
+              {t("CityMap.brakDanych")}
+            </Text>
           </Grid.Col>
         )}
       </Grid>

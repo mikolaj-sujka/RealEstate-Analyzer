@@ -9,6 +9,10 @@
         "analizaHistoryczna": "Analiza Historyczna",
         "zakresCzasu": "Zakres Czasu"
     },
+    "CityMap": {
+        "mapaNieruchomościDzielnice": "Mapa Nieruchomości - Dzielnice",
+        "brakDanych": "Brak danych dla wybranych filtrów"
+    },
     "Analytics": {
         "analitykaRynku": "Analityka Rynku",
         "wydajnośćRynkuWCzasie": "Wydajność Rynku w Czasie",
@@ -25,6 +29,18 @@
         "wybierzWojewództwo": "Wybierz Województwo",
         "analizaCen": "Analiza Cen",
         "historiaCenWedlugMiast": "Historia Cen według Miast",
-        "wykresLiniowy": "Wykres Liniowy"
+        "wykresLiniowy": "Wykres Liniowy",
+        "opisPorównania": "Porównaj różne miasta pod względem cen nieruchomości, trendów i wydajności rynku."
+    },
+    "Trends": {
+        "analizaRyzykaInwestycyjnego": "Analiza Ryzyka Inwestycyjnego",
+        "ogólnyWskaźnikRyzykaDla": "Ogólny Wskaźnik Ryzyka dla",
+        "nizszaWartośćOznaczaMniejszeRyzyko": "Niższa wartość oznacza mniejsze ryzyko inwestycyjne",
+        "analizaKorelacji": "Analiza Korelacji"
+    },
+    "InvestmentScore": {
+        "kalkulatorPotencjałuInwestycyjnego": "Kalkulator Potencjału Inwestycyjnego",
+        "narzędzieAHP": "Narzędzie AHP do oceny atrakcyjności inwestycyjnej",
+        "wynikiCzastkowe": "Wyniki Cząstkowe"
     }
 }

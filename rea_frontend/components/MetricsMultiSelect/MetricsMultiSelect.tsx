@@ -2,18 +2,18 @@
 
 import { MultiSelect } from "@mantine/core";
 
-interface Option {
+type Option = {
   value: string;
   label: string;
 }
 
-interface Props {
+type MetricsMultiSelectProps = {
   data: Option[];
   value: string[];
   onChange(vals: string[]): void;
 }
 
-export const MetricsMultiSelect = ({ data, value, onChange }: Props) => {
+export const MetricsMultiSelect = ({ data, value, onChange }: MetricsMultiSelectProps) => {
   return (
     <MultiSelect
       label="Metryki do porównania"

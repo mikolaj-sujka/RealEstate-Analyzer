@@ -1,6 +1,6 @@
 import { ChartData } from "@/models/types";
 
-export interface HistoricalData extends ChartData {
+export type HistoricalData = ChartData & {
   listings: number;
   sales: number;
   inventory: number;
@@ -22,9 +22,7 @@ export const metricColors: { [key: string]: string } = {
   inventory: "#f06595",
 };
 
-// Dane dla ostatnich 3 lat z większym zróżnicowaniem
 export const historicalData: HistoricalData[] = [
-  // 2022
   {
     month: "Sty '22",
     price: 11200,

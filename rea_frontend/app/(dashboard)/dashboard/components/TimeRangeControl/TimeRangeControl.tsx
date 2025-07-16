@@ -3,12 +3,12 @@
 import { SegmentedControl, Text } from "@mantine/core";
 import { useTranslation } from "react-i18next";
 
-interface Props {
+type TimeRangeControlProps = {
   value: string;
   onChange(range: string): void;
 }
 
-export const TimeRangeControl = ({ value, onChange }: Props) => {
+export const TimeRangeControl = ({ value, onChange }: TimeRangeControlProps) => {
   const { t } = useTranslation();
   return (
     <>

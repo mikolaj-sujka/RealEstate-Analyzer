@@ -19,16 +19,20 @@ const navSections = [
     title: "Przegląd",
     items: [
       { href: "/dashboard", label: "Pulpit", icon: IconDashboard },
-      { href: "/analytics", label: "Analityka", icon: IconChartBar },
+      { href: "/map", label: "Mapa Nieruchomości", icon: IconMap },
     ],
   },
   {
     title: "Analiza",
     items: [
+      { href: "/analytics", label: "Analityka Rynku", icon: IconChartBar },
       { href: "/trends", label: "Porównanie Trendów", icon: IconTrendingUp },
-      { href: "/map", label: "Mapa Nieruchomości", icon: IconMap },
       { href: "/cities", label: "Porównanie Miast", icon: IconBuildingStore },
-      { href: "/investment-score", label: "Kalkulator Potencjału Inwestycyjnego", icon: IconCalculator },
+      {
+        href: "/investment-score",
+        label: "Kalkulator Potencjału Inwestycyjnego",
+        icon: IconCalculator,
+      },
     ],
   },
 ];

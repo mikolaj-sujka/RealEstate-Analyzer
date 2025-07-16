@@ -2,12 +2,12 @@
 
 import { DatePickerInput } from "@mantine/dates";
 
-interface Props {
+type DateRangePickerProps = {
   value: [Date | null, Date | null];
   onChange(dates: [Date | null, Date | null]): void;
-}
+};
 
-export const DateRangePicker = ({ value, onChange }: Props) => {
+export const DateRangePicker = ({ value, onChange }: DateRangePickerProps) => {
   return (
     <DatePickerInput
       type="range"

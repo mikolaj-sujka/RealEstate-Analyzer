@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 
-export interface Column {
+export type Column = {
   key: string
   label: string
   width?: string
@@ -9,7 +9,7 @@ export interface Column {
   render?: (value: any, row: any) => ReactNode
 }
 
-export interface TableProps {
+export type TableProps = {
   data: any[]
   columns: Column[]
   pageSize?: number

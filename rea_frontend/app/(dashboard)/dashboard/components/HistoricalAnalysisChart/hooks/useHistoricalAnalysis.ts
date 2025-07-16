@@ -26,13 +26,11 @@ export function useHistoricalAnalysis(
     else setRange([subMonths(latest, 12), latest])
   }, [first, latest])
 
-  // 2. Filtrowanie danych według zakresu
   const filtered = useMemo(() => data.filter(item => {
     const d = parseDate(item.month)
     return d >= range[0] && d <= range[1]
   }), [data, range])
 
-  // 3. Zarządzanie metrykami i budowanie serii
   const [metrics, setMetrics] = useState<string[]>(defaultMetrics)
 
   const toggleMetric = useCallback((value: string[]) => {

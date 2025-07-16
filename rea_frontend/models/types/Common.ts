@@ -1,14 +1,14 @@
-export interface SparklineData {
+export type SparklineData = {
   value: number;
 }
 
-export interface ChartData {
+export type ChartData = {
   month: string;
   price: number;
   prediction?: number;
 }
 
-export interface MarketData {
+export type MarketData = {
   month: string;
   avgPrice: number;
   listings: number;
@@ -17,14 +17,14 @@ export interface MarketData {
   demand?: number;
 }
 
-export interface CityData {
+export type CityData = {
   city: string;
   avgPrice: number;
   transactions: number;
   growth: number;
 }
 
-export interface PriceHistoryData {
+export type PriceHistoryData = {
   month: string;
   Warsaw: number;
   Krakow: number;
@@ -33,13 +33,13 @@ export interface PriceHistoryData {
   Poznan: number;
 }
 
-export interface CorrelationData {
+export type CorrelationData = {
   metric: string;
   correlation: number;
   change: string;
 }
 
-export interface TransactionData {
+export type TransactionData = {
   id: number;
   property: string;
   location: string;
@@ -50,14 +50,14 @@ export interface TransactionData {
   status: string;
 }
 
-export interface PropertyTypeData {
+export type PropertyTypeData = {
   name: string;
   value: number;
   color: string;
   icon: any;
 }
 
-export interface DistrictData {
+export type DistrictData = {
   district: string;
   averagePrice: number;
   properties: number;
