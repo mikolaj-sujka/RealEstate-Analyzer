@@ -20,6 +20,7 @@ import {
   IconMail,
 } from "@tabler/icons-react";
 import { UserProfile } from "../../models";
+import { useTranslate } from "@/hooks/useTranslate";
 
 type ProfileCardProps = {
   profile: UserProfile;
@@ -27,12 +28,14 @@ type ProfileCardProps = {
 };
 
 export const ProfileCard = ({ profile, isEditing }: ProfileCardProps) => {
+  const { t } = useTranslate();
+
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
       <Card.Section withBorder inheritPadding py="xs">
         <Group>
           <IconUser size={20} />
-          <Text fw={500}>Profile Overview</Text>
+          <Text fw={500}>{t("ProfileCard.ogólneInformacje")}</Text>
         </Group>
       </Card.Section>
       <Stack align="center" mt="md">
@@ -53,9 +56,9 @@ export const ProfileCard = ({ profile, isEditing }: ProfileCardProps) => {
           <Title order={3}>
             {profile.firstName} {profile.lastName}
           </Title>
-          <Text c="dimmed">Real Estate Analyst</Text>
+          <Text c="dimmed">{t("ProfileCard.realEstateAnalyst")}</Text>
           <Badge variant="light" leftSection={<IconShield size={12} />}>
-            Premium Member
+            {t("ProfileCard.premiumUzytkownik")}
           </Badge>
         </Stack>
       </Stack>
@@ -76,7 +79,7 @@ export const ProfileCard = ({ profile, isEditing }: ProfileCardProps) => {
         <Group gap="sm">
           <IconCalendar size={16} color="var(--mantine-color-dimmed)" />
           <Text size="sm">
-            Member since {new Date(profile.joined).toLocaleString()}
+            {t("ProfileCard.uzytkownikOd")} {new Date(profile.joined).toLocaleString()}
           </Text>
         </Group>
       </Stack>

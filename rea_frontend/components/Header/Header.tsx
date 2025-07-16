@@ -65,9 +65,6 @@ export const Header = () => {
         {items}
       </Breadcrumbs>
       <Group>
-        <ActionIcon variant="default" size="lg" radius="xl">
-          <IconBell size={18} />
-        </ActionIcon>
         <ActionIcon
           variant="default"
           size="lg"

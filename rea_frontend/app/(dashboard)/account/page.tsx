@@ -1,20 +1,26 @@
 "use client";
 import { Container, Grid, Flex, Title, Button } from "@mantine/core";
 import { IconDeviceFloppy, IconEdit } from "@tabler/icons-react";
-import { useAccountPage } from "./_hooks";
-import { NotificationSettingsCard, PersonalInfoForm, ProfileCard } from "./components";
+import { useAccountPage } from "./hooks";
+import {
+  PersonalInfoForm,
+  ProfileCard,
+} from "./components";
 import * as classes from "./styles";
+import { useTranslate } from "@/hooks";
 
 export const AccountPage = () => {
   const { profile, notifications, isEditing, toggleEdit, setNotifications } =
     useAccountPage();
+    
+  const { t } = useTranslate();
 
   if (!profile) return <p>Loading…</p>;
 
   return (
     <Container className={classes.container}>
       <Flex className={classes.header}>
-        <Title order={1}>My Account</Title>
+        <Title order={1}>{t("Account.mojeKonto")}</Title>
         <Button
           onClick={toggleEdit}
           variant={isEditing ? "outline" : "filled"}
@@ -22,7 +28,7 @@ export const AccountPage = () => {
             isEditing ? <IconDeviceFloppy size={16} /> : <IconEdit size={16} />
           }
         >
-          {isEditing ? "Save Changes" : "Edit Profile"}
+          {isEditing ? t("Account.zapiszZmiany") : t("Account.edytujProfil")}
         </Button>
       </Flex>
       <Grid className={classes.grid}>
@@ -31,14 +37,10 @@ export const AccountPage = () => {
         </Grid.Col>
         <Grid.Col span={{ base: 12, lg: 8 }}>
           <PersonalInfoForm profile={profile} isEditing={isEditing} />
-          <NotificationSettingsCard
-            notifications={notifications}
-            setNotifications={setNotifications}
-          />
         </Grid.Col>
       </Grid>
     </Container>
   );
-}
+};
 
 export default AccountPage;

@@ -1,4 +1,24 @@
 {
+    "Account": {
+        "mojeKonto": "Moje Konto",
+        "edytujProfil": "Edytuj Profil",
+        "zapiszZmiany": "Zapisz Zmiany"
+    },
+    "ProfileCard": {
+        "ogólneInformacje": "Ogólne Informacje",
+        "uzytkownikOd": "Użytkownik od",
+        "realEstateAnalyst": "Real Estate Analyst",
+        "premiumUzytkownik": "Premium Użytkownik"
+    },
+    "PersonalInfo": {
+        "informacjeOsobiste": "Informacje Osobiste",
+        "imię": "Imię",
+        "nazwisko": "Nazwisko",
+        "email": "Email",
+        "numerTelefonu": "Numer Telefonu",
+        "firma": "Firma",
+        "bio": "Bio"
+    },
     "Dashboard": {
         "ostatnieTransakcje": "Ostatnie Transakcje",
         "generujRaport": "Generuj Raport",
