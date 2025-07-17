@@ -42,9 +42,9 @@ export const WeightsSliders = ({ weights, onChange }: WeightsSlidersProps) => {
       <Text size="lg" mb="md">
         Wagi Kryteriów (AHP)
       </Text>
-      <Grid>
+      <Grid gutter={{ base: 10, xs: 'xl', md: 'xl', xl: 90 }}>
         {criteria.map(({ key, label, description }) => (
-          <Grid.Col key={key} span={{ base: 12, sm: 6 }} mb="lg">
+          <Grid.Col key={key} span={6} mb="lg">
             <Box>
               <Text fw={500}>{label}</Text>
               <Text size="xs" c="dimmed" mb="xs">
