@@ -8,4 +8,6 @@ export type CityInvestmentFactors = {
 export type InvestmentScoreResult = {
   totalScore: number;
   partialScores: CityInvestmentFactors;
+  weightedSum: number;
+  adjustmentFactor: number;
 }
