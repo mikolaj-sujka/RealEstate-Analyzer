@@ -16,7 +16,7 @@ export default function DashboardPage() {
 
       <TitleSection title={t("Dashboard.ostatnieTransakcje")} />
       <Text c="dimmed" size="sm" mb="md">
-        {t("Dashboard.analizaHistorycznaOpis")}
+        {t("Dashboard.ostatnieTransakcjeOpis")}
       </Text>
       <DataTable
         data={recentTransactions}

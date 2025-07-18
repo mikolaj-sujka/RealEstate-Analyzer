@@ -1,4 +1,4 @@
-import { IconDashboard, IconMap, IconChartBar, IconTrendingUp, IconBuildingStore, IconCalculator, IconHelp, IconEyeDollar } from "@tabler/icons-react";
+import { IconDashboard, IconMap, IconChartBar, IconTrendingUp, IconBuildingStore, IconCalculator, IconHelp, IconEyeDollar, IconMapPinDollar } from "@tabler/icons-react";
 
 export const sidebarSections = [
     {
@@ -19,14 +19,14 @@ export const sidebarSections = [
     {
         title: "Kalkulatory",
         items: [
-            { href: "/investment-score", label: "Kalkulator Potencjału Inwestycyjnego", icon: IconCalculator },
+            { href: "/investment-score", label: "Kalkulator Potencjału Inwestycyjnego", icon: IconMapPinDollar },
             { href: "/investment-calculator", label: "Symulator Rentowności Inwestycji", icon: IconCalculator },
         ],
     },
     {
         title: "Pomoc",
         items: [
-            { href: "/help", label: "Centrum Pomocy", icon: IconHelp },
+            { href: "/help-center", label: "Centrum Pomocy", icon: IconHelp },
         ],
     },
 ];

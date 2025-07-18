@@ -25,6 +25,7 @@ export function DataTable({
   selectable,
   onRowAction,
   onExport,
+  description
 }: TableProps) {
   const [sortKey, setSortKey] = React.useState<string | null>(null);
   const [sortDir, setSortDir] = React.useState<"asc" | "desc">("asc");
@@ -143,7 +144,7 @@ export function DataTable({
       <Group justify="space-between" mb="md">
         <TitleSection title={t("Dashboard.ostatnieTransakcje")} />
         <Text c="dimmed" size="sm">
-          {t("Dashboard.ostatnieTransakcjeOpis")}
+          {description}
         </Text>
         {onExport && (
           <Button

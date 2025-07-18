@@ -16,4 +16,5 @@ export type TableProps = {
   selectable?: boolean
   onRowAction?: (action: string, row: any) => void
   onExport?: (rows: any[]) => void
+  description?: string
 }

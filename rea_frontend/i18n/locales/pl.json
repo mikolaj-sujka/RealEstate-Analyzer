@@ -68,5 +68,16 @@
         "symulatorOpłacalnościInwestycji": "Symulator Opłacalności Inwestycji",
         "analizaWhatIf": "Analiza 'What-If' dla Twojej inwestycji - dostosuj parametry makroekonomiczne i zobacz prawdopodobny rozkład zysków.",
         "dostosujParametry": "Dostosuj parametry i zobacz potencjalne wyniki"
+    },
+    "HelpCenter": {
+        "centrumPomocy": "Centrum Pomocy",
+        "faq": "FAQ",
+        "zasoby": "Zasoby",
+        "statusSystemu": "Status Systemu",
+        "kontakt": "Kontakt",
+        "pomocOpis": "Znajdź odpowiedzi na najczęściej zadawane pytania, dostęp do zasobów i informacje o statusie systemu.",
+        "przydatneZasoby": "Przydatne Zasoby",
+        "statusOpis": "Wszystkie systemy działają prawidłowo",
+        "statusAktywny": "Aktywny"
     }
 }
