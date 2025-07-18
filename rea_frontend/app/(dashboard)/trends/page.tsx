@@ -36,7 +36,7 @@ export default function TrendComparison({
 }: TrendComparisonProps) {
   const [selectedCity, setSelectedCity] = useState("Warszawa");
   const [analysisType, setAnalysisType] = useState<
-    "basic" | "advanced" | "investment"
+    "basic" | "advanced"
   >("basic");
   const [isSwitching, setIsSwitching] = useState(false);
   const trendChartInstanceRef = useRef<echarts.ECharts | null>(null);
@@ -46,7 +46,7 @@ export default function TrendComparison({
   const handleAnalysisTypeChange = (value: string) => {
     setIsSwitching(true);
     setTimeout(() => {
-      setAnalysisType(value as "basic" | "advanced" | "investment");
+      setAnalysisType(value as "basic" | "advanced");
       setIsSwitching(false);
     }, 400);
   };

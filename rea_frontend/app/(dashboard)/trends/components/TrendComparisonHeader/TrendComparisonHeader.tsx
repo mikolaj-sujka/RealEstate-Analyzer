@@ -31,7 +31,6 @@ export const TrendComparisonHeader = ({
           data={[
             { label: "Podstawowa", value: "basic" },
             { label: "Zaawansowana", value: "advanced" },
-            { label: "Inwestycyjna", value: "investment" },
           ]}
         />
         <Select

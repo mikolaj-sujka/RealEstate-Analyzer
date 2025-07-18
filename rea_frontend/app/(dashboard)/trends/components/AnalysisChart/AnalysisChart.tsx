@@ -3,7 +3,7 @@ import { advancedMetricsData, cityTrendData, investmentMetrics, riskAnalysisData
 import { getAdvancedMetricsChartOption, getBasicTrendChartOption, getCorrelationChartOption, getInvestmentChartOption, getRiskAnalysisChartOption } from "../../utils/chartOptions";
 
 type MainAnalysisChartProps = {
-  type: "basic" | "advanced" | "investment";
+  type: "basic" | "advanced"; 
   city: string;
   onChartInit?: (chart: any) => void;
 };
@@ -12,7 +12,7 @@ export const MainAnalysisChart = ({ type, city, onChartInit }: MainAnalysisChart
   const chartOptions = {
     basic: getBasicTrendChartOption(cityTrendData[city]),
     advanced: getAdvancedMetricsChartOption(advancedMetricsData[city]),
-    investment: getInvestmentChartOption(investmentMetrics[city]),
+    // investment: getInvestmentChartOption(investmentMetrics[city]),
   };
 
   if (!chartOptions[type]) return null;

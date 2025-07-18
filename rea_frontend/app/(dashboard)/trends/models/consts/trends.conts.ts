@@ -752,6 +752,5 @@ export const correlationData: CorrelationData[] = [
   { metric: "Czas Sprzedaży vs Cena", correlation: -0.76, change: "-0.08" },
   { metric: "Pustostany vs Popyt", correlation: -0.82, change: "-0.12" },
   { metric: "ROI vs Aktywność Dev.", correlation: 0.71, change: "+0.09" },
-  { metric: "Zadłużenie vs Cena", correlation: 0.85, change: "+0.11" },
   { metric: "Migracja vs Popyt", correlation: 0.68, change: "+0.06" },
 ]
