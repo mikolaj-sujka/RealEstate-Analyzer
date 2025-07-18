@@ -55,9 +55,10 @@
         "centrumInwestora": "Centrum Inwestora",
         "centrumInwestoraOpis": "Twoje centrum inwestycyjne - dostęp do narzędzi analitycznych, raportów i wskaźników inwestycyjnych.",
         "analizaRyzykaInwestycyjnego": "Analiza Ryzyka Inwestycyjnego",
-        "ogólnyWskaźnikRyzykaDla": "Ogólny Wskaźnik Ryzyka dla",
-        "nizszaWartośćOznaczaMniejszeRyzyko": "Niższa wartość oznacza mniejsze ryzyko inwestycyjne",
-        "analizaKorelacji": "Analiza Korelacji"
+        "ogólnyWskaźnikRyzykaDla": "Ogólny Wskaźnik Ryzyka dla Twojej inwestycji. ",
+        "nizszaWartośćOznaczaMniejszeRyzyko": "Niższa wartość oznacza mniejsze ryzyko inwestycyjne.",
+        "analizaKorelacji": "Analiza Korelacji",
+        "analizaKorelacjiOpis": "Analiza korelacji między różnymi czynnikami wpływającymi na rynek nieruchomości."
     },
     "InvestmentScore": {
         "kalkulatorPotencjałuInwestycyjnego": "Kalkulator Potencjału Inwestycyjnego",

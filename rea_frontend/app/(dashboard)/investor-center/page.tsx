@@ -100,7 +100,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
               {t("InvestorCenter.ogólnyWskaźnikRyzykaDla", {
                 city: selectedCity,
               })}
-              . {t("InvestorCenter.nizszaWartośćOznaczaMniejszeRyzyko")}
+              {t("InvestorCenter.nizszaWartośćOznaczaMniejszeRyzyko")}
             </Text>
             <RiskAnalysisChart city={selectedCity} />
           </Paper>
@@ -110,6 +110,9 @@ export default function InvestorCenter({}: InvestorCenterProps) {
             <Group mb="md">
               <IconChartBar size={20} />
               <Title order={3}>{t("InvestorCenter.analizaKorelacji")}</Title>
+              <Text size="sm" c="dimmed">
+                {t("InvestorCenter.analizaKorelacjiOpis")}
+              </Text>
             </Group>
             <CorrelationChart />
           </Paper>
