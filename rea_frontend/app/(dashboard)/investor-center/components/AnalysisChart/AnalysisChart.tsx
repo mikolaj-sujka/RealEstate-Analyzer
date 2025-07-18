@@ -1,6 +1,6 @@
 import { ChartContainer } from "@/components/ChartContainer";
-import { advancedMetricsData, cityTrendData, investmentMetrics, riskAnalysisData } from "../../models";
-import { getAdvancedMetricsChartOption, getBasicTrendChartOption, getCorrelationChartOption, getInvestmentChartOption, getRiskAnalysisChartOption } from "../../utils/chartOptions";
+import { advancedMetricsData, cityTrendData, riskAnalysisData } from "../../models";
+import { getAdvancedMetricsChartOption, getBasicTrendChartOption, getCorrelationChartOption, getRiskAnalysisChartOption } from "../../utils/chartOptions";
 
 type MainAnalysisChartProps = {
   type: "basic" | "advanced"; 

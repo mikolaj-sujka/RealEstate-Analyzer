@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Container, Grid, Select, Title, Group, Paper } from "@mantine/core";
+import { Grid, Select, Title, Group, Paper, Text, Flex } from "@mantine/core";
 import {
   IconCurrencyDollar,
   IconHome,
@@ -13,6 +13,8 @@ import { MarketAnalyticsChart } from "./components";
 import { voivodeshipMarketData } from "./models";
 import { useTranslation } from "react-i18next";
 import { ReportGenerator } from "@/components/ReportGenerator/ReportGenerator";
+import { DashboardSection } from "@/components/DashboardSection/DashboardSection";
+import { TitleSection } from "@/components/UI/TitleSection";
 
 export default function AnalyticsPage() {
   const [voivodeship, setVoivodeship] = useState("Cała Polska");
@@ -49,9 +51,14 @@ export default function AnalyticsPage() {
   ];
 
   return (
-    <Container size="xl" py="xl">
-      <Group justify="space-between" mb="xl">
-        <Title order={1}>{t("Analytics.analitykaRynku")}</Title>
+    <DashboardSection>
+      <Group justify="space-between" align="center">
+        <Flex direction="column">
+          <TitleSection title={t("Analytics.analitykaRynku")}></TitleSection>
+          <Text c="dimmed" size="sm">
+            {t("Analytics.analitykaRynkuOpis")}
+          </Text>
+        </Flex>
         <Select
           label={t("Analytics.wybierzWojewództwo")}
           data={Object.keys(voivodeshipMarketData)}
@@ -60,7 +67,7 @@ export default function AnalyticsPage() {
         />
       </Group>
 
-      <Grid mb="xl">
+      <Grid mb="xl" mt="xl">
         {cards.map((c) => (
           <Grid.Col key={c.label} span={{ base: 12, sm: 6, lg: 3 }}>
             <StatisticsCardData {...c} />
@@ -70,7 +77,7 @@ export default function AnalyticsPage() {
 
       <Paper shadow="sm" p="lg" radius="md" withBorder>
         <Title order={3} mb="md">
-          {t("Analytics.wydajnośćRynkuWCzasie")}
+          {t("Analytics.stanRynku")}
         </Title>
         <MarketAnalyticsChart data={marketData} />
       </Paper>
@@ -83,6 +90,6 @@ export default function AnalyticsPage() {
         title={t("ReportGenerator.tytułGeneratoraRaportów")}
         description={t("ReportGenerator.opisRaportu")}
       />
-    </Container>
+    </DashboardSection>
   );
 }

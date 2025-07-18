@@ -30,18 +30,7 @@ export const LandingHeader = () => {
         </Text>
       </Group>
       <Group>
-        <Link href="/dashboard" style={{ textDecoration: "none" }}>
-          <Text
-            c="rgba(255,255,255,0.8)"
-            style={{
-              cursor: "pointer",
-              transition: "color 0.2s ease",
-            }}
-            className="hover-text-white"
-          >
-            Zaloguj się
-          </Text>
-        </Link>
+        <Link href="/dashboard" style={{ textDecoration: "none" }}></Link>
         <Link href="/dashboard" style={{ textDecoration: "none" }}>
           <Group gap="xs" style={{ cursor: "pointer" }}>
             <Text

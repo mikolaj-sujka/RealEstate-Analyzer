@@ -1,4 +1,4 @@
-export * from "./useTrendData"
+export * from "./useInvestorCenterData"
 export * from "./useAdvancedMetrics"
 export * from "./useInvestmentMetrics"
 export * from "./useRiskAnalysis"

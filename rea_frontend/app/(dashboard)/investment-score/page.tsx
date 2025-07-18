@@ -16,6 +16,8 @@ import { cityInvestmentData } from "./models";
 import { ParameterForm } from "@/components/ParameterForm";
 import { GaugeChart } from "@/components/GaugeChart";
 import { useTranslate } from "@/hooks/useTranslate";
+import { DashboardSection } from "@/components/DashboardSection/DashboardSection";
+import { TitleSection } from "@/components/UI/TitleSection";
 
 export default function InvestmentScoreCalculator() {
   const {
@@ -36,11 +38,11 @@ export default function InvestmentScoreCalculator() {
   const { t } = useTranslate();
 
   return (
-    <Paper shadow="sm" p="lg" withBorder>
-      <Group justify="space-between" mb="sm">
-        <Title order={2}>{t("InvestmentScore.kalkulatorPotencjałuInwestycyjnego")}</Title>
-      </Group>
-      <Text mb="md" c="dimmed">
+    <DashboardSection>
+      <TitleSection
+        title={t("InvestmentScore.kalkulatorPotencjałuInwestycyjnego")}
+      />
+      <Text c="dimmed" size="sm" mb="xl">
         {t("InvestmentScore.narzędzieAHP")}
       </Text>
 
@@ -81,6 +83,6 @@ export default function InvestmentScoreCalculator() {
           </>
         )}
       </Box>
-    </Paper>
+    </DashboardSection>
   );
 }

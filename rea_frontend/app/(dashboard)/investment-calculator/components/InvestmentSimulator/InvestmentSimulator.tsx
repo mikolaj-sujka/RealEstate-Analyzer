@@ -21,6 +21,7 @@ import {
   IconPigMoney,
   IconTrendingUp,
 } from "@tabler/icons-react";
+import { useTranslate } from "@/hooks/useTranslate";
 
 /**
  * Build histogram bins for numeric data.
@@ -146,18 +147,14 @@ export const InvestmentSimulator: React.FC = () => {
     };
   }, [result]);
 
+  const { t } = useTranslate();
+
   return (
-    <Paper shadow="sm" p="lg" radius="md" withBorder mt="xl">
-      <Group justify="space-between" mb="md">
-        <Group>
-          <IconChartHistogram size={24} />
-          <Title order={3}>Symulator Opłacalności Inwestycji</Title>
-        </Group>
-      </Group>
+    <>
+      <Title order={3}>{t("InvestmentCalculator.symulatorOpłacalnościInwestycji")}</Title>
 
       <Text c="dimmed" size="sm" mb="xl">
-        Przeprowadź analizę „what-if” dla Twojej inwestycji. Dostosuj parametry
-        makroekonomiczne i zobacz prawdopodobny rozkład zysków.
+        {t("InvestmentCalculator.analizaWhatIf")}
       </Text>
 
       {/* PARAMS ------------------------------------------------------------- */}
@@ -315,6 +312,6 @@ export const InvestmentSimulator: React.FC = () => {
           </Grid>
         )}
       </Box>
-    </Paper>
+    </>
   );
 };

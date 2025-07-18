@@ -1,13 +1,14 @@
 "use client";
 
-import { Paper, Title, Grid, Box } from "@mantine/core";
+import { Grid, Box, Text } from "@mantine/core";
 import { DateRangePicker } from "@/components/DateRangePicker";
 import { MetricsMultiSelect } from "@/components/MetricsMultiSelect";
 import { TimeRangeControl } from "../TimeRangeControl";
 import { useHistoricalAnalysis } from "./hooks";
-import { historicalData, allMetrics, metricColors } from "./models";
+import { historicalData, allMetrics } from "./models";
 import { Chart } from "@/components/Chart";
 import { useTranslation } from "react-i18next";
+import { TitleSection } from "@/components/UI/TitleSection";
 
 export const HistoricalAnalysisChart = () => {
   const { range, setRange, setPreset, filtered, series, metrics, setMetrics } =
@@ -15,10 +16,11 @@ export const HistoricalAnalysisChart = () => {
   const { t } = useTranslation();
 
   return (
-    <Paper shadow="sm" p="lg" radius="md" withBorder>
-      <Title order={3} mb="md">
-        {t("Dashboard.analizaHistoryczna")}
-      </Title>
+    <>
+      <TitleSection title={t("Dashboard.analizaHistoryczna")} />
+      <Text c="dimmed" size="sm" mb="md">
+        {t("Dashboard.analizaHistorycznaOpis")}
+      </Text>
       <Grid align="flex-end">
         <Grid.Col span={{ base: 12, md: "auto" }}>
           <TimeRangeControl value={""} onChange={setPreset} />
@@ -39,9 +41,9 @@ export const HistoricalAnalysisChart = () => {
           />
         </Grid.Col>
       </Grid>
-      <Box h={300} mt="xl">
+      <Box h={300} mt="xl" mb="xl">
         <Chart data={filtered} series={series} height={300} />
       </Box>
-    </Paper>
+    </>
   );
 };

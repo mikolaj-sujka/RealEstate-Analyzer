@@ -34,7 +34,7 @@ export function Filter({
   });
 
   return (
-    <Paper shadow="sm" p="md" radius="md" withBorder mb="lg">
+    <Paper shadow="sm" p="md" radius="md" withBorder mb="lg" mt="xl">
       <Group style={{ justifyContent: "space-between" }} mb={expanded ? "md" : 0}>
         <Group>
           <IconFilter size={20} />

@@ -1,9 +1,4 @@
 {
-    "Account": {
-        "mojeKonto": "Moje Konto",
-        "edytujProfil": "Edytuj Profil",
-        "zapiszZmiany": "Zapisz Zmiany"
-    },
     "ProfileCard": {
         "ogólneInformacje": "Ogólne Informacje",
         "uzytkownikOd": "Użytkownik od",
@@ -27,15 +22,19 @@
         "suma": "Suma",
         "rozkładTypówNieruchomości": "Rozkład Typów Nieruchomości",
         "analizaHistoryczna": "Analiza Historyczna",
-        "zakresCzasu": "Zakres Czasu"
+        "zakresCzasu": "Zakres Czasu",
+        "analizaHistorycznaOpis": "Analiza historyczna cen nieruchomości w Twoim województwie. Wybierz województwo, aby zobaczyć szczegółowe dane.",
+        "ostatnieTransakcjeOpis": "Ostatnie transakcje nieruchomości w Twoim województwie. Wybierz województwo, aby zobaczyć szczegółowe dane."
     },
     "CityMap": {
         "mapaNieruchomościDzielnice": "Mapa Nieruchomości - Dzielnice",
+        "mapaNieruchomosciOpis": "Zobacz rozkład nieruchomości w Twoim mieście. Kliknij na dzielnicę, aby zobaczyć szczegółowe dane.",
         "brakDanych": "Brak danych dla wybranych filtrów"
     },
     "Analytics": {
         "analitykaRynku": "Analityka Rynku",
-        "wydajnośćRynkuWCzasie": "Wydajność Rynku w Czasie",
+        "analitykaRynkuOpis": "Analiza rynku nieruchomości w Twoim województwie. Wybierz województwo, aby zobaczyć szczegółowe dane.",
+        "stanRynku": "Stan Rynku",
         "wybierzWojewództwo": "Wybierz Województwo"
     },
     "ReportGenerator": {
@@ -52,7 +51,9 @@
         "wykresLiniowy": "Wykres Liniowy",
         "opisPorównania": "Porównaj różne miasta pod względem cen nieruchomości, trendów i wydajności rynku."
     },
-    "Trends": {
+    "InvestorCenter": {
+        "centrumInwestora": "Centrum Inwestora",
+        "centrumInwestoraOpis": "Twoje centrum inwestycyjne - dostęp do narzędzi analitycznych, raportów i wskaźników inwestycyjnych.",
         "analizaRyzykaInwestycyjnego": "Analiza Ryzyka Inwestycyjnego",
         "ogólnyWskaźnikRyzykaDla": "Ogólny Wskaźnik Ryzyka dla",
         "nizszaWartośćOznaczaMniejszeRyzyko": "Niższa wartość oznacza mniejsze ryzyko inwestycyjne",
@@ -60,7 +61,12 @@
     },
     "InvestmentScore": {
         "kalkulatorPotencjałuInwestycyjnego": "Kalkulator Potencjału Inwestycyjnego",
-        "narzędzieAHP": "Narzędzie AHP do oceny atrakcyjności inwestycyjnej",
+        "narzędzieAHP": "Narzędzie AHP do oceny atrakcyjności inwestycyjnej nieruchomości na podstawie różnych kryteriów.",
         "wynikiCzastkowe": "Wyniki Cząstkowe"
+    },
+    "InvestmentCalculator": {
+        "symulatorOpłacalnościInwestycji": "Symulator Opłacalności Inwestycji",
+        "analizaWhatIf": "Analiza 'What-If' dla Twojej inwestycji - dostosuj parametry makroekonomiczne i zobacz prawdopodobny rozkład zysków.",
+        "dostosujParametry": "Dostosuj parametry i zobacz potencjalne wyniki"
     }
 }

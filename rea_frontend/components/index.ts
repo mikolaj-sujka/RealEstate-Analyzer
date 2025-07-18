@@ -15,3 +15,4 @@ export * from "./ReportGenerator";
 export * from "./ReportGeneratorWrapper";
 export * from './DashboardSection';
 export * from './AnalysisSwitcher';
+export * from './UI';

@@ -15,6 +15,8 @@ import {
   Pagination,
 } from "@mantine/core";
 import { Column, TableProps } from "@/models/types";
+import { useTranslate } from "@/hooks";
+import { TitleSection } from "../UI";
 
 export function DataTable({
   data,
@@ -134,10 +136,15 @@ export function DataTable({
     </Table.Tr>
   ));
 
+  const { t } = useTranslate();
+
   return (
-    <Paper shadow="sm" p="lg" radius="md" withBorder>
+    <Paper shadow="sm" p="lg" radius="md" withBorder mt="xl">
       <Group justify="space-between" mb="md">
-        <Text fw={500}>Ostatnie transakcje</Text>
+        <TitleSection title={t("Dashboard.ostatnieTransakcje")} />
+        <Text c="dimmed" size="sm">
+          {t("Dashboard.ostatnieTransakcjeOpis")}
+        </Text>
         {onExport && (
           <Button
             size="xs"

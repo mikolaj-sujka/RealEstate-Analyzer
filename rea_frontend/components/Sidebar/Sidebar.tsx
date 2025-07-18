@@ -1,46 +1,9 @@
 "use client";
 import { NavLink, Stack, Group, Text, Box } from "@mantine/core";
-import {
-  IconSettings,
-  IconHelp,
-  IconDashboard,
-  IconChartBar,
-  IconTrendingUp,
-  IconMap,
-  IconBuildingStore,
-  IconCalculator,
-} from "@tabler/icons-react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-
-const navSections = [
-  {
-    title: "Przegląd",
-    items: [
-      { href: "/dashboard", label: "Pulpit", icon: IconDashboard },
-      { href: "/map", label: "Mapa Nieruchomości", icon: IconMap },
-    ],
-  },
-  {
-    title: "Analiza",
-    items: [
-      { href: "/analytics", label: "Analityka Rynku", icon: IconChartBar },
-      { href: "/trends", label: "Porównanie Trendów", icon: IconTrendingUp },
-      { href: "/cities", label: "Porównanie Miast", icon: IconBuildingStore },
-      {
-        href: "/investment-score",
-        label: "Kalkulator Potencjału Inwestycyjnego",
-        icon: IconCalculator,
-      },
-    ],
-  },
-];
-
-const bottomNav = [
-  { href: "/account", label: "Konto", icon: IconSettings },
-  { href: "/help", label: "Pomoc", icon: IconHelp },
-];
+import { sidebarSections } from "./types/consts";
 
 export const Sidebar = () => {
   const pathname = usePathname();
@@ -79,7 +42,7 @@ export const Sidebar = () => {
         mt="md"
       >
         <Box>
-          {navSections.map((section) => (
+          {sidebarSections.map((section) => (
             <Stack key={section.title} gap="xs" mb="lg">
               <Text size="xs" c="dimmed" fw={700} tt="uppercase" px="md">
                 {section.title}
@@ -96,19 +59,6 @@ export const Sidebar = () => {
                 />
               ))}
             </Stack>
-          ))}
-        </Box>
-        <Box>
-          {bottomNav.map((item) => (
-            <NavLink
-              key={item.label}
-              href={item.href}
-              label={item.label}
-              leftSection={<item.icon size={18} />}
-              active={pathname === item.href}
-              component={Link}
-              variant="subtle"
-            />
           ))}
         </Box>
       </Stack>

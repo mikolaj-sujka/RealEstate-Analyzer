@@ -1,30 +1,28 @@
 "use client";
 
 import { useTranslate } from "@/hooks/useTranslate";
-import { Box, Paper, Title } from "@mantine/core";
 import { recentTransactions, tableColumns } from "./models/consts";
 import { HistoricalAnalysisChart } from "./components";
 import { DataTable } from "@/components/DataTable";
 import { DashboardSection } from "@/components/DashboardSection";
+import { TitleSection } from "@/components/UI/TitleSection";
+import { Text } from "@mantine/core";
 
 export default function DashboardPage() {
   const { t } = useTranslate();
   return (
     <DashboardSection>
-      <Box mt="xl">
-        <HistoricalAnalysisChart />
-      </Box>
+      <HistoricalAnalysisChart />
 
-      <Paper mt="xl" shadow="sm" p="lg" radius="md" withBorder>
-        <Title order={4} mb="md">
-          {t("Dashboard.ostatnieTransakcje")}
-        </Title>
-        <DataTable
-          data={recentTransactions}
-          columns={tableColumns}
-          pageSize={5}
-        />
-      </Paper>
+      <TitleSection title={t("Dashboard.ostatnieTransakcje")} />
+      <Text c="dimmed" size="sm" mb="md">
+        {t("Dashboard.analizaHistorycznaOpis")}
+      </Text>
+      <DataTable
+        data={recentTransactions}
+        columns={tableColumns}
+        pageSize={5}
+      />
     </DashboardSection>
   );
 }

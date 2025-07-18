@@ -1,31 +1,36 @@
-import { Group, Title, SegmentedControl, Select } from "@mantine/core";
-import { IconChartBar } from "@tabler/icons-react";
+import { TitleSection } from "@/components/UI/TitleSection";
+import { useTranslate } from "@/hooks/useTranslate";
+import { Flex, Group, SegmentedControl, Select, Text } from "@mantine/core";
 
-type TrendComparisonHeaderProps = {
+type InvestorCenterHeaderProps = {
   title: string;
   analysisType: string;
   onAnalysisTypeChange: (value: string) => void;
   selectedCity: string;
   onCityChange: (value: string | null) => void;
   cityOptions: { value: string; label: string }[];
-}
+};
 
-export const TrendComparisonHeader = ({
+export const InvestorCenterHeader = ({
   title,
   analysisType,
   onAnalysisTypeChange,
   selectedCity,
   onCityChange,
   cityOptions,
-}: TrendComparisonHeaderProps) => {
+}: InvestorCenterHeaderProps) => {
+  const { t } = useTranslate();   
   return (
-    <Group justify="space-between" mb="md">
-      <Group>
-        <IconChartBar size={20} />
-        <Title order={2}>{title}</Title>
-      </Group>
-      <Group>
+    <>
+      <Flex direction="column" mb="md">
+        <TitleSection title={title} />
+        <Text c="dimmed" size="sm">
+          {t("InvestorCenter.centrumInwestoraOpis")}
+        </Text>
+      </Flex>
+      <Flex justify="flex-end" align="center" mb="md" gap="xl">
         <SegmentedControl
+          style={{ top: '13px' }}
           value={analysisType}
           onChange={onAnalysisTypeChange}
           data={[
@@ -40,7 +45,7 @@ export const TrendComparisonHeader = ({
           onChange={onCityChange}
           allowDeselect={false}
         />
-      </Group>
-    </Group>
+      </Flex>
+    </>
   );
-}
+};

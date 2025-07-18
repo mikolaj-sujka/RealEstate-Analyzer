@@ -25,12 +25,18 @@ import Link from "next/link";
 const breadcrumbNameMap: { [key: string]: { section: string; page: string } } =
   {
     "/dashboard": { section: "Przegląd", page: "Pulpit" },
+    "/map": { section: "Przegląd", page: "Mapa Nieruchomości" },
     "/analytics": { section: "Analiza", page: "Analityka Rynku" },
     "/trends": { section: "Analiza", page: "Porównanie Trendów" },
-    "/map": { section: "Przegląd", page: "Mapa Nieruchomości" },
     "/cities": { section: "Analiza", page: "Porównanie Miast" },
-    "/account": { section: "Konto", page: "Moje Konto" },
-    "/settings": { section: "Konto", page: "Ustawienia" },
+    "/investment-score": {
+      section: "Analiza",
+      page: "Kalkulator Potencjału Inwestycyjnego",
+    },
+    "/investment-calculator": {
+      section: "Analiza",
+      page: "Kalkulator Rentowności Inwestycji",
+    },
     "/help": { section: "Pomoc", page: "Centrum Pomocy" },
   };
 
@@ -82,39 +88,11 @@ export const Header = () => {
         <Menu shadow="md" width={200}>
           <Menu.Target>
             <ActionIcon variant="default" size="lg" radius="xl">
-              <IconUser size={18} />
+              <IconHelp size={18} />
             </ActionIcon>
           </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Label>Moje Konto</Menu.Label>
-            <Menu.Item
-              component={Link}
-              href="/account"
-              leftSection={<IconUser size={14} />}
-            >
-              Profil
-            </Menu.Item>
-            <Menu.Item
-              component={Link}
-              href="/account"
-              leftSection={<IconSettings size={14} />}
-            >
-              Ustawienia
-            </Menu.Item>
-            <Menu.Item
-              component={Link}
-              href="/help"
-              leftSection={<IconHelp size={14} />}
-            >
-              Pomoc
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item color="red" leftSection={<IconLogout size={14} />}>
-              Wyloguj
-            </Menu.Item>
-          </Menu.Dropdown>
         </Menu>
       </Group>
     </Group>
   );
-}
+};
