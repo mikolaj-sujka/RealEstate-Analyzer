@@ -3,7 +3,7 @@ import { NavLink, Stack, Group, Text, Box } from "@mantine/core";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { sidebarSections } from "./types/consts";
+import { sidebarSections } from "./models/consts";
 
 export const Sidebar = () => {
   const pathname = usePathname();

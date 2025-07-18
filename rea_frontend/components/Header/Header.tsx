@@ -11,39 +11,17 @@ import {
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import {
-  IconBell,
   IconSun,
   IconMoon,
   IconChevronRight,
-  IconSettings,
   IconHelp,
-  IconLogout,
-  IconUser,
 } from "@tabler/icons-react";
-import Link from "next/link";
-
-const breadcrumbNameMap: { [key: string]: { section: string; page: string } } =
-  {
-    "/dashboard": { section: "Przegląd", page: "Pulpit" },
-    "/map": { section: "Przegląd", page: "Mapa Nieruchomości" },
-    "/analytics": { section: "Analiza", page: "Analityka Rynku" },
-    "/investor-center": { section: "Analiza", page: "Centrum Inwestora" },
-    "/cities": { section: "Analiza", page: "Porównanie Miast" },
-    "/investment-score": {
-      section: "Kalkulatory",
-      page: "Kalkulator Potencjału Inwestycyjnego",
-    },
-    "/investment-calculator": {
-      section: "Kalkulatory",
-      page: "Kalkulator Rentowności Inwestycji",
-    },
-    "/help": { section: "Pomoc", page: "Centrum Pomocy" },
-  };
+import { headerBreadcrumbNames } from "./models";
 
 export const Header = () => {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const pathname = usePathname();
-  const breadcrumbInfo = breadcrumbNameMap[pathname] || {
+  const breadcrumbInfo = headerBreadcrumbNames[pathname] || {
     section: "Przegląd",
     page: "Pulpit",
   };
