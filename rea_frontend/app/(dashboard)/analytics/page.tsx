@@ -57,7 +57,7 @@ export default function AnalyticsPage() {
         <Flex direction="column">
           <TitleSection title={t("Analytics.analitykaRynku")}></TitleSection>
           <TextDescription
-            description={t("Analytics.analitykaRynkuOpisDodatkowy")}
+            description={t("Analytics.analitykaRynkuOpis")}
           />
         </Flex>
         <Select
