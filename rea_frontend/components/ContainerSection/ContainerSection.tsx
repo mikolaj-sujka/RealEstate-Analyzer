@@ -1,7 +1,7 @@
 import React from "react";
 import { Container, Paper } from "@mantine/core";
 
-export const DashboardSection = ({
+export const ContainerSection = ({
   children,
 }: {
   children: React.ReactNode;

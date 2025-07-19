@@ -12,7 +12,6 @@ export const MainAnalysisChart = ({ type, city, onChartInit }: MainAnalysisChart
   const chartOptions = {
     basic: getBasicTrendChartOption(cityTrendData[city]),
     advanced: getAdvancedMetricsChartOption(advancedMetricsData[city]),
-    // investment: getInvestmentChartOption(investmentMetrics[city]),
   };
 
   if (!chartOptions[type]) return null;

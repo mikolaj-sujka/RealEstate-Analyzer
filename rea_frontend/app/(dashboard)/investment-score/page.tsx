@@ -2,9 +2,7 @@
 
 import React from "react";
 import {
-  Paper,
   Title,
-  Text,
   Group,
   Button,
   LoadingOverlay,
@@ -16,8 +14,8 @@ import { cityInvestmentData } from "./models";
 import { ParameterForm } from "@/components/ParameterForm";
 import { GaugeChart } from "@/components/GaugeChart";
 import { useTranslate } from "@/hooks/useTranslate";
-import { DashboardSection } from "@/components/DashboardSection/DashboardSection";
-import { TitleSection } from "@/components/UI/TitleSection";
+import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
+import { TextDescription, TitleSection } from "@/components/UI";
 
 export default function InvestmentScoreCalculator() {
   const {
@@ -38,13 +36,11 @@ export default function InvestmentScoreCalculator() {
   const { t } = useTranslate();
 
   return (
-    <DashboardSection>
+    <ContainerSection>
       <TitleSection
         title={t("InvestmentScore.kalkulatorPotencjałuInwestycyjnego")}
       />
-      <Text c="dimmed" size="sm" mb="xl">
-        {t("InvestmentScore.narzędzieAHP")}
-      </Text>
+      <TextDescription description={t("InvestmentScore.narzędzieAHP")} />
 
       <ParameterForm
         cities={cities}
@@ -83,6 +79,6 @@ export default function InvestmentScoreCalculator() {
           </>
         )}
       </Box>
-    </DashboardSection>
+    </ContainerSection>
   );
 }

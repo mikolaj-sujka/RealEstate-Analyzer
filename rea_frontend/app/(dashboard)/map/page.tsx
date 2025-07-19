@@ -6,8 +6,8 @@ import { usePropertyMap } from "./hooks/usePropertyMap";
 import { Filter } from "@/components/Filters";
 import { DistrictCard, MapChart } from "./components";
 import { useTranslate } from "@/hooks";
-import { DashboardSection } from "@/components/DashboardSection/DashboardSection";
-import { TitleSection } from "@/components/UI/TitleSection";
+import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
+import { TextDescription, TitleSection } from "@/components/UI";
 
 export default function PropertyMap() {
   const {
@@ -27,11 +27,9 @@ export default function PropertyMap() {
   };
 
   return (
-    <DashboardSection>
+    <ContainerSection>
       <TitleSection title={t("CityMap.mapaNieruchomościDzielnice")} />
-      <Text c="dimmed" size="sm">
-        {t("CityMap.mapaNieruchomosciOpis")}
-      </Text>
+      <TextDescription description={t("CityMap.mapaNieruchomosciOpis")} />
       <Filter
         config={filterConfig}
         onFilterChange={handleFilters}
@@ -55,6 +53,6 @@ export default function PropertyMap() {
           </Grid.Col>
         )}
       </Grid>
-    </DashboardSection>
+    </ContainerSection>
   );
 }

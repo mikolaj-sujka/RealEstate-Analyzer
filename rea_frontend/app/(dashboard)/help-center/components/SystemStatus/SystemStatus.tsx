@@ -1,4 +1,5 @@
-import { Card, Group, Title, Text, Badge } from "@mantine/core";
+import { TextDescription } from "@/components/UI";
+import { Card, Group, Title, Badge } from "@mantine/core";
 
 type SystemStatusProps = {
   translate: (key: string) => string;
@@ -10,7 +11,7 @@ export const SystemStatus = ({ translate }: SystemStatusProps) => {
       <Group justify="space-between">
         <div>
           <Title order={3}>{translate("HelpCenter.statusSystemu")}</Title>
-          <Text c="dimmed">{translate("HelpCenter.statusOpis")}</Text>
+          <TextDescription description={translate("HelpCenter.statusOpis")} />
         </div>
         <Badge color="green" size="lg">
           {translate("HelpCenter.statusAktywny")}

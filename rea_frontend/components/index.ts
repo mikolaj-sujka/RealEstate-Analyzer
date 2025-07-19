@@ -13,6 +13,6 @@ export * from "./GaugeChart";
 export * from "./CitySelect";
 export * from "./ReportGenerator";
 export * from "./ReportGeneratorWrapper";
-export * from './DashboardSection';
+export * from './ContainerSection';
 export * from './AnalysisSwitcher';
 export * from './UI';

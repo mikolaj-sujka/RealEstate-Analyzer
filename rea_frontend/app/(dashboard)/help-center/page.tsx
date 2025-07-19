@@ -9,13 +9,13 @@ import {
 } from "./components";
 import { ContactSection } from "./components/ContactSection";
 import { contactOptions, faqItems, resources } from "./models/consts";
-import { DashboardSection } from "@/components/DashboardSection";
+import { ContainerSection } from "@/components/ContainerSection";
 import { useTranslate } from "@/hooks";
 
 export default function HelpCenterPage() {
   const { t } = useTranslate();
   return (
-    <DashboardSection>
+    <ContainerSection>
       <Stack gap="xl">
         <HelpHeader translate={t} />
         <ContactSection translate={t} options={contactOptions} />
@@ -23,6 +23,6 @@ export default function HelpCenterPage() {
         <ResourcesSection translate={t} resources={resources} />
         <SystemStatus translate={t} />
       </Stack>
-    </DashboardSection>
+    </ContainerSection>
   );
 }

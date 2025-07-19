@@ -1,11 +1,11 @@
 "use client";
 import React from "react";
-import { Text } from "@mantine/core";
 import { useCityComparison } from "./hooks";
 import { BarChart, FiltersWrapper, LineChart } from "./components";
 import { useTranslate } from "@/hooks";
-import { DashboardSection } from "@/components/DashboardSection/DashboardSection";
+import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TitleSection } from "@/components/UI/TitleSection";
+import { TextDescription } from "@/components/UI/TextDescription";
 
 export default function CityComparison() {
   const {
@@ -20,11 +20,9 @@ export default function CityComparison() {
   const { t } = useTranslate();
 
   return (
-    <DashboardSection>
+    <ContainerSection>
       <TitleSection title={t("CityComparison.porównanieMiast")} />
-      <Text size="sm" c="dimmed" mb="md">
-        {t("CityComparison.opisPorównania")}
-      </Text>
+      <TextDescription description={t("CityComparison.opisPorównania")} />
       <FiltersWrapper config={filterConfig} onChange={handleFilterChange} />
 
       <BarChart data={filteredData} selectedCities={selectedCities} />
@@ -35,6 +33,6 @@ export default function CityComparison() {
         cities={selectedCities}
         colors={cityColors}
       />
-    </DashboardSection>
+    </ContainerSection>
   );
 }

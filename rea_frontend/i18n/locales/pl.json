@@ -68,7 +68,17 @@
     "InvestmentCalculator": {
         "symulatorOpłacalnościInwestycji": "Symulator Opłacalności Inwestycji",
         "analizaWhatIf": "Analiza 'What-If' dla Twojej inwestycji - dostosuj parametry makroekonomiczne i zobacz prawdopodobny rozkład zysków.",
-        "dostosujParametry": "Dostosuj parametry i zobacz potencjalne wyniki"
+        "dostosujParametry": "Dostosuj parametry i zobacz potencjalne wyniki",
+        "parametryInwestycji": "Parametry Inwestycji",
+        "wynikiSymulacji": "Wyniki Symulacji",
+        "wartośćInwestycji": "Wartość Inwestycji",
+        "horyzontInwestycyjny": "Horyzont Inwestycyjny",
+        "scenariuszMakroekonomiczny": "Scenariusz Makroekonomiczny",
+        "wzrostCen": "Wzrost Cen (%)",
+        "zyskNajmu": "Zysk Najmu (%)",
+        "inflacja": "Inflacja (%)",
+        "stopaProcentowa": "Stopa Procentowa kredytu (%)",
+        "uruchomSymulacje": "Uruchom Symulację"
     },
     "HelpCenter": {
         "centrumPomocy": "Centrum Pomocy",

@@ -13,8 +13,9 @@ import { MarketAnalyticsChart } from "./components";
 import { voivodeshipMarketData } from "./models";
 import { useTranslation } from "react-i18next";
 import { ReportGenerator } from "@/components/ReportGenerator/ReportGenerator";
-import { DashboardSection } from "@/components/DashboardSection/DashboardSection";
 import { TitleSection } from "@/components/UI/TitleSection";
+import { ContainerSection } from "@/components/ContainerSection";
+import { TextDescription } from "@/components/UI/TextDescription";
 
 export default function AnalyticsPage() {
   const [voivodeship, setVoivodeship] = useState("Cała Polska");
@@ -51,13 +52,13 @@ export default function AnalyticsPage() {
   ];
 
   return (
-    <DashboardSection>
+    <ContainerSection>
       <Group justify="space-between" align="center">
         <Flex direction="column">
           <TitleSection title={t("Analytics.analitykaRynku")}></TitleSection>
-          <Text c="dimmed" size="sm">
-            {t("Analytics.analitykaRynkuOpis")}
-          </Text>
+          <TextDescription
+            description={t("Analytics.analitykaRynkuOpisDodatkowy")}
+          />
         </Flex>
         <Select
           label={t("Analytics.wybierzWojewództwo")}
@@ -90,6 +91,6 @@ export default function AnalyticsPage() {
         title={t("ReportGenerator.tytułGeneratoraRaportów")}
         description={t("ReportGenerator.opisRaportu")}
       />
-    </DashboardSection>
+    </ContainerSection>
   );
 }

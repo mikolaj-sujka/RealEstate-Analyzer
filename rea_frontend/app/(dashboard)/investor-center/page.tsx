@@ -8,7 +8,6 @@ import {
   Group,
   Box,
   LoadingOverlay,
-  Title,
 } from "@mantine/core";
 import { IconShieldCheck, IconChartBar } from "@tabler/icons-react";
 import type * as echarts from "echarts";
@@ -22,7 +21,8 @@ import {
 import { ReportGenerator } from "@/components/ReportGenerator";
 import { recentTransactions } from "../dashboard/models/consts";
 import { useTranslate } from "@/hooks/useTranslate";
-import { DashboardSection } from "@/components/DashboardSection/DashboardSection";
+import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
+import { TextDescription, TitleSection } from "@/components/UI";
 
 type InvestorCenterProps = {
   title?: string;
@@ -59,7 +59,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
   };
 
   return (
-    <DashboardSection>
+    <ContainerSection>
       <InvestorCenterHeader
         title={t("InvestorCenter.centrumInwestora")}
         analysisType={analysisType}
@@ -92,9 +92,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
           <Paper shadow="sm" p="lg" radius="md" withBorder h="100%">
             <Group mb="md">
               <IconShieldCheck size={20} />
-              <Title order={3}>
-                {t("InvestorCenter.analizaRyzykaInwestycyjnego")}
-              </Title>
+              <TitleSection title={t("InvestorCenter.analizaRyzyka")} />    
             </Group>
             <Text size="sm" c="dimmed" mb="md">
               {t("InvestorCenter.ogólnyWskaźnikRyzykaDla", {
@@ -109,10 +107,8 @@ export default function InvestorCenter({}: InvestorCenterProps) {
           <Paper shadow="sm" p="lg" radius="md" withBorder h="100%">
             <Group mb="md">
               <IconChartBar size={20} />
-              <Title order={3}>{t("InvestorCenter.analizaKorelacji")}</Title>
-              <Text size="sm" c="dimmed">
-                {t("InvestorCenter.analizaKorelacjiOpis")}
-              </Text>
+              <TitleSection title={t("InvestorCenter.analizaKorelacji")} />
+              <TextDescription description={t("InvestorCenter.analizaKorelacjiOpis")} />
             </Group>
             <CorrelationChart />
           </Paper>
@@ -126,6 +122,6 @@ export default function InvestorCenter({}: InvestorCenterProps) {
         title={t("ReportGenerator.generujRaport")}
         description={t("ReportGenerator.opisRaportu")}
       />
-    </DashboardSection>
+    </ContainerSection>
   );
 }

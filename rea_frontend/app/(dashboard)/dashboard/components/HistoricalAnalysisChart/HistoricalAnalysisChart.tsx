@@ -9,6 +9,7 @@ import { historicalData, allMetrics } from "./models";
 import { Chart } from "@/components/Chart";
 import { useTranslation } from "react-i18next";
 import { TitleSection } from "@/components/UI/TitleSection";
+import { TextDescription } from "@/components/UI/TextDescription";
 
 export const HistoricalAnalysisChart = () => {
   const { range, setRange, setPreset, filtered, series, metrics, setMetrics } =
@@ -18,9 +19,7 @@ export const HistoricalAnalysisChart = () => {
   return (
     <>
       <TitleSection title={t("Dashboard.analizaHistoryczna")} />
-      <Text c="dimmed" size="sm" mb="md">
-        {t("Dashboard.analizaHistorycznaOpis")}
-      </Text>
+      <TextDescription description={t("Dashboard.analizaHistorycznaOpis")} />
       <Grid align="flex-end">
         <Grid.Col span={{ base: 12, md: "auto" }}>
           <TimeRangeControl value={""} onChange={setPreset} />

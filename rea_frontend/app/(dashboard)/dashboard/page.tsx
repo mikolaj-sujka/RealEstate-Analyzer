@@ -4,25 +4,23 @@ import { useTranslate } from "@/hooks/useTranslate";
 import { recentTransactions, tableColumns } from "./models/consts";
 import { HistoricalAnalysisChart } from "./components";
 import { DataTable } from "@/components/DataTable";
-import { DashboardSection } from "@/components/DashboardSection";
+import { ContainerSection } from "@/components/ContainerSection";
 import { TitleSection } from "@/components/UI/TitleSection";
-import { Text } from "@mantine/core";
+import { TextDescription } from "@/components/UI/TextDescription/TextDescription";
 
 export default function DashboardPage() {
   const { t } = useTranslate();
   return (
-    <DashboardSection>
+    <ContainerSection>
       <HistoricalAnalysisChart />
 
       <TitleSection title={t("Dashboard.ostatnieTransakcje")} />
-      <Text c="dimmed" size="sm" mb="md">
-        {t("Dashboard.ostatnieTransakcjeOpis")}
-      </Text>
+      <TextDescription description={t("Dashboard.ostatnieTransakcjeOpis")} />
       <DataTable
         data={recentTransactions}
         columns={tableColumns}
         pageSize={5}
       />
-    </DashboardSection>
+    </ContainerSection>
   );
 }

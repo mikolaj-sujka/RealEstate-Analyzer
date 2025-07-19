@@ -4,15 +4,12 @@ import {
   advancedMetricsData,
   cityTrendData,
   correlationData,
-  investmentMetrics,
   riskAnalysisData,
 } from "../models";
 
 type CityTrendData = (typeof cityTrendData)[keyof typeof cityTrendData];
 type AdvancedMetricsData =
   (typeof advancedMetricsData)[keyof typeof advancedMetricsData];
-type InvestmentMetricsData =
-  (typeof investmentMetrics)[keyof typeof investmentMetrics];
 type RiskAnalysisData =
   (typeof riskAnalysisData)[keyof typeof riskAnalysisData];
 
