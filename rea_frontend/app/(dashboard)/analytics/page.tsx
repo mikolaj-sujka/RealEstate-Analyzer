@@ -1,12 +1,6 @@
 "use client";
 import { useState } from "react";
-import { Grid, Select, Title, Group, Paper, Text, Flex } from "@mantine/core";
-import {
-  IconCurrencyDollar,
-  IconHome,
-  IconChartBar,
-  IconUsers,
-} from "@tabler/icons-react";
+import { Grid, Select, Title, Group, Paper, Flex } from "@mantine/core";
 import { useMarketAnalytics } from "./hooks";
 import { StatisticsCardData } from "@/components/StatisticsCardData";
 import { MarketAnalyticsChart } from "./components";
@@ -16,49 +10,30 @@ import { ReportGenerator } from "@/components/ReportGenerator/ReportGenerator";
 import { TitleSection } from "@/components/UI/TitleSection";
 import { ContainerSection } from "@/components/ContainerSection";
 import { TextDescription } from "@/components/UI/TextDescription";
+import { getCitiesAnalyticsCards } from "./utils";
+import * as styles from "./styles";
 
 export default function AnalyticsPage() {
   const [voivodeship, setVoivodeship] = useState("Cała Polska");
   const { marketData, lastMonth, changes } = useMarketAnalytics(voivodeship);
   const { t } = useTranslation();
 
-  const cards = [
-    {
-      label: "Średnia Cena",
-      value: lastMonth?.averagePrice.toLocaleString("pl-PL") + " PLN/m²",
-      change: changes.price,
-      icon: (
-        <IconCurrencyDollar size={16} color="var(--mantine-color-dimmed)" />
-      ),
-    },
-    {
-      label: "Nowe Oferty",
-      value: lastMonth?.listings.toLocaleString("pl-PL") || "–",
-      change: changes.listings,
-      icon: <IconHome size={16} color="var(--mantine-color-dimmed)" />,
-    },
-    {
-      label: "Wolumen Sprzedaży",
-      value: lastMonth?.sales.toLocaleString("pl-PL") || "–",
-      change: changes.sales,
-      icon: <IconChartBar size={16} color="var(--mantine-color-dimmed)" />,
-    },
-    {
-      label: "Zapasy Rynkowe",
-      value: lastMonth?.totalInventory.toLocaleString("pl-PL") || "–",
-      change: changes.inventory,
-      icon: <IconUsers size={16} color="var(--mantine-color-dimmed)" />,
-    },
-  ];
+  const cards = getCitiesAnalyticsCards(lastMonth, changes).map(
+    (card) => {
+      const CardIcon = card.icon;
+      return {
+        ...card,
+        icon: <CardIcon />,
+      };
+    }
+  );
 
   return (
     <ContainerSection>
-      <Group justify="space-between" align="center">
-        <Flex direction="column">
+      <Group className={styles.analyticsHeader}>
+        <Flex className={styles.headerCol}>
           <TitleSection title={t("Analytics.analitykaRynku")}></TitleSection>
-          <TextDescription
-            description={t("Analytics.analitykaRynkuOpis")}
-          />
+          <TextDescription description={t("Analytics.analitykaRynkuOpis")} />
         </Flex>
         <Select
           label={t("Analytics.wybierzWojewództwo")}
@@ -68,7 +43,7 @@ export default function AnalyticsPage() {
         />
       </Group>
 
-      <Grid mb="xl" mt="xl">
+      <Grid className={styles.analyticsGrid}>
         {cards.map((c) => (
           <Grid.Col key={c.label} span={{ base: 12, sm: 6, lg: 3 }}>
             <StatisticsCardData {...c} />
@@ -76,8 +51,8 @@ export default function AnalyticsPage() {
         ))}
       </Grid>
 
-      <Paper shadow="sm" p="lg" radius="md" withBorder>
-        <Title order={3} mb="md">
+      <Paper className={styles.analyticsPaper}>
+        <Title order={3} className={styles.analyticsPaperTitle}>
           {t("Analytics.stanRynku")}
         </Title>
         <MarketAnalyticsChart data={marketData} />

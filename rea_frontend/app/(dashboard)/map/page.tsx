@@ -8,6 +8,7 @@ import { DistrictCard, MapChart } from "./components";
 import { useTranslate } from "@/hooks";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TextDescription, TitleSection } from "@/components/UI";
+import * as classes from "./styles";
 
 export default function PropertyMap() {
   const {
@@ -47,7 +48,7 @@ export default function PropertyMap() {
           ))
         ) : (
           <Grid.Col span={12}>
-            <Text style={{ textAlign: "center" }}>
+            <Text className={classes.cityMapNoDataText}>
               {t("CityMap.brakDanych")}
             </Text>
           </Grid.Col>

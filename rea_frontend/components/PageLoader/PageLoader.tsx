@@ -6,15 +6,15 @@ import Image from "next/image";
 
 export const PageLoader = () => {
   const [progress, setProgress] = useState(0);
-  const [loadingText, setLoadingText] = useState("Initializing...");
+  const [loadingText, setLoadingText] = useState("Inicjalizacja...");
 
   useEffect(() => {
     const texts = [
-      "Initializing...",
-      "Loading market data...",
-      "Analyzing trends...",
-      "Preparing dashboard...",
-      "Almost ready...",
+      "Inicjalizacja...",
+      "Ładowanie danych rynkowych...",
+      "Analiza trendów...",
+      "Przygotowywanie wykresów...",
+      "Już prawie gotowe...",
     ];
 
     let textIndex = 0;

@@ -1,6 +1,7 @@
 import { DistrictData } from "@/models";
 import { Group, Paper, ThemeIcon, Text } from "@mantine/core";
 import { IconHome, IconTrendingDown, IconTrendingUp } from "@tabler/icons-react";
+import * as classes from "./styles/districtCardStyles.css";
 
 type DistrictCardProps = {
   district: DistrictData;
@@ -8,8 +9,8 @@ type DistrictCardProps = {
 
 export const DistrictCard = ({ district }: DistrictCardProps) => {
   return (
-    <Paper shadow="sm" p="md" radius="md" withBorder>
-      <Group justify="space-between" mb="xs">
+    <Paper className={classes.card}>
+      <Group className={classes.header}>
         <Group>
           <ThemeIcon variant="light" radius="md">
             <IconHome size={18} />
@@ -22,13 +23,13 @@ export const DistrictCard = ({ district }: DistrictCardProps) => {
           <IconTrendingDown size={16} color="var(--mantine-color-red-6)" />
         )}
       </Group>
-      <Text size="xl" fw={700} mb="xs">
+      <Text className={classes.price}>
         {district.averagePrice.toLocaleString("pl-PL")} PLN/m²
       </Text>
-      <Text size="sm" c="dimmed" mb="xs">
+      <Text className={classes.properties}>
         {district.properties} nieruchomości
       </Text>
-      <Text size="sm" c={district.trend === "up" ? "green" : "red"}>
+      <Text className={district.trend === "up" ? classes.changeUp : classes.changeDown}>
         {district.change} w tym miesiącu
       </Text>
     </Paper>
