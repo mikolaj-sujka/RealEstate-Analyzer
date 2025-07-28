@@ -1,17 +1,7 @@
 "use client";
 
-import { useState, useRef } from "react";
-import {
-  Paper,
-  Text,
-  Grid,
-  Group,
-  Box,
-  LoadingOverlay,
-} from "@mantine/core";
+import { Paper, Grid, Group, Box, LoadingOverlay } from "@mantine/core";
 import { IconShieldCheck, IconChartBar } from "@tabler/icons-react";
-import type * as echarts from "echarts";
-import { cityTrendData } from "./models";
 import {
   CorrelationChart,
   InvestorCenterHeader,
@@ -23,6 +13,8 @@ import { recentTransactions } from "../dashboard/models/consts";
 import { useTranslate } from "@/hooks/useTranslate";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TextDescription, TitleSection } from "@/components/UI";
+import * as classes from "./styles/investorCenterStyles.css";
+import { useInvestorCenter } from "./hooks";
 
 type InvestorCenterProps = {
   title?: string;
@@ -30,33 +22,17 @@ type InvestorCenterProps = {
 };
 
 export default function InvestorCenter({}: InvestorCenterProps) {
-  const [selectedCity, setSelectedCity] = useState("Warszawa");
-  const [analysisType, setAnalysisType] = useState<"basic" | "advanced">(
-    "basic"
-  );
-  const [isSwitching, setIsSwitching] = useState(false);
-  const trendChartInstanceRef = useRef<echarts.ECharts | null>(null);
-
   const { t } = useTranslate();
-
-  const handleAnalysisTypeChange = (value: string) => {
-    setIsSwitching(true);
-    setTimeout(() => {
-      setAnalysisType(value as "basic" | "advanced");
-      setIsSwitching(false);
-    }, 400);
-  };
-
-  const cityOptions = Object.keys(cityTrendData).map((city) => ({
-    value: city,
-    label: city,
-  }));
-
-  const handleChartInit = (instance: echarts.ECharts | null) => {
-    if (analysisType === "basic") {
-      trendChartInstanceRef.current = instance;
-    }
-  };
+  const {
+    selectedCity,
+    setSelectedCity,
+    analysisType,
+    isSwitching,
+    trendChartInstanceRef,
+    handleAnalysisTypeChange,
+    cityOptions,
+    handleChartInit,
+  } = useInvestorCenter();
 
   return (
     <ContainerSection>
@@ -68,18 +44,13 @@ export default function InvestorCenter({}: InvestorCenterProps) {
         onCityChange={(value) => setSelectedCity(value || "Warszawa")}
         cityOptions={cityOptions}
       />
-      <Box pos="relative" style={{ minHeight: "400px" }}>
+      <Box className={classes.relativeBox}>
         <LoadingOverlay
           visible={isSwitching}
           zIndex={1000}
           overlayProps={{ radius: "sm", blur: 2 }}
         />
-        <Box
-          style={{
-            opacity: isSwitching ? 0 : 1,
-            transition: "opacity 300ms ease",
-          }}
-        >
+        <Box className={classes.chartWrapper}>
           <MainAnalysisChart
             type={analysisType}
             city={selectedCity}
@@ -87,28 +58,34 @@ export default function InvestorCenter({}: InvestorCenterProps) {
           />
         </Box>
       </Box>
-      <Grid mt="xl">
+      <Grid className={classes.controlGrid}>
         <Grid.Col span={{ base: 12, lg: 6 }}>
-          <Paper shadow="sm" p="lg" radius="md" withBorder h="100%">
-            <Group mb="md">
+          <Paper className={classes.paperCard}>
+            <Group className={classes.mb}>
               <IconShieldCheck size={20} />
-              <TitleSection title={t("InvestorCenter.analizaRyzyka")} />    
+              <TitleSection
+                title={t("InvestorCenter.analizaRyzykaInwestycyjnego")}
+              />
             </Group>
-            <Text size="sm" c="dimmed" mb="md">
-              {t("InvestorCenter.ogólnyWskaźnikRyzykaDla", {
-                city: selectedCity,
-              })}
-              {t("InvestorCenter.nizszaWartośćOznaczaMniejszeRyzyko")}
-            </Text>
+            <TextDescription
+              description={
+                t("InvestorCenter.ogólnyWskaźnikRyzykaDla", {
+                  city: selectedCity,
+                }) + t("InvestorCenter.nizszaWartośćOznaczaMniejszeRyzyko")
+              }
+              className={classes.mb}
+            />
             <RiskAnalysisChart city={selectedCity} />
           </Paper>
         </Grid.Col>
         <Grid.Col span={{ base: 12, lg: 6 }}>
-          <Paper shadow="sm" p="lg" radius="md" withBorder h="100%">
-            <Group mb="md">
+          <Paper className={classes.paperCard}>
+            <Group className={classes.mb}>
               <IconChartBar size={20} />
               <TitleSection title={t("InvestorCenter.analizaKorelacji")} />
-              <TextDescription description={t("InvestorCenter.analizaKorelacjiOpis")} />
+              <TextDescription
+                description={t("InvestorCenter.analizaKorelacjiOpis")}
+              />
             </Group>
             <CorrelationChart />
           </Paper>

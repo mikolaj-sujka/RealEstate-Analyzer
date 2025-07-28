@@ -16,6 +16,7 @@ import { GaugeChart } from "@/components/GaugeChart";
 import { useTranslate } from "@/hooks/useTranslate";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TextDescription, TitleSection } from "@/components/UI";
+import * as classes from "./styles";
 
 export default function InvestmentScoreCalculator() {
   const {
@@ -52,7 +53,7 @@ export default function InvestmentScoreCalculator() {
         onSizeChange={setPropertySize}
       />
 
-      <Box mt="lg">
+      <Box className={classes.weightsWrapper}>
         <WeightsSliders
           weights={weights}
           onChange={(key, value) =>
@@ -61,18 +62,18 @@ export default function InvestmentScoreCalculator() {
         />
       </Box>
 
-      <Group justify="center" mt="xl">
+      <Group className={classes.calculateGroup}>
         <Button onClick={calculate} loading={loading} disabled={!selectedCity}>
           Oblicz Score
         </Button>
       </Group>
 
-      <Box mt="xl" style={{ position: "relative", minHeight: 350 }}>
+      <Box className={classes.resultContainer}>
         <LoadingOverlay visible={loading} />
         {result && !loading && (
           <>
             <GaugeChart score={result.totalScore} />
-            <Title order={3} mt="md" mb={"md"}>
+            <Title order={3} className={classes.partialTitle}>
               {t("InvestmentScore.wynikiCzastkowe")}
             </Title>
             <PartialScores partial={result.partialScores} />

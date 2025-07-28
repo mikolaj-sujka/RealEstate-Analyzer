@@ -1,6 +1,7 @@
 import { TitleSection, TextDescription } from "@/components/UI";
 import { useTranslate } from "@/hooks/useTranslate";
 import { Flex, SegmentedControl, Select } from "@mantine/core";
+import * as classes from "./styles";
 
 type InvestorCenterHeaderProps = {
   title: string;
@@ -22,15 +23,15 @@ export const InvestorCenterHeader = ({
   const { t } = useTranslate();
   return (
     <>
-      <Flex direction="column" mb="md">
+      <Flex className={classes.headerTop}>
         <TitleSection title={title} />
         <TextDescription
           description={t("InvestorCenter.centrumInwestoraOpis")}
         />
       </Flex>
-      <Flex justify="flex-end" align="center" mb="md" gap="xl">
+      <Flex className={classes.headerControls}>
         <SegmentedControl
-          style={{ top: "13px" }}
+          className={classes.segmentedControl}
           value={analysisType}
           onChange={onAnalysisTypeChange}
           data={[
