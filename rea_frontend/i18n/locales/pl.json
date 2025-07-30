@@ -23,8 +23,8 @@
         "rozkładTypówNieruchomości": "Rozkład Typów Nieruchomości",
         "analizaHistoryczna": "Analiza Historyczna",
         "zakresCzasu": "Zakres Czasu",
-        "analizaHistorycznaOpis": "Analiza historyczna cen nieruchomości w Twoim województwie. Wybierz województwo, aby zobaczyć szczegółowe dane.",
-        "ostatnieTransakcjeOpis": "Ostatnie transakcje nieruchomości w Twoim województwie. Wybierz województwo, aby zobaczyć szczegółowe dane."
+        "analizaHistorycznaOpis": "Analiza historyczna cen nieruchomości w Twoim mieście. Wybierz miasto, aby zobaczyć szczegółowe dane.",
+        "ostatnieTransakcjeOpis": "Ostatnie transakcje nieruchomości w Twoim mieście. Wybierz miasto, aby zobaczyć szczegółowe dane."
     },
     "CityMap": {
         "mapaNieruchomościDzielnice": "Mapa Nieruchomości - Dzielnice",

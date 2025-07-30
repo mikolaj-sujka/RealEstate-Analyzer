@@ -1,7 +1,8 @@
 import { TitleSection, TextDescription } from "@/components/UI";
 import { useTranslate } from "@/hooks/useTranslate";
-import { Flex, SegmentedControl, Select } from "@mantine/core";
+import { Flex, SegmentedControl } from "@mantine/core";
 import * as classes from "./styles";
+import { CitySelect } from "@/components/CitySelect";
 
 type InvestorCenterHeaderProps = {
   title: string;
@@ -39,12 +40,10 @@ export const InvestorCenterHeader = ({
             { label: "Zaawansowana", value: "advanced" },
           ]}
         />
-        <Select
-          label="Miasto"
-          data={cityOptions}
+        <CitySelect
+          options={cityOptions}
           value={selectedCity}
           onChange={onCityChange}
-          allowDeselect={false}
         />
       </Flex>
     </>

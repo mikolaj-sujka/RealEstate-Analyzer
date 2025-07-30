@@ -15,24 +15,17 @@ export const LandingPagePreview: React.FC = () => {
         <Image
           src="/images/logo.png"
           alt="Real Estate Analyzer Logo"
-          width={140}
           height={140}
-          className={`${classes.fadeInUp} ${classes.fadeInDelay1}`}
-          style={{ display: "block", margin: "0 auto" }}
+          width={140}
+          className={`${classes.imageLanding} ${classes.fadeInUp} ${classes.fadeInDelay1}`}
         />
 
         <Title
-          className={`${classes.fadeInUp} ${classes.fadeInDelay1}`}
-          style={{ textShadow: "2px 2px 4px rgba(255, 255, 255, 0.5)" }}
+          className={`${classes.fadeInUp} ${classes.fadeInDelay1} ${classes.titleLanding}`}
         >
           {t("LandingPagePreview.profesjonalnaAnaliza")}
           <br />
-          <Text
-            component="span"
-            variant="gradient"
-            gradient={{ from: "blue.4", to: "cyan.6", deg: 45 }}
-            inherit
-          >
+          <Text className={classes.titleTextGradient}>
             {t("LandingPagePreview.rynkuNieruchomości")}
           </Text>
         </Title>
@@ -51,10 +44,7 @@ export const LandingPagePreview: React.FC = () => {
           <Button
             component={Link}
             href="/dashboard"
-            size="xl"
-            radius="xl"
-            variant="gradient"
-            gradient={{ from: "blue.6", to: "cyan.8" }}
+            className={classes.landingButton}
           >
             {t("LandingPagePreview.rozpocznijAnalizę")}
           </Button>

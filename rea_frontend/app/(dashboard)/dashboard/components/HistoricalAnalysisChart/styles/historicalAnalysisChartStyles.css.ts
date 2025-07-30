@@ -1,17 +1,25 @@
 import { style } from '@vanilla-extract/css';
-import { rem } from '@mantine/core';
+import { rem } from "@mantine/core";
 
-export const container = style({
-    display: 'flex',
-    flexDirection: 'column',
-});
-
-export const controlGrid = style({
-    alignItems: 'flex-end',
-});
-
-export const chartBox = style({
-    height: rem(300),
-    marginTop: rem(32),
+export const card = style({
+    padding: rem(16),
+    backgroundColor: '#fff',
     marginBottom: rem(32),
+    borderRadius: rem(8),
+    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+    border: `1px solid rgba(0, 0, 0, 0.1)`,
+    display: 'flex',
+});
+
+export const group = style({
+    marginBottom: rem(16),
+    justifyContent: 'space-between',
+    display: 'flex',
+    alignItems: 'start',
+    flexDirection: 'column'
+});
+
+export const grid = style({
+    marginBottom: rem(16),
+    gap: rem(16)
 });
