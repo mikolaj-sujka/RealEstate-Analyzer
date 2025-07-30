@@ -90,5 +90,12 @@
         "przydatneZasoby": "Przydatne Zasoby",
         "statusOpis": "Wszystkie systemy działają prawidłowo",
         "statusAktywny": "Aktywny"
+    },
+    "LandingPagePreview": {
+        "profesjonalnaAnaliza": "Profesjonalna Analiza",
+        "rynkuNieruchomości": "Rynku Nieruchomości",
+        "inteligentneNarzędzie": "Zoptymalizuj swoje inwestycje dzięki zaawansowanej analityce i raportom.",
+        "rozpocznijAnalizę": "Rozpocznij Analizę"
+        
     }
 }

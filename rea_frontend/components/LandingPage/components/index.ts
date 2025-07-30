@@ -1,3 +1,1 @@
-export * from "./DashboardPreview";
-export * from "./LandingHero";
-export * from "./LandingHeader";
+export * from "./BeamsBackground";
