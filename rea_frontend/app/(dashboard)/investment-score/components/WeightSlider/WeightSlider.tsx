@@ -3,6 +3,7 @@
 import React from "react";
 import { Grid, Slider, Text, Box } from "@mantine/core";
 import { CityInvestmentFactors } from "../../models";
+import { TextDescription } from "@/components/UI";
 
 type WeightsSlidersProps = {
   weights: CityInvestmentFactors;
@@ -42,14 +43,12 @@ export const WeightsSliders = ({ weights, onChange }: WeightsSlidersProps) => {
       <Text size="lg" mb="md">
         Wagi Kryteriów (AHP)
       </Text>
-      <Grid gutter={{ base: 10, xs: 'xl', md: 'xl', xl: 90 }}>
+      <Grid gutter={{ base: 10, xs: "xl", md: "xl", xl: 90 }}>
         {criteria.map(({ key, label, description }) => (
           <Grid.Col key={key} span={6} mb="lg">
             <Box>
               <Text fw={500}>{label}</Text>
-              <Text size="xs" c="dimmed" mb="xs">
-                {description}
-              </Text>
+              <TextDescription description={description} />
               <Slider
                 min={0}
                 max={100}
@@ -67,4 +66,4 @@ export const WeightsSliders = ({ weights, onChange }: WeightsSlidersProps) => {
       </Grid>
     </Box>
   );
-}
+};

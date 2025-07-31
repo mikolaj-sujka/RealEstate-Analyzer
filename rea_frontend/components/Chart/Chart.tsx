@@ -10,7 +10,13 @@ export const Chart = ({
   series,
 }: ChartProps) => {
   const chartRef = useRef<HTMLDivElement>(null);
-  useEcharts(chartRef, { data, showPrediction, accentColor, secondaryColor, series });
+  useEcharts(chartRef, {
+    data,
+    showPrediction,
+    accentColor,
+    secondaryColor,
+    series,
+  });
 
   return (
     <div ref={chartRef} style={{ width: "100%", height: `${height}px` }} />

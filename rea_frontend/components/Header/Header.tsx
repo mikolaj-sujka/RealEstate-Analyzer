@@ -11,33 +11,17 @@ import {
 } from "@mantine/core";
 import { useMantineColorScheme } from "@mantine/core";
 import {
-  IconBell,
   IconSun,
   IconMoon,
   IconChevronRight,
-  IconSettings,
   IconHelp,
-  IconLogout,
-  IconUser,
 } from "@tabler/icons-react";
-import Link from "next/link";
-
-const breadcrumbNameMap: { [key: string]: { section: string; page: string } } =
-  {
-    "/dashboard": { section: "Przegląd", page: "Pulpit" },
-    "/analytics": { section: "Analiza", page: "Analityka Rynku" },
-    "/trends": { section: "Analiza", page: "Porównanie Trendów" },
-    "/map": { section: "Przegląd", page: "Mapa Nieruchomości" },
-    "/cities": { section: "Analiza", page: "Porównanie Miast" },
-    "/account": { section: "Konto", page: "Moje Konto" },
-    "/settings": { section: "Konto", page: "Ustawienia" },
-    "/help": { section: "Pomoc", page: "Centrum Pomocy" },
-  };
+import { headerBreadcrumbNames } from "./models";
 
 export const Header = () => {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
   const pathname = usePathname();
-  const breadcrumbInfo = breadcrumbNameMap[pathname] || {
+  const breadcrumbInfo = headerBreadcrumbNames[pathname] || {
     section: "Przegląd",
     page: "Pulpit",
   };
@@ -82,39 +66,11 @@ export const Header = () => {
         <Menu shadow="md" width={200}>
           <Menu.Target>
             <ActionIcon variant="default" size="lg" radius="xl">
-              <IconUser size={18} />
+              <IconHelp size={18} />
             </ActionIcon>
           </Menu.Target>
-          <Menu.Dropdown>
-            <Menu.Label>Moje Konto</Menu.Label>
-            <Menu.Item
-              component={Link}
-              href="/account"
-              leftSection={<IconUser size={14} />}
-            >
-              Profil
-            </Menu.Item>
-            <Menu.Item
-              component={Link}
-              href="/account"
-              leftSection={<IconSettings size={14} />}
-            >
-              Ustawienia
-            </Menu.Item>
-            <Menu.Item
-              component={Link}
-              href="/help"
-              leftSection={<IconHelp size={14} />}
-            >
-              Pomoc
-            </Menu.Item>
-            <Menu.Divider />
-            <Menu.Item color="red" leftSection={<IconLogout size={14} />}>
-              Wyloguj
-            </Menu.Item>
-          </Menu.Dropdown>
         </Menu>
       </Group>
     </Group>
   );
-}
+};

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useLayoutEffect } from "react";
 import * as echarts from "echarts";
 import type { SeriesOption } from "echarts";
 
@@ -16,6 +16,7 @@ export const useEcharts = (
   ref: React.RefObject<HTMLDivElement | null>,
   {
     data,
+    height = 300,
     showPrediction = false,
     accentColor = "#3b82f6",
     secondaryColor = "#818cf8",
@@ -23,8 +24,11 @@ export const useEcharts = (
     showDetailedTooltip = false,
   }: ChartProps
 ) => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!ref.current) return;
+
+    // Ustawiamy wysokość kontenera
+    ref.current.style.height = `${height}px`;
 
     const chart = echarts.init(ref.current);
 
@@ -33,13 +37,13 @@ export const useEcharts = (
       grid: { left: "3%", right: "4%", bottom: "18%", containLabel: true },
       tooltip: showDetailedTooltip
         ? {
-            trigger: "axis",
-            backgroundColor: "rgba(255,255,255,0.95)",
-            borderColor: "#e5e7eb",
-            borderWidth: 1,
-            textStyle: { color: "#374151" },
-            axisPointer: { type: "cross", crossStyle: { color: "#999" } },
-          }
+          trigger: "axis",
+          backgroundColor: "rgba(255,255,255,0.95)",
+          borderColor: "#e5e7eb",
+          borderWidth: 1,
+          textStyle: { color: "#374151" },
+          axisPointer: { type: "cross", crossStyle: { color: "#999" } },
+        }
         : { trigger: "axis" },
       legend: {
         show: true,
@@ -52,11 +56,7 @@ export const useEcharts = (
         itemGap: 20,
       },
       dataZoom: [
-        {
-          type: "inside",
-          zoomOnMouseWheel: true,
-          throttle: 50,
-        },
+        { type: "inside", zoomOnMouseWheel: true, throttle: 50 },
         {
           type: "slider",
           bottom: "8%",
@@ -82,47 +82,47 @@ export const useEcharts = (
         series && series.length
           ? series
           : [
-              {
-                name: "Actual Price",
-                type: "line",
-                data: data.map((item) => item.price),
-                smooth: true,
-                lineStyle: { color: accentColor, width: 3 },
-                itemStyle: {
-                  color: accentColor,
-                  borderWidth: 2,
-                  borderColor: "#fff",
-                },
-                areaStyle: {
-                  color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                    { offset: 0, color: `${accentColor}20` },
-                    { offset: 1, color: `${accentColor}05` },
-                  ]),
-                },
-                emphasis: { focus: "series" },
+            {
+              name: "Actual Price",
+              type: "line",
+              data: data.map((item) => item.price),
+              smooth: true,
+              lineStyle: { color: accentColor, width: 3 },
+              itemStyle: {
+                color: accentColor,
+                borderWidth: 2,
+                borderColor: "#fff",
               },
-              ...(showPrediction
-                ? [
-                    {
-                      name: "Prediction",
-                      type: "line",
-                      data: data.map((item) => item.prediction),
-                      smooth: true,
-                      lineStyle: {
-                        color: secondaryColor,
-                        width: 2,
-                        type: "dashed",
-                      },
-                      itemStyle: {
-                        color: secondaryColor,
-                        borderWidth: 2,
-                        borderColor: "#fff",
-                      },
-                      emphasis: { focus: "series" },
-                    },
-                  ]
-                : []),
-            ],
+              areaStyle: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: `${accentColor}20` },
+                  { offset: 1, color: `${accentColor}05` },
+                ]),
+              },
+              emphasis: { focus: "series" },
+            },
+            ...(showPrediction
+              ? [
+                {
+                  name: "Prediction",
+                  type: "line",
+                  data: data.map((item) => item.prediction),
+                  smooth: true,
+                  lineStyle: {
+                    color: secondaryColor,
+                    width: 2,
+                    type: "dashed",
+                  },
+                  itemStyle: {
+                    color: secondaryColor,
+                    borderWidth: 2,
+                    borderColor: "#fff",
+                  },
+                  emphasis: { focus: "series" },
+                },
+              ]
+              : []),
+          ],
     };
 
     chart.setOption(option);
@@ -135,6 +135,7 @@ export const useEcharts = (
   }, [
     ref,
     data,
+    height,
     showPrediction,
     accentColor,
     secondaryColor,

@@ -4,6 +4,8 @@ import React from 'react';
 import { SimpleGrid, Card, Text, Group, ThemeIcon } from '@mantine/core';
 import { IconTrendingUp, IconBuildingStore, IconChartDonut, IconListNumbers } from '@tabler/icons-react';
 import { CityInvestmentFactors } from '../../models';
+import * as classes from './styles';
+import { TextDescription } from '@/components/UI';
 
 type PartialScoresProps = {
   partial: CityInvestmentFactors;
@@ -20,16 +22,14 @@ export function PartialScores({ partial }: PartialScoresProps) {
   return (
     <SimpleGrid cols={4}>
       {items.map(({ key, label, icon }) => (
-        <Card withBorder radius="md" p="md" key={key}>
-          <Group align="center">
+        <Card className={classes.card} key={key}>
+          <Group className={classes.headerGroup}>
             <ThemeIcon size="lg" radius="md" variant="light">
               {icon}
             </ThemeIcon>
-            <Text size="sm" c="dimmed">
-              {label}
-            </Text>
+            <TextDescription description={label} className={classes.label} />
           </Group>
-          <Text fw={700} size="xl" mt="xs">
+          <Text className={classes.score}>
             {partial[key].toFixed(0)}/100
           </Text>
         </Card>

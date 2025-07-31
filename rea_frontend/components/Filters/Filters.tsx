@@ -22,19 +22,19 @@ type FilterProps = {
   defaultExpanded?: boolean;
 }
 
-export function Filter({
+export const Filter = ({
   config,
   onFilterChange,
   title = "Filtry",
   defaultExpanded = true,
-}: FilterProps) {
+}: FilterProps) => {
   const { values, setFilter, clearAll, expanded, setExpanded } = useFilters({
     config,
     onChange: onFilterChange,
   });
 
   return (
-    <Paper shadow="sm" p="md" radius="md" withBorder mb="lg">
+    <Paper shadow="sm" p="md" radius="md" withBorder mb="lg" mt="xl">
       <Group style={{ justifyContent: "space-between" }} mb={expanded ? "md" : 0}>
         <Group>
           <IconFilter size={20} />

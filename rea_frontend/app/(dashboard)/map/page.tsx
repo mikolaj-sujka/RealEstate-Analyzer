@@ -1,11 +1,14 @@
 "use client";
 
 import React from "react";
-import { Container, Paper, Title, Grid, Text } from "@mantine/core";
+import { Grid, Text } from "@mantine/core";
 import { usePropertyMap } from "./hooks/usePropertyMap";
 import { Filter } from "@/components/Filters";
 import { DistrictCard, MapChart } from "./components";
 import { useTranslate } from "@/hooks";
+import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
+import { TextDescription, TitleSection } from "@/components/UI";
+import * as classes from "./styles";
 
 export default function PropertyMap() {
   const {
@@ -25,20 +28,16 @@ export default function PropertyMap() {
   };
 
   return (
-    <Container size="xl" py="xl">
-      <Paper shadow="sm" p="lg" radius="md" withBorder mb="xl">
-        <Title mb="md" order={2}>
-          {t("CityMap.mapaNieruchomościDzielnice")}
-        </Title>
+    <ContainerSection>
+      <TitleSection title={t("CityMap.mapaNieruchomościDzielnice")} />
+      <TextDescription description={t("CityMap.mapaNieruchomosciOpis")} />
+      <Filter
+        config={filterConfig}
+        onFilterChange={handleFilters}
+        defaultExpanded
+      />
 
-        <Filter
-          config={filterConfig}
-          onFilterChange={handleFilters}
-          defaultExpanded
-        />
-
-        <MapChart data={filteredData} />
-      </Paper>
+      <MapChart data={filteredData} />
 
       <Grid>
         {filteredData.length > 0 ? (
@@ -49,12 +48,12 @@ export default function PropertyMap() {
           ))
         ) : (
           <Grid.Col span={12}>
-            <Text style={{ textAlign: "center" }}>
+            <Text className={classes.cityMapNoDataText}>
               {t("CityMap.brakDanych")}
             </Text>
           </Grid.Col>
         )}
       </Grid>
-    </Container>
+    </ContainerSection>
   );
 }

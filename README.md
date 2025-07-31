@@ -6,26 +6,21 @@ RealEstate Analyzer to zaawansowana platforma webowa umożliwiająca kompleksow�
 Główne funkcjonalności obejmują:
 
 - Szczegółową analizę geograficzną oraz czasową danych rynkowych.
-
 - Zaawansowane modele predykcyjne oparte na uczeniu maszynowym.
-
-- Monitoring rynku w czasie rzeczywistym z interaktywnymi wizualizacjami danych.
+- Monitoring rynku, który posiada najnowsze jak i dane historyczne z interaktywnymi wizualizacjami.
+- Kalkulatory rentowności i potencjału inwestycyjnego.
 
 ## :computer: Stack technologiczny
 #### Backend
-- .NET (Web API, Entity Framework Core)
-
-- Autoryzacja z wykorzystaniem JWT
-
-- Web scraping i przetwarzanie danych z Hangfire
-
-- Filtrowanie danych, stronicowanie (paging)
-
-- Monitorowanie i telemetria z wykorzystaniem OpenTelemetry
+- .NET (Web API, Entity Framework Core).
+- Web scraping i przetwarzanie danych z Hangfire.
+- Filtrowanie danych, stronicowanie (paging).
+- Monitorowanie i telemetria z wykorzystaniem OpenTelemetry.
+- Wykorzystanie danych historycznych z GUS (pliki w formie csv).
+- Redis Cache.
 
 #### Frontend
 - Next.js (SSR, optymalizacja SEO)
-
 - Mantine UI (responsywność i estetyka)
 
 #### Baza danych
@@ -33,23 +28,10 @@ Główne funkcjonalności obejmują:
 
 #### DevOps i hosting
 - Firebase
-
 - Docker
 
-- Azure Pipelines (CI/CD)
-
 ## :dart: Cel Projektu
-Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzędzia do podejmowania trafnych decyzji inwestycyjnych poprzez efektywną analizę oraz prognozowanie trendów na rynku nieruchomości w Polsce.
+Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzędzia do podejmowania trafnych decyzji inwestycyjnych poprzez efektywną analizę oraz prognozowanie cen na rynku nieruchomości w Polsce.
 
 ## :newspaper: Templates
-![ChatGPT Image Apr 27, 2025, 06_46_07 PM](https://github.com/user-attachments/assets/f0ccf635-077c-4f68-bf36-8b0d2659374f)
-![ChatGPT Image Apr 27, 2025, 06_49_08 PM](https://github.com/user-attachments/assets/1083c819-23cd-4780-a70a-9477f08efe7b)
-![ciekawe_liczby_fixed](https://github.com/user-attachments/assets/a01e3754-1218-486b-b0e2-966df3093ba3)
-![ChatGPT Image Apr 27, 2025, 09_59_33 PM](https://github.com/user-attachments/assets/a4acb2dc-69fc-4df5-8727-120e23a20386)
-
-
-## :bangbang: Kluczowe funkcjonalności wraz z diagramami
-
-### :closed_lock_with_key: Auth 
-
-### :arrows_counterclockwise: Web scrapping wraz z cyklicznym pobieraniem danych
+<img width="1709" height="898" alt="Zrzut ekranu 2025-07-30 o 20 18 06" src="https://github.com/user-attachments/assets/438bdfd4-3818-4fb0-81ce-10d5920fc22c" />

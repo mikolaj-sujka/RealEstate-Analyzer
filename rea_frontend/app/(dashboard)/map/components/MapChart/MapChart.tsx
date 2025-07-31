@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useECharts } from "@/hooks";
 import { DistrictData } from "@/models";
 import { elegantColors } from "../../models";
@@ -16,9 +16,7 @@ export const MapChart = ({ data }: MapChartProps) => {
     () => ({
       backgroundColor: "transparent",
       color: elegantColors,
-      tooltip: {
-        /* formatter as before */
-      },
+      tooltip: {},
       series: [
         {
           name: "Dzielnice",
@@ -26,12 +24,8 @@ export const MapChart = ({ data }: MapChartProps) => {
           radius: ["30%", "75%"],
           center: ["50%", "50%"],
           roseType: "area",
-          itemStyle: {
-            /* ... */
-          },
-          label: {
-            /* ... */
-          },
+          itemStyle: {},
+          label: {},
           data: data.map((item) => ({
             value: item.properties,
             name: item.district,

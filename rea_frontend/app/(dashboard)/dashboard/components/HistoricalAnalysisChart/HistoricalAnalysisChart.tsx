@@ -1,47 +1,80 @@
-"use client";
-
-import { Paper, Title, Grid, Box } from "@mantine/core";
-import { DateRangePicker } from "@/components/DateRangePicker";
-import { MetricsMultiSelect } from "@/components/MetricsMultiSelect";
-import { TimeRangeControl } from "../TimeRangeControl";
-import { useHistoricalAnalysis } from "./hooks";
-import { historicalData, allMetrics, metricColors } from "./models";
+import React from "react";
+import { Card, Group, Text, Grid } from "@mantine/core";
+import { CitySelect } from "@/components/CitySelect";
+import { TimeRangeSelector } from "@/components/TimeRangeSelector";
+import { CustomDateRangePicker } from "@/components/CustomDateRangePicker";
 import { Chart } from "@/components/Chart";
-import { useTranslation } from "react-i18next";
+import { useHistoricalAnalysisChartState } from "./hooks";
+import * as classes from "./styles";
+import { MetricsSelector } from "@/components/MetricsMultiSelect";
+import { cities, metrics, timeRanges } from "./models";
+import { useTranslate } from "@/hooks";
+import { TitleSection, TextDescription } from "@/components/UI";
 
 export const HistoricalAnalysisChart = () => {
-  const { range, setRange, setPreset, filtered, series, metrics, setMetrics } =
-    useHistoricalAnalysis("1y", historicalData, ["price", "prediction"]);
-  const { t } = useTranslation();
+  const {
+    city,
+    setCity,
+    range,
+    setRange,
+    selectedMetrics,
+    setSelectedMetrics,
+    customRange,
+    setCustomRange,
+    data,
+    series,
+    showPrediction,
+    accentColor,
+    secondaryColor,
+    showDetailedTooltip,
+    height,
+  } = useHistoricalAnalysisChartState();
+
+  const { t } = useTranslate();
 
   return (
-    <Paper shadow="sm" p="lg" radius="md" withBorder>
-      <Title order={3} mb="md">
-        {t("Dashboard.analizaHistoryczna")}
-      </Title>
-      <Grid align="flex-end">
-        <Grid.Col span={{ base: 12, md: "auto" }}>
-          <TimeRangeControl value={""} onChange={setPreset} />
+    <Card className={classes.card}>
+      <Group className={classes.group}>
+        <TitleSection title={t("Dashboard.analizaHistoryczna")} />
+        <TextDescription description={t("Dashboard.analizaHistorycznaOpis")} />
+      </Group>
+
+      <Grid className={classes.grid}>
+        <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
+          <CitySelect value={city!} onChange={setCity} options={cities} />
         </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 4 }}>
-          <DateRangePicker
-            value={range as [Date | null, Date | null]}
-            onChange={(dates) => {
-              if (dates[0] && dates[1]) setRange([dates[0], dates[1]]);
-            }}
+        <Grid.Col span={{ base: 12, sm: 6, md: 8 }}>
+          <TimeRangeSelector
+            value={range}
+            onChange={setRange}
+            timeRanges={timeRanges}
           />
         </Grid.Col>
-        <Grid.Col span={{ base: 12, md: 4 }}>
-          <MetricsMultiSelect
-            data={allMetrics}
-            value={metrics}
-            onChange={setMetrics}
+        <Grid.Col span={{ base: 12, sm: 6 }}>
+          <CustomDateRangePicker
+            value={customRange}
+            onChange={setCustomRange}
+            disabled={range !== "custom"}
+          />
+        </Grid.Col>
+        <Grid.Col span={{ base: 6, sm: 6 }}>
+          <MetricsSelector
+            value={selectedMetrics}
+            onChange={setSelectedMetrics}
+            metrics={metrics}
           />
         </Grid.Col>
       </Grid>
-      <Box h={300} mt="xl">
-        <Chart data={filtered} series={series} height={300} />
-      </Box>
-    </Paper>
+
+      <Chart
+        data={data}
+        series={series}
+        showPrediction={showPrediction}
+        accentColor={accentColor}
+        secondaryColor={secondaryColor}
+        showDetailedTooltip={showDetailedTooltip}
+        height={height}
+      />
+    </Card>
   );
 };
