@@ -1,6 +1,6 @@
 # :office: RealEstate Analyzer
 
-## Table of Contents
+## :books: Spis Treści
 - [Opis projektu](#bookmark_tabs-opis-projektu)
 - [Stack technologiczny](#computer-stack-technologiczny)
 - [Cel Projektu](#dart-cel-projektu)
