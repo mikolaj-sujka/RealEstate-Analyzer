@@ -14,16 +14,7 @@ export const PageLoader = () => {
         <Box className={styles.wrapper}>
           <Box className={styles.logoContainer}>
             <Box className={styles.pingEffect} />
-            <Paper
-              shadow="xl"
-              radius="xl"
-              p="md"
-              style={{
-                position: "relative",
-                zIndex: 10,
-                backgroundColor: "white",
-              }}
-            >
+            <Paper className={styles.pageLoaderPaper}>
               <Image
                 src="/images/logo.png"
                 alt="Logo"
@@ -37,8 +28,6 @@ export const PageLoader = () => {
           <Box className={styles.content}>
             <Progress
               value={Math.min(progress, 100)}
-              size="lg"
-              radius="xl"
               className={styles.progressBar}
             />
 
@@ -46,7 +35,7 @@ export const PageLoader = () => {
               <Text className={styles.title}>Real Estate Analyzer</Text>
               <Text className={styles.loadingText}>{loadingText}</Text>
               <Text className={styles.percentageText}>
-                {Math.round(progress)}% załadowane
+                {Math.round(progress)}% Załadowane
               </Text>
             </Box>
           </Box>

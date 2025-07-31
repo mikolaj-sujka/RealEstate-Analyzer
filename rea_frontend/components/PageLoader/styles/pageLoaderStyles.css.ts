@@ -67,7 +67,12 @@ export const content = style({
     gap: rem(16),
 });
 
-export const progressBar = style({});
+export const progressBar = style({
+    width: rem(280),
+    margin: '0 auto',
+    borderRadius: rem(32),
+    overflow: 'hidden',
+});
 
 // Override nested Mantine Progress bar using globalStyle
 globalStyle(`${progressBar} .mantine-Progress-bar`, {
@@ -104,4 +109,13 @@ export const dot = style({
         '&:nth-child(2)': { animationDelay: '0.2s' },
         '&:nth-child(3)': { animationDelay: '0.4s' },
     },
+});
+
+export const pageLoaderPaper = style({
+    position: 'relative',
+    zIndex: 10,
+    backgroundColor: 'white',
+    padding: rem(16),
+    borderRadius: rem(16),
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)'
 });

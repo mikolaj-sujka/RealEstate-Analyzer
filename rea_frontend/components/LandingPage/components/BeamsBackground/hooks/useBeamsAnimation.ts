@@ -1,10 +1,5 @@
 import { useEffect, useRef } from 'react';
-
-export type Beam = {
-    x: number; y: number; width: number; length: number;
-    angle: number; speed: number; opacity: number;
-    hue: number; pulse: number; pulseSpeed: number;
-}
+import { Beam } from '../models';
 
 export function useBeamsAnimation(
     canvasRef: React.RefObject<HTMLCanvasElement>,
@@ -25,7 +20,7 @@ export function useBeamsAnimation(
             const angle = -35 + Math.random() * 10;
             const spacing = canvas.width / 5;
             const column = i % 5;
-            const hue = 220 + Math.random() * 50; // odcień od granatowego (230) po fioletowy (280)
+            const hue = 220 + Math.random() * 50; 
             return {
                 x: column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing * 0.5,
                 y: Math.random() * canvas.height * 1.5 - canvas.height * 0.25,

@@ -1,22 +1,15 @@
 import { useState, useEffect } from "react";
+import { PAGE_LOADER_TEXTS } from "../models";
 
 export const usePageLoader = () => {
     const [progress, setProgress] = useState(0);
     const [loadingText, setLoadingText] = useState("Inicjalizacja...");
 
     useEffect(() => {
-        const texts = [
-            "Inicjalizacja...",
-            "Ładowanie danych rynkowych...",
-            "Analiza trendów...",
-            "Przygotowywanie wykresów...",
-            "Już prawie gotowe...",
-        ];
-
         let textIndex = 0;
         const textTimer = setInterval(() => {
-            setLoadingText(texts[textIndex]);
-            textIndex = (textIndex + 1) % texts.length;
+            setLoadingText(PAGE_LOADER_TEXTS[textIndex]);
+            textIndex = (textIndex + 1) % PAGE_LOADER_TEXTS.length;
         }, 400);
 
         const progressTimer = setInterval(() => {

@@ -24,3 +24,15 @@ export const parseDate = (monthStr: string): Date => {
 
     return new Date(year, monthIndex, 1)
 }
+
+export const formatDate = (input: string | Date) => {
+  try {
+    return new Intl.DateTimeFormat('pl-PL', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    }).format(new Date(input));
+  } catch {
+    return String(input);
+  }
+};

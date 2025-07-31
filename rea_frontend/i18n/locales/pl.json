@@ -96,6 +96,10 @@
         "rynkuNieruchomości": "Rynku Nieruchomości",
         "inteligentneNarzędzie": "Zoptymalizuj swoje inwestycje dzięki zaawansowanej analityce i raportom.",
         "rozpocznijAnalizę": "Rozpocznij Analizę"
-        
+    },
+    "DataTable": {
+        "kolejna": "Kolejna",
+        "poprzednia": "Poprzednia",
+        "exportuj": "Eksportuj"
     }
 }

@@ -1,14 +1,16 @@
 import React from "react";
-import { Title, Text, Button, Group, rem } from "@mantine/core";
+import { Title, Text, Button, Group } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
-import { IconChartLine, IconMap, IconCalculator } from "@tabler/icons-react";
 import * as classes from "./styles";
 import { BeamsBackground } from "./components";
 import { useTranslate } from "@/hooks";
+import { useLandingPage } from "./hooks";
+import { LANDING_PAGE_FEATURES } from "./models";
 
 export const LandingPagePreview: React.FC = () => {
   const { t } = useTranslate();
+  const { loading, handleClick } = useLandingPage();
   return (
     <BeamsBackground intensity={1}>
       <div className={classes.container}>
@@ -45,40 +47,24 @@ export const LandingPagePreview: React.FC = () => {
             component={Link}
             href="/dashboard"
             className={classes.landingButton}
+            loading={loading}
+            onClick={handleClick}
           >
             {t("LandingPagePreview.rozpocznijAnalizę")}
           </Button>
         </Group>
 
-        <Group mt="xl" className={classes.fadeInDelay3} gap="xl">
-          {[
-            {
-              Icon: IconChartLine,
-              label: "24/7 Dostępność",
-              sub: "Analizuj kiedy chcesz",
-            },
-            {
-              Icon: IconMap,
-              label: "Mapa nieruchomości",
-              sub: "Wizualizuj dane",
-            },
-            {
-              Icon: IconCalculator,
-              label: "Kalkulator inwestycyjny",
-              sub: "Oszacuj zyski",
-            },
-          ].map(({ Icon, label, sub }, i) => (
+        <Group className={classes.titleGroup}>
+          {LANDING_PAGE_FEATURES.map(({ Icon, label, sub }, idx) => (
             <div
               key={label}
-              className={`${classes.fadeInUp} ${classes.fadeInDelay3}`}
+              className={`${classes.fadeInUp} ${
+                (classes as Record<string, string>)[`fadeInDelay${idx + 1}`]
+              }`}
             >
-              <Icon size={rem(48)} style={{ color: "#93c5fd" }} />
-              <Text size="lg" fw={700} mt="sm">
-                {label}
-              </Text>
-              <Text size="sm" c="gray.4">
-                {sub}
-              </Text>
+              <Icon className={classes.iconLanding} />
+              <Text className={classes.textFeatureLanding}>{label}</Text>
+              <Text className={classes.textFreatureLandingSub}>{sub}</Text>
             </div>
           ))}
         </Group>
