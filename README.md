@@ -8,7 +8,7 @@
 - [Struktura projektu](#file_folder-struktura-projektu)
 - [Funkcjonalności](#chart_with_upwards_trend-funkcjonalności)
 - [Research](#microscope-research)
-- [Templates](#newspaper-templates)
+- [Templates](#newspaper-templates-aplikacji)
 - [Kontakt](#handshake-kontakt)
 - [Licencja](#page_facing_up-licencja)
 
@@ -178,9 +178,14 @@ Projekt zawiera zaawansowaną część badawczą w katalogu [`rea_research`](rea
 - **OLX**: ~3,640+ ofert z różną jakością danych
 - Pliki wynikowe: [`olx_offers_final.csv`](rea_research/olx_offers_final.csv), [`otodom_offers_final.csv`](rea_research/otodom_offers_final.csv)
 
-## :newspaper: Templates
+## :newspaper: Templates aplikacji
+<img width="1722" height="891" alt="Zrzut ekranu 2025-07-31 o 15 03 27" src="https://github.com/user-attachments/assets/334ada0d-8e21-4124-9050-9f1228eb070b" />
+<img width="1707" height="895" alt="Zrzut ekranu 2025-07-31 o 15 05 30" src="https://github.com/user-attachments/assets/94b6e9b5-5677-48f4-953a-097ec5fb9a65" />
+<img width="1728" height="998" alt="Zrzut ekranu 2025-07-31 o 15 05 50" src="https://github.com/user-attachments/assets/3fc90a34-af81-4ba5-a4fc-3d2d3155fa1d" />
+<img width="1722" height="991" alt="Zrzut ekranu 2025-07-31 o 15 06 11" src="https://github.com/user-attachments/assets/1ddaf547-455a-40e8-b1c5-e32a780e19c1" />
+<img width="1726" height="987" alt="Zrzut ekranu 2025-07-31 o 15 06 52" src="https://github.com/user-attachments/assets/98e87f22-3871-4a17-9a25-6abb5b950a09" />
 
-<img width="1709" height="898" alt="Zrzut ekranu 2025-07-30 o 20 18 06" src="https://github.com/user-attachments/assets/438bdfd4-3818-4fb0-81ce-10d5920fc22c" />
+
 
 ---
 
