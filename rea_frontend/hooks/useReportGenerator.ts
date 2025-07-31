@@ -1,26 +1,47 @@
-import { ReportParamsClient } from "@/models";
-import { generateReport } from "@/services";
-import { useCallback } from "react";
+import { ReportDefinition } from '@/models';
+import { PDFBuilder } from '@/services';
+import { useCallback, useState } from 'react';
 
-export function useReportGenerator({
-  chartInstance,
-  transactions,
-  selectedCities,
-}: ReportParamsClient) {
-  const generate = useCallback(() => {
-    if (!chartInstance) {
-      window.alert(
-        "Wykres nie jest jeszcze gotowy. Spróbuj ponownie za chwilę."
-      );
-      return;
+export const useReportGenerator = () => {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const generateReport = useCallback(async (report: ReportDefinition) => {
+    setIsGenerating(true);
+    setError(null);
+    const builder = new PDFBuilder();
+
+    try {
+      builder.addTitlePage(report.title, report.subtitle, report.createdAt);
+
+      for (const section of report.sections) {
+        await builder.applySection(section);
+      }
+
+      const fileName = report.fileName
+        ? report.fileName
+        : `raport-${report.title
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^a-z0-9\-]/gi, '')}-${new Date()
+            .toISOString()
+            .split('T')[0]}.pdf`;
+
+      builder.save(fileName);
+    } catch (e) {
+      console.error('Error generating report', e);
+      setError('Wystąpił błąd podczas generowania raportu.');
+    } finally {
+      setIsGenerating(false);
     }
+  }, []);
 
-    generateReport({
-      chartDataUrl: chartInstance.getDataURL(),
-      transactions,
-      selectedCities,
-    });
-  }, [chartInstance, transactions, selectedCities]);
+  const clearError = useCallback(() => setError(null), []);
 
-  return { generate };
+  return {
+    isGenerating,
+    error,
+    generateReport,
+    clearError,
+  };
 }

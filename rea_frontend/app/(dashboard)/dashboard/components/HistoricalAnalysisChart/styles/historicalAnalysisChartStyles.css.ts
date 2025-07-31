@@ -16,7 +16,8 @@ export const group = style({
     justifyContent: 'space-between',
     display: 'flex',
     alignItems: 'start',
-    flexDirection: 'column'
+    flexDirection: 'column',
+    gap: rem(4)
 });
 
 export const grid = style({

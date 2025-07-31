@@ -1,32 +1,25 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import * as echarts from "echarts";
+import type { ECharts, EChartsOption } from "echarts";
 import { MarketAnalyticsData } from "../../../models/types/MarketAnalyticsData";
 
-export const useMarketAnalyticsChart = (data: MarketAnalyticsData[]) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const chartRef = useRef<echarts.ECharts | null>(null);
+export const useMarketAnalyticsChart = (
+    data: MarketAnalyticsData[],
+    onChartReady?: (chart: ECharts) => void
+) => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const chartRef = useRef<ECharts | null>(null);
 
-    useEffect(() => {
-        if (!containerRef.current) return;
-        chartRef.current = echarts.init(containerRef.current);
-        return () => {
-            chartRef.current?.dispose();
-        };
-    }, []);
-
-    useEffect(() => {
-        const chart = chartRef.current;
-        if (!chart || data.length === 0) return;
-
+    const buildOption = useCallback((data: MarketAnalyticsData[]): EChartsOption => {
         const months = data.map((d) => d.month);
         const avgPrices = data.map((d) => d.averagePrice);
         const listings = data.map((d) => d.listings);
         const sales = data.map((d) => d.sales);
         const inventory = data.map((d) => d.totalInventory);
 
-        const option: echarts.EChartsOption = {
+        return {
             backgroundColor: "transparent",
             tooltip: {
                 trigger: "axis",
@@ -35,10 +28,10 @@ export const useMarketAnalyticsChart = (data: MarketAnalyticsData[]) => {
                 borderWidth: 1,
                 textStyle: { color: "#374151" },
                 axisPointer: { type: "cross", crossStyle: { color: "#999" } },
-                formatter: (params) => {
+                formatter: (params: any) => {
                     if (Array.isArray(params)) {
                         let html = `${params[0].name}<br/>`;
-                        params.forEach((p) => {
+                        params.forEach((p: any) => {
                             html += `${p.marker} ${p.seriesName}: <strong>${Number(p.value).toLocaleString("pl-PL")}</strong><br/>`;
                         });
                         return html;
@@ -123,16 +116,46 @@ export const useMarketAnalyticsChart = (data: MarketAnalyticsData[]) => {
                 },
             ],
             animationEasing: "cubicOut",
+            toolbox: {
+                feature: {
+                    saveAsImage: {},
+                },
+            },
         };
+    }, []);
 
+    // init chart once
+    useEffect(() => {
+        if (!containerRef.current) return;
+        if (!chartRef.current) {
+            chartRef.current = echarts.init(containerRef.current);
+            if (chartRef.current) {
+                onChartReady?.(chartRef.current);
+            }
+        }
+        return () => {
+            chartRef.current?.dispose();
+            chartRef.current = null;
+        };
+    }, [onChartReady]);
+
+    // update options when data changes
+    useEffect(() => {
+        const chart = chartRef.current;
+        if (!chart || data.length === 0) return;
+        const option = buildOption(data);
         chart.setOption(option);
-    }, [data]);
+    }, [data, buildOption]);
 
+    // resize listener
     useEffect(() => {
         const onResize = () => chartRef.current?.resize();
         window.addEventListener("resize", onResize);
         return () => window.removeEventListener("resize", onResize);
     }, []);
 
-    return containerRef;
-}
+    return {
+        containerRef,
+        chartInstance: chartRef.current,
+    };
+};

@@ -4,7 +4,7 @@ import { useTranslate } from "@/hooks";
 
 export type AnalysisType = "basic" | "advanced";
 
-export function useInvestorCenter(defaultCity: string = "Warszawa") {
+export const useInvestorCenter = (defaultCity: string = "Warszawa") => {
   const [selectedCity, setSelectedCity] = useState<string>(defaultCity);
   const [analysisType, setAnalysisType] = useState<AnalysisType>("basic");
   const [isSwitching, setIsSwitching] = useState<boolean>(false);

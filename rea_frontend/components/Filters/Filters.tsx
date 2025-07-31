@@ -22,12 +22,12 @@ type FilterProps = {
   defaultExpanded?: boolean;
 }
 
-export function Filter({
+export const Filter = ({
   config,
   onFilterChange,
   title = "Filtry",
   defaultExpanded = true,
-}: FilterProps) {
+}: FilterProps) => {
   const { values, setFilter, clearAll, expanded, setExpanded } = useFilters({
     config,
     onChange: onFilterChange,

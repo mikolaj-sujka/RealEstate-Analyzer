@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Grid, Select, Title, Group, Paper, Flex } from "@mantine/core";
 import { useMarketAnalytics } from "./hooks";
 import { StatisticsCardData } from "@/components/StatisticsCardData";
@@ -12,21 +12,30 @@ import { ContainerSection } from "@/components/ContainerSection";
 import { TextDescription } from "@/components/UI/TextDescription";
 import { getCitiesAnalyticsCards } from "./utils";
 import * as styles from "./styles";
+import { useLocationReportDefinition } from "@/hooks";
+import { ECharts } from "echarts/types/dist/echarts";
 
 export default function AnalyticsPage() {
   const [voivodeship, setVoivodeship] = useState("Cała Polska");
   const { marketData, lastMonth, changes } = useMarketAnalytics(voivodeship);
   const { t } = useTranslation();
 
-  const cards = getCitiesAnalyticsCards(lastMonth, changes).map(
-    (card) => {
-      const CardIcon = card.icon;
-      return {
-        ...card,
-        icon: <CardIcon />,
-      };
-    }
-  );
+  const chartRef = useRef<ECharts | null>(null);
+
+  const reportDefinition = useLocationReportDefinition({
+    locationName: voivodeship,
+    isCity: false,
+    chartInstance: chartRef.current,
+    recentTransactions: marketData,
+  });
+
+  const cards = getCitiesAnalyticsCards(lastMonth, changes).map((card) => {
+    const CardIcon = card.icon;
+    return {
+      ...card,
+      icon: <CardIcon />,
+    };
+  });
 
   return (
     <ContainerSection>
@@ -55,17 +64,15 @@ export default function AnalyticsPage() {
         <Title order={3} className={styles.analyticsPaperTitle}>
           {t("Analytics.stanRynku")}
         </Title>
-        <MarketAnalyticsChart data={marketData} />
+        <MarketAnalyticsChart
+          data={marketData}
+          onChartReady={(chart) => {
+            chartRef.current = chart;
+          }}
+        />
       </Paper>
 
-      {/* To add data visualization and report generation */}
-      <ReportGenerator
-        chartInstance={null}
-        transactions={[]}
-        selectedCities={[]}
-        title={t("ReportGenerator.tytułGeneratoraRaportów")}
-        description={t("ReportGenerator.opisRaportu")}
-      />
+      <ReportGenerator report={reportDefinition} />
     </ContainerSection>
   );
 }

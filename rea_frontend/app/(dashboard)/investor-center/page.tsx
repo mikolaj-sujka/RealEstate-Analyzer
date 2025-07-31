@@ -8,8 +8,6 @@ import {
   MainAnalysisChart,
   RiskAnalysisChart,
 } from "./components";
-import { ReportGenerator } from "@/components/ReportGenerator";
-import { recentTransactions } from "../dashboard/models/consts";
 import { useTranslate } from "@/hooks/useTranslate";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TextDescription, TitleSection } from "@/components/UI";
@@ -28,7 +26,6 @@ export default function InvestorCenter({}: InvestorCenterProps) {
     setSelectedCity,
     analysisType,
     isSwitching,
-    trendChartInstanceRef,
     handleAnalysisTypeChange,
     cityOptions,
     handleChartInit,
@@ -91,14 +88,6 @@ export default function InvestorCenter({}: InvestorCenterProps) {
           </Paper>
         </Grid.Col>
       </Grid>
-
-      <ReportGenerator
-        chartInstance={trendChartInstanceRef.current}
-        transactions={recentTransactions}
-        selectedCities={[selectedCity]}
-        title={t("ReportGenerator.generujRaport")}
-        description={t("ReportGenerator.opisRaportu")}
-      />
     </ContainerSection>
   );
 }
