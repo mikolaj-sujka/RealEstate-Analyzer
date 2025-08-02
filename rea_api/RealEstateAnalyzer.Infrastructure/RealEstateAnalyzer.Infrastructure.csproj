@@ -28,8 +28,4 @@
     <ProjectReference Include="..\RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Configurations\" />
-  </ItemGroup>
-
 </Project>

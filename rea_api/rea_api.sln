@@ -13,7 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Api", "RealEstateAnalyzer.Api\RealEstateAnalyzer.Api.csproj", "{0DDA0964-F0A2-6E80-B028-D6C586193DB0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Hangfire", "RealEstateAnalyzer.Hangfire\RealEstateAnalyzer.Hangfire.csproj", "{6AB6B7B1-B24A-4024-ABA2-034886936AE0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Hangfire", "RealEstateAnalyzer.Hangfire\RealEstateAnalyzer.Infrastructure.Hangfire.csproj", "{6AB6B7B1-B24A-4024-ABA2-034886936AE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Redis", "RealEstateAnalyzer.Infrastructure.Redis\RealEstateAnalyzer.Infrastructure.Redis.csproj", "{9E3E9D0F-168C-4586-A056-FE5253FE9EC6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{6AB6B7B1-B24A-4024-ABA2-034886936AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6AB6B7B1-B24A-4024-ABA2-034886936AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6AB6B7B1-B24A-4024-ABA2-034886936AE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E3E9D0F-168C-4586-A056-FE5253FE9EC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E3E9D0F-168C-4586-A056-FE5253FE9EC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E3E9D0F-168C-4586-A056-FE5253FE9EC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E3E9D0F-168C-4586-A056-FE5253FE9EC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

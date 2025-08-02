@@ -6,14 +6,14 @@ public sealed class PricePerSquareMeter : ValueObject
 {
     public decimal Price { get; }
 
-    public PricePerSquareMeter()
+    public PricePerSquareMeter(decimal price)
     {
-        if (Price < 0)
+        if (price < 0)
         {
-            throw new ArgumentOutOfRangeException(nameof(Price), "Price per square meter cannot be negative.");
+            throw new ArgumentOutOfRangeException(nameof(price), "Price per square meter cannot be negative.");
         }
 
-        Price = Price;
+        Price = price;
     }
     protected override IEnumerable<object> GetEqualityComponents()
     {

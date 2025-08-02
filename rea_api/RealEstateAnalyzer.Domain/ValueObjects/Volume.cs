@@ -1,15 +1,9 @@
 ﻿using RealEstateAnalyzer.Domain.Infrastructure;
 
 namespace RealEstateAnalyzer.Domain.ValueObjects;
-public sealed class Volume : ValueObject
+public sealed class Volume(uint count) : ValueObject
 {
-    public int Count { get; }
-
-    public Volume(int count)
-    {
-        if (count < 0) throw new ArgumentException("Volume must be non-negative");
-        Count = count;
-    }
+    public uint Count { get; } = count;
 
     protected override IEnumerable<object> GetEqualityComponents()
     {

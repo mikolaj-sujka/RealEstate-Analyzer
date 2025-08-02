@@ -7,6 +7,11 @@ public sealed class QuarterPeriod : ValueObject
     public uint Year { get; private set; }
     public uint Quarter { get; private set; }
 
+    private QuarterPeriod()
+    {
+        
+    }
+
     public QuarterPeriod(uint year, uint quarter)
     {
         if (year is < 2000 or > 2100)
