@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using RealEstateAnalyzer.Domain.Entities;
 
 namespace RealEstateAnalyzer.Infrastructure;
 

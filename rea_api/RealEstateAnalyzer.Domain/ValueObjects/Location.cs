@@ -2,23 +2,14 @@
 
 namespace RealEstateAnalyzer.Domain.ValueObjects;
 
-public sealed class Location(string city, string district, string street, string postalCode, 
-    decimal? latitude, decimal? longitude) : ValueObject
+public sealed class Location(string city, string district) : ValueObject
 {
-    public string City { get; } = city;
-    public string District { get; } = district;
-    public string Street { get; } = street;
-    public string PostalCode { get; } = postalCode;
-    public decimal? Latitude { get; } = latitude;
-    public decimal? Longitude { get; } = longitude;
+    public string City { get; } = city ?? throw new ArgumentNullException(nameof(city));
+    public string District { get; } = district ?? throw new ArgumentNullException(nameof(district));
 
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return City;
         yield return District;
-        yield return Street;
-        yield return PostalCode;
-        yield return Latitude;
-        yield return Longitude;
     }
 }

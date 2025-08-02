@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Api", "rea_api\RealEstateAnalyzer.Api.csproj", "{E9ADC14D-58C5-42FC-BB89-71AD117D136F}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Domain", "RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj", "{6D6D1AB2-A948-4290-A293-3D15DB0A0893}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.WebScrapping", "RealEstateAnalyzer.WebScrapping\RealEstateAnalyzer.WebScrapping.csproj", "{1C3F8906-CD64-43B0-831B-5F37387533B7}"
@@ -13,16 +11,16 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Applicat
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure", "RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj", "{31E6C7D7-AF54-4910-B2AA-BE53568260CC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Api", "RealEstateAnalyzer.Api\RealEstateAnalyzer.Api.csproj", "{0DDA0964-F0A2-6E80-B028-D6C586193DB0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Hangfire", "RealEstateAnalyzer.Hangfire\RealEstateAnalyzer.Hangfire.csproj", "{6AB6B7B1-B24A-4024-ABA2-034886936AE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E9ADC14D-58C5-42FC-BB89-71AD117D136F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D6D1AB2-A948-4290-A293-3D15DB0A0893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D6D1AB2-A948-4290-A293-3D15DB0A0893}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D6D1AB2-A948-4290-A293-3D15DB0A0893}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +37,14 @@ Global
 		{31E6C7D7-AF54-4910-B2AA-BE53568260CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31E6C7D7-AF54-4910-B2AA-BE53568260CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31E6C7D7-AF54-4910-B2AA-BE53568260CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DDA0964-F0A2-6E80-B028-D6C586193DB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DDA0964-F0A2-6E80-B028-D6C586193DB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DDA0964-F0A2-6E80-B028-D6C586193DB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DDA0964-F0A2-6E80-B028-D6C586193DB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AB6B7B1-B24A-4024-ABA2-034886936AE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AB6B7B1-B24A-4024-ABA2-034886936AE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AB6B7B1-B24A-4024-ABA2-034886936AE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AB6B7B1-B24A-4024-ABA2-034886936AE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

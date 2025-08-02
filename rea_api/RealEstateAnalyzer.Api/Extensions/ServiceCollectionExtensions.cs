@@ -61,7 +61,7 @@ public static class ServiceCollectionExtensions
         services.AddHangfireConsoleExtensions();
 
         services.AddHangfireServer();
-        services.AddHostedService<HangfireRecurringJobConfiguratorHostedService>();
+        // services.AddHostedService<HangfireRecurringJobConfiguratorHostedService>();
     }
 
     public static void AddHangfireAuthorizationWithPolicies(this IServiceCollection services)
