@@ -5,9 +5,12 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
 	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	<UserSecretsId>28006e4d-15e6-4456-81ab-7e92765fd9e7</UserSecretsId>
+	<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
     <PackageReference Include="Hangfire" Version="1.8.18" />
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.18" />
     <PackageReference Include="Hangfire.Console.Extensions" Version="2.0.0" />
@@ -20,12 +23,14 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.3.1" />
     <PackageReference Include="SqlAlias" Version="3.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\RealEstateAnalyzer.Application\RealEstateAnalyzer.Application.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure.Redis\RealEstateAnalyzer.Infrastructure.Redis.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
   </ItemGroup>
 

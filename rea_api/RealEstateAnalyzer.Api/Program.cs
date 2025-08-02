@@ -1,7 +1,9 @@
 using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using RealEstateAnalyzer.Api.Extensions;
 using RealEstateAnalyzer.Infrastructure.Extensions;
+using RealEstateAnalyzer.Infrastructure.Redis.Extensions;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +13,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
 builder.Services.AddDataLayer(builder.Configuration);
+
+builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.ConfigureHealthChecks(builder.Configuration);
 
