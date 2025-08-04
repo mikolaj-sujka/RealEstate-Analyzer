@@ -3,6 +3,7 @@ using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RealEstateAnalyzer.Api.Extensions;
 using RealEstateAnalyzer.Infrastructure.Extensions;
+using RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
 using RealEstateAnalyzer.Infrastructure.Redis.Extensions;
 using Scalar.AspNetCore;
 
@@ -17,6 +18,8 @@ builder.Services.AddDataLayer(builder.Configuration);
 builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.ConfigureHealthChecks(builder.Configuration);
+
+builder.Services.AddHangfire(builder.Configuration);
 
 var app = builder.Build();
 
@@ -40,6 +43,8 @@ app.UseHealthChecksUI(delegate (Options options)
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHangfireDashboardWithAuth(builder.Configuration);
 
 app.MapControllers();
 
