@@ -19,4 +19,7 @@ public sealed class PricePerSquareMeter : ValueObject
     {
         yield return Price;
     }
+
+    public static PricePerSquareMeter Zero() => new PricePerSquareMeter(0);
+    public static PricePerSquareMeter FromDecimal(decimal d) => new(d);
 }

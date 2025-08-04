@@ -15,4 +15,7 @@ public sealed class Money : ValueObject
     {
         yield return Amount;
     }
+
+    public static Money Zero() => new Money(0);
+    public static Money FromDecimal(decimal amount) => new Money(amount);
 }

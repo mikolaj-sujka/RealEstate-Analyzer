@@ -1,5 +1,4 @@
-﻿using HealthChecks.Redis;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using SqlAlias;
 
 namespace RealEstateAnalyzer.Api.Extensions;

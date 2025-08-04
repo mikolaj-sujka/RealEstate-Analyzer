@@ -8,7 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Parsers\" />
+    <PackageReference Include="CsvHelper" Version="33.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.7" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RealEstateAnalyzer.Application.Abstractions\RealEstateAnalyzer.Application.Abstractions.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="BackgroundJobs\" />
   </ItemGroup>
 
 </Project>
