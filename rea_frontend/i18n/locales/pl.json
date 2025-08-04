@@ -73,12 +73,15 @@
         "wynikiSymulacji": "Wyniki Symulacji",
         "wartośćInwestycji": "Wartość Inwestycji",
         "horyzontInwestycyjny": "Horyzont Inwestycyjny",
-        "scenariuszMakroekonomiczny": "Scenariusz Makroekonomiczny",
+        "scenariuszeMakroekonomiczny": "Scenariusz Makroekonomiczny",
         "wzrostCen": "Wzrost Cen (%)",
         "zyskNajmu": "Zysk Najmu (%)",
         "inflacja": "Inflacja (%)",
         "stopaProcentowa": "Stopa Procentowa kredytu (%)",
-        "uruchomSymulacje": "Uruchom Symulację"
+        "uruchomSymulacje": "Uruchom Symulację",
+        "rozkładPrawdopodobieństwaROI": "Rozkład Prawdopodobieństwa ROI",
+        "kluczoweWskaźniki": "Kluczowe Wskaźniki",
+        "średnieROI": "Średnie ROI"
     },
     "HelpCenter": {
         "centrumPomocy": "Centrum Pomocy",
