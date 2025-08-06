@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstateAnalyzer.Infrastructure;
 
@@ -11,9 +12,11 @@ using RealEstateAnalyzer.Infrastructure;
 namespace RealEstateAnalyzer.Infrastructure.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250806172446_Change-Prop-CityId-CityCode")]
+    partial class ChangePropCityIdCityCode
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,10 +30,10 @@ namespace RealEstateAnalyzer.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("AveragePricePerSqm")
+                    b.Property<decimal>("AverageFlatSize")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<decimal>("AverageTotalPrice")
+                    b.Property<decimal>("AveragePricePerSqm")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CityCode")
@@ -42,6 +45,9 @@ namespace RealEstateAnalyzer.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<long>("ConstructionStarts")
+                        .HasColumnType("bigint");
+
                     b.Property<DateTimeOffset>("CreatedAt")
                         .HasColumnType("datetimeoffset");
 
@@ -50,9 +56,6 @@ namespace RealEstateAnalyzer.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("FlatsCompleted")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("FlatsSold")
                         .HasColumnType("bigint");
 
                     b.Property<decimal>("MedianPricePerSqm")

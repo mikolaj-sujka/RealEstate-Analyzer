@@ -15,7 +15,7 @@ public class GusHousingListingEntityTypeConfiguration : IEntityTypeConfiguration
         builder.Property(x => x.Id)
             .ValueGeneratedNever().IsRequired();
 
-        builder.Property(x => x.CityId).IsRequired();
+        builder.Property(x => x.CityCode).IsRequired();
 
         builder.Property(x => x.CityName).IsRequired().HasMaxLength(100);
 
@@ -33,16 +33,16 @@ public class GusHousingListingEntityTypeConfiguration : IEntityTypeConfiguration
             .HasPricePerSquareMeterConversion()
             .IsRequired();
 
+        builder.Property(x => x.AverageTotalPrice)
+            .HasMoneyConversion()
+            .IsRequired();
+
         builder.Property(x => x.FlatsCompleted)
             .HasVolumeConversion()
             .IsRequired();
 
-        builder.Property(x => x.ConstructionStarts)
+        builder.Property(x => x.FlatsSold)
             .HasVolumeConversion()
-            .IsRequired();
-
-        builder.Property(x => x.AverageFlatSize)
-            .HasAreaConversion()
             .IsRequired();
 
         builder.Property(x => x.TotalValueSold)

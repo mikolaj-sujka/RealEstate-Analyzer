@@ -15,4 +15,6 @@ public sealed class Area : ValueObject
     {
         yield return SquareMeters;
     }
+
+    public static Area Zero() => new Area(0);
 }

@@ -13,7 +13,6 @@ public class CsvParsingGusHousingListingBackgroundJobMission(IMediator mediator,
     [Mission(Name = "Import Gus csv files", 
         Description = "Imports GUS housing listings from CSV files. ")]
     [DisableConcurrentExecution(60 * 60 * 6)]
-    [AutomaticRetry(Attempts = 1)]
     [JobDisplayName("Import Gus csv files.")]
     public async Task Run()
     {

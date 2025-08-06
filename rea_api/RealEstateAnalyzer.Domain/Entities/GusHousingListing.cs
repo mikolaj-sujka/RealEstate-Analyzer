@@ -5,7 +5,7 @@ namespace RealEstateAnalyzer.Domain.Entities;
 
 public sealed class GusHousingListing : AuditableAggregateRoot
 {
-    public Guid CityId { get; private set; }
+    public string CityCode { get; private set; } = null!;
     public string CityName { get; private set; } = null!;
     public QuarterPeriod Period { get; private set; } = null!;
 
@@ -13,58 +13,58 @@ public sealed class GusHousingListing : AuditableAggregateRoot
     public PricePerSquareMeter AveragePricePerSqm { get; private set; } = null!;
 
     public Volume FlatsCompleted { get; private set; } = null!;
-    public Volume ConstructionStarts { get; private set; } = null!;
-    public Area AverageFlatSize { get; private set; } = null!;     
+    public Volume FlatsSold { get; private set; } = null!;
     public Money TotalValueSold { get; private set; } = null!;
+    public Money AverageTotalPrice { get; private set; } = null!;
 
     private GusHousingListing() { }
 
     private GusHousingListing(
-        Guid cityId,
+        string cityCode,
         string cityName,
         QuarterPeriod period,
         PricePerSquareMeter medianPricePerSqm,
         PricePerSquareMeter averagePricePerSqm,
         Volume flatsCompleted,
-        Volume constructionStarts,
-        Area averageFlatSize,
-        Money totalValueSold)
+        Volume flatsSold,
+        Money totalValueSold,
+        Money averageTotalPrice)
     {
         Id = Guid.NewGuid();
         Created("System", DateTimeOffset.Now);
 
-        CityId = cityId;
+        CityCode = cityCode;
         CityName = cityName;
         Period = period;
         MedianPricePerSqm = medianPricePerSqm;
         AveragePricePerSqm = averagePricePerSqm;
         FlatsCompleted = flatsCompleted;
-        ConstructionStarts = constructionStarts;
-        AverageFlatSize = averageFlatSize;
+        FlatsSold = flatsSold;
         TotalValueSold = totalValueSold;
+        AverageTotalPrice = averageTotalPrice;
     }
 
     public static GusHousingListing Create(
-        Guid cityId,
+        string cityCode,
         string cityName,
         QuarterPeriod period,
         PricePerSquareMeter medianPricePerSqm,
         PricePerSquareMeter averagePricePerSqm,
         Volume flatsCompleted,
-        Volume constructionStarts,
-        Area averageFlatSize,
-        Money totalValueSold)
+        Volume flatsSold,
+        Money totalValueSold,
+        Money averageTotalPrice)
     {
         return new GusHousingListing(
-            cityId,
+            cityCode,
             cityName,
             period,
             medianPricePerSqm,
             averagePricePerSqm,
             flatsCompleted,
-            constructionStarts,
-            averageFlatSize,
-            totalValueSold);
+            flatsSold,
+            totalValueSold,
+            averageTotalPrice);
     }
 
     public void Update(
@@ -72,17 +72,17 @@ public sealed class GusHousingListing : AuditableAggregateRoot
         PricePerSquareMeter medianPricePerSqm,
         PricePerSquareMeter averagePricePerSqm,
         Volume flatsCompleted,
-        Volume constructionStarts,
-        Area averageFlatSize,
-        Money totalValueSold)
+        Volume flatsSold,
+        Money totalValueSold,
+        Money averageTotalPrice)
     {
         Period = period;
         MedianPricePerSqm = medianPricePerSqm;
         AveragePricePerSqm = averagePricePerSqm;
         FlatsCompleted = flatsCompleted;
-        ConstructionStarts = constructionStarts;
-        AverageFlatSize = averageFlatSize;
+        FlatsSold = flatsSold;
         TotalValueSold = totalValueSold;
+        AverageTotalPrice = averageTotalPrice;
 
         Updated("System", DateTimeOffset.Now);
     }

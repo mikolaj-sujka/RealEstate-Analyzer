@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RealEstateAnalyzer.Application.Abstractions\RealEstateAnalyzer.Application.Abstractions.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
