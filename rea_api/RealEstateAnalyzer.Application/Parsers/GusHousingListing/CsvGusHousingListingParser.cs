@@ -1,211 +1,162 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RealEstateAnalyzer.Application.Abstractions;
-using RealEstateAnalyzer.Application.Mappers.GusHousingCsvMap;
 using RealEstateAnalyzer.Domain.ValueObjects;
 using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace RealEstateAnalyzer.Application.Parsers.GusHousingListing;
-public class CsvGusHousingListingParser(ILogger<CsvGusHousingListingParser> logger, IHostEnvironment env)
-    : IFileParser<Domain.Entities.GusHousingListing>
+public class CsvGusHousingListingParser : IFileParser<Domain.Entities.GusHousingListing>
 {
-    private readonly string _directory = Path.GetFullPath(
-        Path.Combine(env.ContentRootPath,"..", "RealEstateAnalyzer-Csv-Files"));
+    private readonly ILogger<CsvGusHousingListingParser> _logger;
+    private readonly string _directory;
+    private readonly Dictionary<string, Action<GusHousingPartial, decimal>> _metricSetters 
+        = new Dictionary<string, Action<GusHousingPartial, decimal>>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["mediana_sprzedanych_m2.csv"] = (p, v) => p.MedianPricePerSqm = PricePerSquareMeter.FromDecimal(v),
+        ["srednia_sprzedanych_m2.csv"] = (p, v) => p.AveragePricePerSqm = PricePerSquareMeter.FromDecimal(v),
+        ["mieszkania_oddane_do_uzytkowania.csv"] = (p, v) => p.FlatsCompleted = Volume.FromDecimal(v),
+        ["wartosc_lokali_sprzedanych.csv"] = (p, v) => p.TotalValueSold = Money.FromDecimal(v),
+        ["liczba_lokali_sprzedanych.csv"] = (p, v) => p.FlatsSold = Volume.FromDecimal(v),
+        ["srednia_cena_sprzedanych.csv"] = (p, v) => p.AverageTotalPrice = Money.FromDecimal(v)
+    };
 
-    private readonly Dictionary<string, Action<GusHousingPartial, GusHousingCsvRow>> _metricSetters
-        = new(StringComparer.OrdinalIgnoreCase)
-        {
-            ["mediana_sprzedanych_m2.csv"] = (p, r) => p.MedianPricePerSqm = PricePerSquareMeter.FromDecimal(r.Value),
-            ["srednia_sprzedanych_m2.csv"] = (p, r) => p.AveragePricePerSqm = PricePerSquareMeter.FromDecimal(r.Value),
-            ["mieszkania_oddane_do_uzytkowania.csv"] = (p, r) => p.FlatsCompleted = Volume.FromDecimal(r.Value),
-            ["wartosc_lokali_sprzedanych.csv"] = (p, r) => p.TotalValueSold = Money.FromDecimal(r.Value),
-            ["liczba_lokali_sprzedanych.csv"] = (p, r) => p.FlatsSold = Volume.FromDecimal(r.Value),
-            ["srednia_cena_sprzedanych.csv"] = (p, r) => p.AverageTotalPrice = Money.FromDecimal(r.Value),
-        };
-
-    private static readonly Dictionary<string, (uint From, uint To)> SpecialQuarterMap = new(StringComparer.OrdinalIgnoreCase)
+    private readonly Dictionary<string, (uint From, uint To)> _specialQuarterMap 
+        = new Dictionary<string, (uint From, uint To)>(StringComparer.OrdinalIgnoreCase)
     {
         ["pierwsze półrocze"] = (1, 2),
         ["drugie półrocze"] = (3, 4),
         ["1-3 kwartal"] = (1, 3),
-        ["2-4 kwartal"] = (2, 4),
+        ["2-4 kwartal"] = (2, 4)
     };
 
-    public async Task<ParseResult<Domain.Entities.GusHousingListing>> ParseAsync(CancellationToken cancellationToken)
+    public CsvGusHousingListingParser(
+        ILogger<CsvGusHousingListingParser> logger,
+        IHostEnvironment env,
+        IConfiguration config)
     {
-        var errors = new List<string>();
+        _logger = logger;
+        var folder = config.GetValue<string>("CsvSettings:GusHousingDirectory") ?? "RealEstateAnalyzer-Csv-Files";
+        _directory = Path.GetFullPath(Path.Combine(env.ContentRootPath, "..", folder));
+    }
 
-        if (!await DirectoryExists(_directory)) return await Task.FromResult(ParseFailure());
-
-        var files = _metricSetters.Keys
-            .Select(fn => (Name: fn, Path: Path.Combine(_directory, fn)))
-            .ToList();
-
-        var missing = files.Where(x => !File.Exists(x.Path)).ToList();
-        if (missing.Any())
+    public async Task<ParseResult<Domain.Entities.GusHousingListing>> ParseAsync(CancellationToken ct)
+    {
+        if (!Directory.Exists(_directory))
         {
-            foreach (var m in missing)
+            _logger.LogWarning("Missing directory: {directory}", _directory);
+            return ParseFailure(errors: new[]
             {
-                var msg = $"Brak pliku: {m.Name}";
-                logger.LogWarning(msg);
-                errors.Add(msg);
-            }
-            return ParseFailure(errors.ToArray());
+                $"Missing directory: {_directory}"
+            });
         }
 
-        var partials = await GetPartialsAsync(files);
+        // Build full paths
+        var paths = _metricSetters.Keys
+            .Select(name => (Name: name, Path: Path.Combine(_directory, name)))
+            .ToList();
+
+        // Check missing files
+        var missing = paths.Where(x => !File.Exists(x.Path)).Select(x => x.Name).ToArray();
+        if (missing.Length > 0)
+        {
+            var missingFiles = string.Join(", ", missing);
+
+            return ParseFailure(errors: new[]
+            {
+                $"Missing files in directory '{_directory}': {missingFiles}"
+            });
+        }
+
+        var partials = new Dictionary<CsvParsingGusHousingKey, GusHousingPartial>();
+        foreach (var (name, path) in paths)
+            await ProcessFileAsync(name, path, partials);
 
         var listings = partials.Values
             .Select(p => Domain.Entities.GusHousingListing.Create(
-                cityCode: p.CityCode,
-                cityName: p.CityName,
-                period: p.Period,
-                medianPricePerSqm: p.MedianPricePerSqm ?? PricePerSquareMeter.Zero(),
-                averagePricePerSqm: p.AveragePricePerSqm ?? PricePerSquareMeter.Zero(),
-                flatsCompleted: p.FlatsCompleted ?? Volume.Zero(),
-                flatsSold: p.FlatsSold ?? Volume.Zero(),
-                totalValueSold: p.TotalValueSold ?? Money.Zero(),
-                averageTotalPrice: p.AverageTotalPrice ?? Money.Zero()))
-            .ToList();
+                p.CityCode, p.CityName, p.Period,
+                p.MedianPricePerSqm!, p.AveragePricePerSqm!,
+                p.FlatsCompleted!, p.FlatsSold!,
+                p.TotalValueSold!, p.AverageTotalPrice!))
+            .ToArray();
 
-        logger.LogInformation("Parsowanie zakończone. Utworzono {Count} rekordów.", listings.Count);
-        return new ParseResult<Domain.Entities.GusHousingListing>(listings, errors.ToArray(), errors.Count == 0);
+        return new ParseResult<Domain.Entities.GusHousingListing>(listings, Array.Empty<string>(), true);
     }
 
-    private async Task<Dictionary<(string CityCode, string CityName, uint Year, uint Quarter), GusHousingPartial>> 
-        GetPartialsAsync(List<(string FileName, string FullPath)> files)
+    private async Task ProcessFileAsync(
+        string fileName,
+        string fullPath,
+        Dictionary<CsvParsingGusHousingKey, GusHousingPartial> partials)
     {
-        var errors = new List<string>();
-        var partials = new Dictionary<(string CityCode, string CityName, uint Year, uint Quarter), 
-            GusHousingPartial>();
-        var cfg = new CsvConfiguration(CultureInfo.InvariantCulture)
+        _logger.LogInformation("Parsing file: {File}", fileName);
+
+        var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             Delimiter = ";",
             BadDataFound = null,
             MissingFieldFound = null,
             HeaderValidated = null,
-            PrepareHeaderForMatch = h => h.Header.Trim()
+            PrepareHeaderForMatch = args => args.Header.Trim()
         };
 
-        foreach (var (fileName, fullPath) in files)
+        await using var stream = File.OpenRead(fullPath);
+        using var reader = new StreamReader(stream);
+        using var csv = new CsvReader(reader, config);
+
+        await csv.ReadAsync();
+        csv.ReadHeader();
+        var headers = csv.HeaderRecord!;
+        var dataCols = headers.Select((h, i) => (Header: h, Index: i)).Where(x => x.Index >= 2).ToArray();
+
+        while (await csv.ReadAsync())
         {
-            logger.LogInformation("Parsowanie pliku: {FileName}", fileName);
-            using var reader = new StreamReader(fullPath);
-            using var csv = new CsvReader(reader, cfg);
+            if (!CsvParsingGusHousingListingHelpers.TryReadKey(csv, out var key))
+                continue;
 
-            await csv.ReadAsync();
-            csv.ReadHeader();
-            var headers = csv.HeaderRecord!;
-
-            var dataCols = headers
-                .Select((h, idx) => (Header: h, Index: idx))
-                .Where(x => x.Index >= 2)
-                .ToArray();
-
-            while (await csv.ReadAsync())
+            foreach (var (Header, Index) in dataCols)
             {
-                string cityName;
-                string cityCode;
-
-                try
-                {
-                    cityCode = csv.GetField("Kod")!;
-                    cityName = csv.GetField("Nazwa")!;
-                }
-                catch (Exception ex)
-                {
-                    var msg = $"Błędne Kod/Nazwa w wierszu {csv.Context.Parser!.Row}: {ex.Message}";
-                    logger.LogWarning(msg);
-                    errors.Add(msg);
+                var raw = csv.GetField(Index);
+                if (!CsvParsingGusHousingListingHelpers.TryParseDecimal(raw!, out var value))
                     continue;
-                }
 
-                foreach (var (Header, Index) in dataCols)
+                // special cases: ranges or half-years
+                if (CsvParsingGusHousingListingHelpers.TryGetSpecialQuarterRange(Header, _specialQuarterMap, out var range))
                 {
-                    string rawValue = csv.GetField(Index)!;
-                    if (!decimal.TryParse(rawValue, NumberStyles.Any, CultureInfo.InvariantCulture, out var value))
+                    if (!CsvParsingGusHousingListingHelpers.TryExtractYear(Header, out var year))
                         continue;
-
-                    var specialKey = SpecialQuarterMap.Keys
-                        .FirstOrDefault(k => Header.Contains(k, StringComparison.OrdinalIgnoreCase));
-                    if (specialKey is not null)
-                    {
-                        var (fromQ, toQ) = SpecialQuarterMap[specialKey];
-                        var yMatch = Regex.Match(Header, @"\b(20\d{2}|19\d{2})\b");
-                        if (!yMatch.Success || !uint.TryParse(yMatch.Groups[1].Value, out var year))
-                        {
-                            logger.LogWarning("Nieparsowalny rok w nagłówku: {Header}", Header);
-                            continue;
-                        }
-                        for (uint q = fromQ; q <= toQ; q++)
-                        {
-                            var key = (cityCode, cityName, year, q);
-                            if (!partials.TryGetValue(key, out var part))
-                            {
-                                part = new GusHousingPartial(cityCode, cityName, new QuarterPeriod(year, q));
-                                partials[key] = part;
-                            }
-                            _metricSetters[fileName](part, new GusHousingCsvRow(cityCode, cityName, year, q, value));
-                        }
-                        continue;
-                    }
-
-                    var qMatch = Regex.Match(Header, @"(\d+)\s*kwart", RegexOptions.IgnoreCase);
-                    if (!qMatch.Success || !uint.TryParse(qMatch.Groups[1].Value, out var quarter))
-                    {
-                        logger.LogWarning("Nieparsowalny kwartał w nagłówku: {Header}", Header);
-                        continue;
-                    }
-
-                    var yMatchStd = Regex.Match(Header, @"\b(20\d{2}|19\d{2})\b");
-                    if (!yMatchStd.Success || !uint.TryParse(yMatchStd.Groups[1].Value, out var yearStd))
-                    {
-                        logger.LogWarning("Nieparsowalny rok w nagłówku: {Header}", Header);
-                        continue;
-                    }
-                    var stdkey = (cityCode, cityName, yearStd, quarter);
-                    if (!partials.TryGetValue(stdkey, out var stdPart))
-                    {
-                        stdPart = new GusHousingPartial(cityCode, cityName, new QuarterPeriod(yearStd, quarter));
-                        partials[stdkey] = stdPart;
-                    }
-
-                    _metricSetters[fileName](stdPart, new GusHousingCsvRow(cityCode, cityName, yearStd, quarter, value));
+                    for (uint q = range.From; q <= range.To; q++)
+                        ApplyMetric(fileName, key.WithPeriod(year, q), value, partials);
+                }
+                // standard quarter extraction
+                else if (CsvParsingGusHousingListingHelpers.TryExtractQuarter(Header, out var quarter)
+                         && CsvParsingGusHousingListingHelpers.TryExtractYear(Header, out var yearStd))
+                {
+                    ApplyMetric(fileName, key.WithPeriod(yearStd, quarter), value, partials);
                 }
             }
         }
-
-        return partials;
     }
 
-    private Task<bool> DirectoryExists(string directory)
+    private void ApplyMetric(
+        string fileName,
+        CsvParsingGusHousingKey key,
+        decimal value,
+        Dictionary<CsvParsingGusHousingKey, GusHousingPartial> partials)
     {
-        if (Directory.Exists(directory))
+        if (!partials.TryGetValue(key, out var part))
         {
-            return Task.FromResult(true);
+            part = new GusHousingPartial(key.CityCode, key.CityName, key.GetPeriod());
+            partials[key] = part;
         }
-        logger.LogError("Directory does not exist: {Directory}", directory);
-        return Task.FromResult(false);
+        _metricSetters[fileName](part, value);
     }
 
-    private static ParseResult<Domain.Entities.GusHousingListing> ParseFailure(params string[] errs)
-        => new(
-            Array.Empty<Domain.Entities.GusHousingListing>(), errs, Success: false);
-}
-
-public class GusHousingPartial(string cityCode, string cityName, QuarterPeriod period)
-{
-    public string CityCode { get; } = cityCode;
-    public string CityName { get; } = cityName;
-    public QuarterPeriod Period { get; } = period;
-
-    public PricePerSquareMeter? MedianPricePerSqm { get; set; }
-    public PricePerSquareMeter? AveragePricePerSqm { get; set; }
-    public Volume? FlatsCompleted { get; set; }
-    public Money? TotalValueSold { get; set; }
-    public Money? AverageTotalPrice { get; set; }
-    public Volume? FlatsSold { get; set; }
+    private static ParseResult<Domain.Entities.GusHousingListing> ParseFailure(IReadOnlyList<string> errors) =>
+        new ParseResult<Domain.Entities.GusHousingListing>(
+            Success: false,
+            Errors: errors,
+            Records: Array.Empty<Domain.Entities.GusHousingListing>()
+        );
 }
