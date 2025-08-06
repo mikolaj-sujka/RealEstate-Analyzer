@@ -9,7 +9,10 @@
 
   <ItemGroup>
     <PackageReference Include="CsvHelper" Version="33.1.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.7" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.20" />
+    <PackageReference Include="Hangfire.MissionControl" Version="0.10.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.8" />
   </ItemGroup>
 
   <ItemGroup>
@@ -18,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BackgroundJobs\" />
+    <Folder Include="BackgroundJobs\WebScraping\" />
   </ItemGroup>
 
 </Project>

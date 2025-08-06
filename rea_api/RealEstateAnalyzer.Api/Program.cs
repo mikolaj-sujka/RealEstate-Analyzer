@@ -2,6 +2,7 @@ using HealthChecks.UI.Client;
 using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RealEstateAnalyzer.Api.Extensions;
+using RealEstateAnalyzer.Application.Extensions;
 using RealEstateAnalyzer.Infrastructure.Extensions;
 using RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
 using RealEstateAnalyzer.Infrastructure.Redis.Extensions;
@@ -20,6 +21,8 @@ builder.Services.AddRedis(builder.Configuration);
 builder.Services.ConfigureHealthChecks(builder.Configuration);
 
 builder.Services.AddHangfire(builder.Configuration);
+
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 

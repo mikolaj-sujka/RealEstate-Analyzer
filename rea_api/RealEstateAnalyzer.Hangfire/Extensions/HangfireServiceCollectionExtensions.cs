@@ -1,19 +1,14 @@
 ﻿using Hangfire;
 using Hangfire.Console.Extensions;
+using Hangfire.MissionControl;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RealEstateAnalyzer.Application.BackgroundJobs.CsvParsing;
 using SqlAlias;
 
 namespace RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
-
-public sealed class HangfireConfiguration
-{
-    public bool Enabled { get; set; }
-    public IDictionary<string, string?>? Crons { get; set; }
-    public int LongRunningQueueWorkersCount { get; set; }
-}
 
 public static class HangfireServiceCollectionExtensions
 {
@@ -46,7 +41,13 @@ public static class HangfireServiceCollectionExtensions
                     EnableHeavyMigrations = true,
                     SchemaName = "hangfire",
                     PrepareSchemaIfNecessary = true
-                });
+                })
+                .UseMissionControl(new MissionControlOptions
+                    {
+                        RequireConfirmation = false,
+                        HideCodeSnippet = false
+                    },
+                    typeof(CsvParsingGusHousingListingBackgroundJobMission).Assembly);
         });
 
         services.AddHangfireServer(x =>

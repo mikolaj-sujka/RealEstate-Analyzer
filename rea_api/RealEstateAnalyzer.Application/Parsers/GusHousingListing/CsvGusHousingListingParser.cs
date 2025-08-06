@@ -1,7 +1,6 @@
-﻿using CsvHelper.Configuration;
+﻿using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RealEstateAnalyzer.Application.Abstractions;
-using RealEstateAnalyzer.Domain.ValueObjects;
 
 namespace RealEstateAnalyzer.Application.Parsers.GusHousingListing;
 
@@ -16,75 +15,41 @@ public record GusHousingCsvRow(
     double ConstructionStarts,
     double AverageFlatSize,
     double TotalValueSold);
-public class CsvGusHousingListingParser(string directory, ILogger<CsvGusHousingListingParser> logger)
+public class CsvGusHousingListingParser(ILogger<CsvGusHousingListingParser> logger, IHostEnvironment env)
     : IFileParser<Domain.Entities.GusHousingListing>
 {
-    private readonly string _directory = directory;
-    private readonly ILogger<CsvGusHousingListingParser> _logger = logger;
-    private readonly Dictionary<string, Action<GusHousingPartial, GusHousingCsvRow>> _metricSetters
-        = new()
+    private readonly string _directory = Path.GetFullPath(
+        Path.Combine(env.ContentRootPath,"..", "RealEstateAnalyzer-Csv-Files"));
+
+    public async Task<ParseResult<Domain.Entities.GusHousingListing>> ParseAsync(CancellationToken cancellationToken)
+    {
+        if (!await DirectoryExists(_directory)) return await Task.FromResult(ParseFailure());
+        
+        var found = Directory.EnumerateFiles(_directory)
+            .Select(Path.GetFileName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        logger.LogInformation("Files in folder: {Files}", string.Join(", ", found));
+
+        return await Task.FromResult(ParseSuccess());
+    }
+
+    private Task<bool> DirectoryExists(string directory)
+    {
+        if (Directory.Exists(directory))
         {
-            ["mediana_sprzedanych_m2.csv"] = (p, r) => p.MedianPricePerSqm = PricePerSquareMeter.FromDecimal(r.Value),
-            ["srednia_sprzedanych_m2.csv"] = (p, r) => p.AveragePricePerSqm = PricePerSquareMeter.FromDecimal(r.Value),
-            ["mieszkania_oddane_do_uzytkowania.csv"] = (p, r) => p.FlatsCompleted = Volume.FromDecimal(r.Value),
-            ["mieszkania_budowe_rozpoczeto.csv"] = (p, r) => p.ConstructionStarts = Volume.FromDecimal(r.Value),
-            //["average_flat_size.csv"] = (p, r) => p.AverageFlatSize = Area.FromDecimal(r.Value),
-            ["wartosc_lokali_sprzedanych.csv"] = (p, r) => p.TotalValueSold = Money.FromDecimal(r.Value),
-        };
-
-    public Task<ParseResult<Domain.Entities.GusHousingListing>> ParseAsync(Stream fileStream, 
-        CancellationToken cancellationToken)
-    {
-        var errors = new List<string>();
-
-        var missingFiles = _metricSetters.Keys
-            .Select(fn => Path.Combine(_directory, fn))
-            .Where(fullPath => !File.Exists(fullPath))
-            .Select(fullPath => Path.GetFileName(fullPath)!)
-            .ToList();
-
-        if (!missingFiles.Any())
-            return Task.FromResult(new ParseResult<Domain.Entities.GusHousingListing>( 
-                Records: Array.Empty<Domain.Entities.GusHousingListing>(),
-                Errors: Array.Empty<string>(), Success: true));
-
-        errors.AddRange(missingFiles.Select(f => $"Brak pliku: {f}"));
-
-
-        return Task.FromResult(new ParseResult<Domain.Entities.GusHousingListing>(
-            Records: Array.Empty<Domain.Entities.GusHousingListing>(),
-            Errors: errors, Success: false));
-    }
-
-    public class GusHousingPartial(Guid cityId, string cityName, QuarterPeriod period)
-    {
-        public Guid CityId { get; } = cityId;
-        public string CityName { get; } = cityName;
-        public QuarterPeriod Period { get; } = period;
-
-        public PricePerSquareMeter? MedianPricePerSqm { get; set; }
-        public PricePerSquareMeter? AveragePricePerSqm { get; set; }
-        public Volume? FlatsCompleted { get; set; }
-        public Volume? ConstructionStarts { get; set; }
-        public Area? AverageFlatSize { get; set; }
-        public Money? TotalValueSold { get; set; }
-    }
-
-    public class GusHousingCsvRow
-    {
-        public string Kod { get; set; } = "";
-        public string Nazwa { get; set; } = "";
-        public string Quarter { get; set; } = "";
-        public decimal Value { get; set; }
-    }
-    public sealed class GusHousingCsvRowMap : ClassMap<GusHousingCsvRow>
-    {
-        public GusHousingCsvRowMap()
-        {
-            Map(m => m.Kod).Name("Kod");
-            Map(m => m.Nazwa).Name("Nazwa");
-            Map(m => m.Quarter).Name("Okres");
-            Map(m => m.Value).Name("Value");
+            return Task.FromResult(true);
         }
+        logger.LogError("Directory does not exist: {Directory}", directory);
+        return Task.FromResult(false);
     }
+
+    private static ParseResult<Domain.Entities.GusHousingListing> ParseFailure(params string[] errs)
+        => new(
+            Array.Empty<Domain.Entities.GusHousingListing>(), errs, Success: false);
+
+    private static ParseResult<Domain.Entities.GusHousingListing> ParseSuccess()
+    => new(
+        Array.Empty<Domain.Entities.GusHousingListing>(), 
+        Array.Empty<string>(), 
+        Success: true);
 }
