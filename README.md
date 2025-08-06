@@ -119,11 +119,16 @@ RealEstate-Analyzer/
 ├── README.md
 ├── rea_api/                           # Backend API (.NET)
 │   ├── rea_api.sln
-│   ├── rea_api/
+│   ├── RealEstateAnalyzer-csv/
+│   ├── RealEstateAnalyzer.Api/
 │   ├── RealEstateAnalyzer.Application/
+│   ├── RealEstateAnalyzer.Application.Abstractions/
 │   ├── RealEstateAnalyzer.Domain/
 │   ├── RealEstateAnalyzer.Infrastructure/
-│   └── RealEstateAnalyzer.WebScrapping/
+│   ├── RealEstateAnalyzer.Infrastructure.Hangfire/
+│   ├── RealEstateAnalyzer.Infrastructure.Redis/
+│   ├── RealEstateAnalyzer.WebScraping/
+│   └── docker-compose/
 ├── rea_frontend/                      # Frontend (Next.js)
 │   ├── app/                          # App Router (Next.js 13+)
 │   ├── components/                   # Komponenty React
@@ -183,7 +188,8 @@ Projekt zawiera zaawansowaną część badawczą w katalogu [`rea_research`](rea
 <img width="1707" height="895" alt="Zrzut ekranu 2025-07-31 o 15 05 30" src="https://github.com/user-attachments/assets/94b6e9b5-5677-48f4-953a-097ec5fb9a65" />
 <img width="1728" height="998" alt="Zrzut ekranu 2025-07-31 o 15 05 50" src="https://github.com/user-attachments/assets/3fc90a34-af81-4ba5-a4fc-3d2d3155fa1d" />
 <img width="1722" height="991" alt="Zrzut ekranu 2025-07-31 o 15 06 11" src="https://github.com/user-attachments/assets/1ddaf547-455a-40e8-b1c5-e32a780e19c1" />
-<img width="1726" height="987" alt="Zrzut ekranu 2025-07-31 o 15 06 52" src="https://github.com/user-attachments/assets/98e87f22-3871-4a17-9a25-6abb5b950a09" />
+<img width="1703" height="899" alt="Zrzut ekranu 2025-08-4 o 19 05 26" src="https://github.com/user-attachments/assets/c49b019b-00ca-4bb6-9c3a-bf0ef2d300cf" />
+<img width="1705" height="898" alt="Zrzut ekranu 2025-08-4 o 19 06 23" src="https://github.com/user-attachments/assets/e86fc517-5f48-42f3-9366-3d5dcd451f8d" />
 
 
 
