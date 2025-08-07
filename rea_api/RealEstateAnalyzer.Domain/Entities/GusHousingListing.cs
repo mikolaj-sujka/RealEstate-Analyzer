@@ -14,6 +14,7 @@ public sealed class GusHousingListing : AuditableAggregateRoot
 
     public Volume FlatsCompleted { get; private set; } = null!;
     public Volume FlatsSold { get; private set; } = null!;
+
     public Money TotalValueSold { get; private set; } = null!;
     public Money AverageTotalPrice { get; private set; } = null!;
 

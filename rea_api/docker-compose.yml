@@ -1,4 +1,9 @@
-﻿services:
+﻿version: '2.4'
+
+volumes:
+  redis-data:
+
+services:
   redis:
     image: redis:7-alpine
     command: ["redis-server", "--appendonly", "yes"]
@@ -12,7 +17,7 @@
       interval: 5s
       timeout: 2s
       retries: 5
-      start_period: 5s
+      start_period: 10s
 
   app:
     build:
@@ -20,20 +25,17 @@
       dockerfile: RealEstateAnalyzer.Api/Dockerfile
     depends_on:
       redis:
-        condition: service_started  
+        condition: service_healthy
     environment:
+      - Redis__Enabled=true
       - Redis__ConnectionString=redis:6379
       - Redis__InstanceName=RealEstateAnalyzer
     ports:
       - "5000:80"
     restart: on-failure
     healthcheck:
-      test: ["CMD-SHELL", "curl --fail http://localhost:80/api/health || exit 1"]
+      test: ["CMD-SHELL", "curl -f -H 'Accept: application/json' http://localhost:80/api/health || exit 1"]
       interval: 15s
       timeout: 5s
       retries: 3
       start_period: 10s
-
-volumes:
-  redis-data:
-    driver: local

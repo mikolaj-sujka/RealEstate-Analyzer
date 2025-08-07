@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
 namespace RealEstateAnalyzer.Infrastructure.Redis.Extensions;
@@ -8,30 +9,38 @@ public static class ServiceCollectionExtensions
 {
     public static void AddRedis(this IServiceCollection services, IConfiguration configuration)
     {
-        var redisSection = configuration.GetSection("Redis");
-        var redisConfig = redisSection.Get<RedisConfiguration>();
+        services.Configure<RedisConfiguration>(options => 
+            configuration.GetSection("Redis").Bind(options));
 
-        if (redisConfig?.Enabled is false or null)
+        services.AddSingleton(sp =>
         {
-            return;
-        }
+            var redisConfig = sp.GetRequiredService<IOptions<RedisConfiguration>>().Value;
+            if (!redisConfig.Enabled)
+                return null!; // caller must guard or use TryAdd if you prefer
 
-        services.Configure<RedisConfiguration>(options => redisSection.Bind(options));
+            var opts = ConfigurationOptions.Parse(redisConfig.ConnectionString, ignoreUnknown: false);
+            opts.AbortOnConnectFail = false;
+            opts.ClientName = redisConfig.InstanceName;
+            opts.ConnectTimeout = 10_000;  // 10 s
+            opts.SyncTimeout = 10_000;  // 10 s
+
+            return ConnectionMultiplexer.Connect(opts);
+        });
+
+        services.AddScoped(sp =>
+        {
+            var mux = sp.GetRequiredService<ConnectionMultiplexer>();
+            return mux.GetDatabase();
+        });
 
         services.AddStackExchangeRedisCache(options =>
         {
-            options.Configuration = redisConfig.ConnectionString;
-            if (!string.IsNullOrWhiteSpace(redisConfig.InstanceName))
-                options.InstanceName = redisConfig.InstanceName;
-        });
-
-        services.AddSingleton<IConnectionMultiplexer>(sp =>
-        {
-            var opts = ConfigurationOptions.Parse(redisConfig.ConnectionString, ignoreUnknown: false);
-            opts.AbortOnConnectFail = false;
-            return ConnectionMultiplexer.Connect(opts);
+            var redisConfig = configuration.GetSection("Redis").Get<RedisConfiguration>()!;
+            options.Configuration = redisConfig.ConnectionString + ",abortConnect=false";
+            options.InstanceName = redisConfig.InstanceName;
         });
     }
+
 }
 
 public sealed class RedisConfiguration

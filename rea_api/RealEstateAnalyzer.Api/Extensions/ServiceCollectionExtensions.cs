@@ -9,14 +9,27 @@ public static class ServiceCollectionExtensions
     {
         var connectionString = Aliases.Map(configuration.GetSection("Database")["ConnectionString"]);
 
-        services.AddHealthChecks()
+        var healthCheckBuilder = services.AddHealthChecks()
             .AddSqlServer(
                 connectionString,
                 name: "sqlserver",
                 failureStatus: HealthStatus.Unhealthy,
                 tags: new[] { "ready", "live" });
 
+        var redisSection = configuration.GetSection("Redis");
+        if (redisSection.GetValue<bool>("Enabled"))
+        {
+            var rawRedisConn = redisSection.GetValue<string>("ConnectionString");
 
+            var healthRedisConn = $"{rawRedisConn},abortConnect=false";
+
+            healthCheckBuilder.AddRedis(
+                healthRedisConn,
+                name: "redis",
+                failureStatus: HealthStatus.Unhealthy,
+                tags: new[] { "ready", "live" }
+            );
+        }
 
         services.AddHealthChecksUI(opt =>
             {

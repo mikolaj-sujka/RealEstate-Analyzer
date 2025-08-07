@@ -22,7 +22,7 @@ builder.Services.ConfigureHealthChecks(builder.Configuration);
 
 builder.Services.AddHangfire(builder.Configuration);
 
-builder.Services.AddApplicationServices();
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 

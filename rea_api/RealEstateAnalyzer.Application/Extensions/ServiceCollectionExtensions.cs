@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.Parsers.GusHousingListing;
+using RealEstateAnalyzer.Application.Services;
 using RealEstateAnalyzer.Application.UseCases.GetGusHousingListingsFromCsv;
 using RealEstateAnalyzer.Domain.Entities;
 
@@ -14,9 +16,10 @@ public static class ServiceCollectionExtensions
             cfg.RegisterServicesFromAssembly(typeof(GetGusHousingListingsFromCsvQuery).Assembly));
     }
 
-    public static void AddApplicationServices(this IServiceCollection services)
+    public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatRConfig();
         services.AddScoped<IFileParser<GusHousingListing>, CsvGusHousingListingParser>();
+        services.AddScoped<IRedisCacheListingsService, ListingCacheService>();
     }
 }

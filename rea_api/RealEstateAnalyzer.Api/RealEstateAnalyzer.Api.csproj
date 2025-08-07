@@ -34,8 +34,4 @@
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure.Redis\RealEstateAnalyzer.Infrastructure.Redis.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
 </Project>
