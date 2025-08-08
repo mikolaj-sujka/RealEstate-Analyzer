@@ -1,0 +1,53 @@
+name: Next.js - Build & Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'
+        cache-dependency-path: rea_frontend/pnpm-lock.yaml
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install dependencies
+      run: pnpm install
+      working-directory: ./rea_frontend
+
+    - name: Run ESLint
+      run: pnpm run lint
+      working-directory: ./rea_frontend
+
+    - name: Build application
+      run: pnpm run build
+      working-directory: ./rea_frontend
+      env:
+        NODE_ENV: production
+
+    - name: Check if tests exist and run them
+      run: |
+        if [ -f "package.json" ] && grep -q '"test"' package.json; then
+          echo "Running tests..."
+          pnpm test
+        else
+          echo "No tests found, skipping test step"
+        fi
+      working-directory: ./rea_frontend
