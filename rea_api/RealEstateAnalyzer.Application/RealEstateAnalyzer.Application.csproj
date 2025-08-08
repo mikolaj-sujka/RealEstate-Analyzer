@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <Folder Include="BackgroundJobs\WebScraping\" />
-    <Folder Include="UseCases\GusHousingListings\GetGusHousingListingsCustomRange\" />
     <Folder Include="UseCases\OtodomHousingListings\" />
   </ItemGroup>
 

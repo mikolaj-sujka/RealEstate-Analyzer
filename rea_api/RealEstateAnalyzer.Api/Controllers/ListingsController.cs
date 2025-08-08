@@ -1,7 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateAnalyzer.Application.Abstractions;
-using RealEstateAnalyzer.Application.UseCases.GetGusHousingListingsRecentYears;
+using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsCustomRange;
+using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsRecentYears;
 
 namespace RealEstateAnalyzer.Api.Controllers;
 
@@ -27,6 +28,19 @@ public class ListingsController(IRedisCacheListingsService redis, IMediator medi
         var listings = await mediator.Send(
             new GetGusHousingListingsRecentYearsQuery(cityName, yearsBack));
 
+        return StatusCode(200, listings);
+    }
+
+    [HttpGet("gus-housing-listings/custom-range")]
+    public async Task<IActionResult> GetGusHousingListingsCustomRange(
+        [FromQuery] string cityName,
+        [FromQuery] uint yearsFrom,
+        [FromQuery] uint yearsTo,
+        [FromQuery] uint monthFrom,
+        [FromQuery] uint monthTo)
+    {
+        var listings = await mediator.Send(
+            new GetGusHousingListingsCustomRangeQuery(cityName, yearsFrom, yearsTo, monthFrom, monthTo));
         return StatusCode(200, listings);
     }
 }

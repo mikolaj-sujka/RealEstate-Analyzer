@@ -1,7 +1,7 @@
 ﻿using Hangfire;
 using Hangfire.MissionControl;
 using MediatR;
-using RealEstateAnalyzer.Application.UseCases.GetGusHousingListingsFromCsv;
+using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsFromCsv;
 
 namespace RealEstateAnalyzer.Application.BackgroundJobs.CsvParsing;
 
