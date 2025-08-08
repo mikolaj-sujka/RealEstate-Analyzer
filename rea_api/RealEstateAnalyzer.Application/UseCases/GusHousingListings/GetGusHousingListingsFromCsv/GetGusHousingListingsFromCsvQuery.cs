@@ -2,7 +2,7 @@
 using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Infrastructure;
 
-namespace RealEstateAnalyzer.Application.UseCases.GetGusHousingListingsFromCsv;
+namespace RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsFromCsv;
 
 
 public class GetGusHousingListingsFromCsvQuery : IRequest;

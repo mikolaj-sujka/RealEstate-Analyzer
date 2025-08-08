@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.Parsers.GusHousingListing;
 using RealEstateAnalyzer.Application.Services;
-using RealEstateAnalyzer.Application.UseCases.GetGusHousingListingsFromCsv;
+using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsFromCsv;
 using RealEstateAnalyzer.Domain.Entities;
 
 namespace RealEstateAnalyzer.Application.Extensions;
