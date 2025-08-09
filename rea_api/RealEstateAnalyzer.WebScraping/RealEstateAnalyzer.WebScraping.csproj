@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\RealEstateAnalyzer.Infrastructure.Http\RealEstateAnalyzer.Infrastructure.Http.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure.Http\RealEstateAnalyzer.Infrastructure.Http.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.WebScraping.Abstractions\RealEstateAnalyzer.WebScraping.Abstractions.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.WebScraping.Domain\RealEstateAnalyzer.WebScraping.Domain.csproj" />
   </ItemGroup>
