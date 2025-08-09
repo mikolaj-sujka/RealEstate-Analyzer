@@ -32,6 +32,7 @@ Główne funkcjonalności obejmują:
 - Monitorowanie i telemetria z wykorzystaniem OpenTelemetry
 - Wykorzystanie danych historycznych z GUS (pliki w formie csv)
 - Redis Cache
+- Polly Retry (strategia/”polityka” w bibliotece Polly, która automatycznie ponawia nieudane operacje (np. żądania HTTP) przy błędach przejściowych, z konfigurowaną liczbą prób i opóźnieniami (np. exponential backoff))
 
 #### Frontend
 - Next.js (SSR, optymalizacja SEO)
@@ -50,7 +51,7 @@ Główne funkcjonalności obejmują:
 - MSSQL
 
 #### DevOps i hosting
-- Firebase
+- Azure
 - Docker
 
 ## :dart: Cel Projektu
@@ -118,17 +119,20 @@ RealEstate-Analyzer/
 ├── LICENSE
 ├── README.md
 ├── rea_api/                           # Backend API (.NET)
-│   ├── rea_api.sln
-│   ├── RealEstateAnalyzer-csv/
-│   ├── RealEstateAnalyzer.Api/
-│   ├── RealEstateAnalyzer.Application/
-│   ├── RealEstateAnalyzer.Application.Abstractions/
-│   ├── RealEstateAnalyzer.Domain/
-│   ├── RealEstateAnalyzer.Infrastructure/
-│   ├── RealEstateAnalyzer.Infrastructure.Hangfire/
-│   ├── RealEstateAnalyzer.Infrastructure.Redis/
-│   ├── RealEstateAnalyzer.WebScraping/
-│   └── docker-compose/
+│   ├── rea_api.sln                    # Solution (spina wszystkie projekty)
+│   ├── RealEstateAnalyzer-csv/        # Dane wejściowe CSV (GUS) – surowe pliki do importu/testów
+│   ├── RealEstateAnalyzer.Api/        # Warstwa prezentacji (ASP.NET Core): Controllers/Minimal API, DI, appsettings, start aplikacji
+│   ├── RealEstateAnalyzer.Application/        # Logika use-case’ów (CQRS/MediatR), handlery, validacje, mappingi, DTO/Responses
+│   ├── RealEstateAnalyzer.Application.Abstractions/     # Kontrakty dla Application (interfejsy portów: repozytoria, gatewaye, usługi)
+│   ├── RealEstateAnalyzer.Domain/             # Model domenowy (encje, value objects, agregaty, eventy domenowe, enumy, reguły)
+│   ├── RealEstateAnalyzer.Infrastructure/     # Implementacje portów (EF Core DbContext, repozytoria, migracje, I/O, pliki, integracje)
+│   ├── RealEstateAnalyzer.Infrastructure.Http/     # Infrastrukturę HTTP (IHttpClientFactory, DelegatingHandlers, polityki retry, opcje)
+│   ├── RealEstateAnalyzer.Infrastructure.Hangfire/ # Konfiguracja i hostowanie Hangfire, dashboard, serwer, job activator
+│   ├── RealEstateAnalyzer.Infrastructure.Redis/    # Konfiguracja Redis, cache/adapters, polityki wygasania, helpery
+│   ├── RealEstateAnalyzer.WebScraping/             # Implementacje scraperów (Otodom itp.), orkiestracja, wykrywanie stron, workflow scrapingu
+│   ├── RealEstateAnalyzer.WebScraping.Domain/      # Prosty model „scrapingowy” (rekordy prymitywów, np. OtodomOfferRecord, helpery)
+│   ├── RealEstateAnalyzer.WebScraping.Abstractions/ # Interfejsy dla scrapingu (IScraper<T>, IOfferParser<T>, kontrakty serwisów)
+│   └── docker-compose/ # Plik yml zawierający konfiguracje kontenerów dla solution i redis
 ├── rea_frontend/                      # Frontend (Next.js)
 │   ├── app/                          # App Router (Next.js 13+)
 │   ├── components/                   # Komponenty React
