@@ -163,7 +163,7 @@ public static class WebScrapingParserHelpers
     {
         var t = text.ToLowerInvariant();
         if (t.Contains("rynek pierwotny")) return "PrimaryMarket";
-        if (t.Contains("rynek wtórny") || t.Contains("rynek wtorny")) return "SecondaryMarket";
+        if (t.Contains("wtórny") || t.Contains("rynek wtorny")) return "SecondaryMarket";
         return "PrimaryMarket";
     }
 
