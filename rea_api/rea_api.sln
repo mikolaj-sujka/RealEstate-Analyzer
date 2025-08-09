@@ -25,6 +25,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.WebScrap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.WebScraping.Abstractions", "RealEstateAnalyzer.WebScraping.Abstractions\RealEstateAnalyzer.WebScraping.Abstractions.csproj", "{EA305522-53EE-47AE-A047-0BA419849810}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Http", "..\RealEstateAnalyzer.Infrastructure.Http\RealEstateAnalyzer.Infrastructure.Http.csproj", "{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,6 +165,18 @@ Global
 		{EA305522-53EE-47AE-A047-0BA419849810}.Release|x64.Build.0 = Release|Any CPU
 		{EA305522-53EE-47AE-A047-0BA419849810}.Release|x86.ActiveCfg = Release|Any CPU
 		{EA305522-53EE-47AE-A047-0BA419849810}.Release|x86.Build.0 = Release|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Debug|x64.Build.0 = Debug|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Debug|x86.Build.0 = Debug|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Release|x64.ActiveCfg = Release|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Release|x64.Build.0 = Release|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Release|x86.ActiveCfg = Release|Any CPU
+		{6DB6FF23-89AD-4F07-A719-ECBC3B9D5737}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

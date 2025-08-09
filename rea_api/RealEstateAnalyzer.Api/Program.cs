@@ -5,6 +5,7 @@ using RealEstateAnalyzer.Api.Extensions;
 using RealEstateAnalyzer.Application.Extensions;
 using RealEstateAnalyzer.Infrastructure.Extensions;
 using RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
+using RealEstateAnalyzer.Infrastructure.Http.Extensions;
 using RealEstateAnalyzer.Infrastructure.Redis.Extensions;
 using RealEstateAnalyzer.WebScraping.Extensions;
 using Scalar.AspNetCore;
@@ -26,6 +27,8 @@ builder.Services.AddHangfire(builder.Configuration);
 builder.Services.AddApplicationServices(builder.Configuration);
 
 builder.Services.AddWebScrapingServices(builder.Configuration);
+
+builder.Services.AddHttpScrapingServices(builder.Configuration);
 
 var app = builder.Build();
 

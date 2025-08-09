@@ -1,4 +1,4 @@
-﻿namespace RealEstateAnalyzer.WebScrapping;
+﻿namespace RealEstateAnalyzer.Infrastructure.Http.HttpOptions;
 
 public sealed class ScraperOptions
 {

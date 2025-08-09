@@ -1,19 +1,21 @@
 ﻿using System.Text.RegularExpressions;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Options;
+using RealEstateAnalyzer.Infrastructure.Http.HttpOptions;
 using RealEstateAnalyzer.WebScraping.Abstractions;
 using RealEstateAnalyzer.WebScraping.Domain;
-using RealEstateAnalyzer.WebScrapping;
 
 namespace RealEstateAnalyzer.WebScraping.Scraper;
 
-public class OtodomScraper(ScraperOptions options, IHttpClientFactory httpFactory,
+public class OtodomScraper(IOptions<ScraperOptions> options, IHttpClientFactory httpFactory,
     IOfferParser<OtodomOfferRecord> parser) : IScraper<OtodomOfferRecord>
 {
+    private readonly ScraperOptions _options = options.Value;
     public async Task<IReadOnlyList<OtodomOfferRecord>> ScrapeAllAsync(CancellationToken ct = default)
     {
         var http = httpFactory.CreateClient("otodom");
-        var totalPages = await DetectTotalPagesAsync(options.BaseUrl, ct);
-        var maxPages = Math.Min(totalPages, options.MaxPagesHardCap);
+        var totalPages = await DetectTotalPagesAsync(_options.BaseUrl, ct);
+        var maxPages = Math.Min(totalPages, _options.MaxPagesHardCap);
 
         var results = new List<OtodomOfferRecord>(capacity: maxPages * 50);
 
@@ -21,7 +23,7 @@ public class OtodomScraper(ScraperOptions options, IHttpClientFactory httpFactor
         {
             ct.ThrowIfCancellationRequested();
 
-            var url = page == 1 ? options.BaseUrl : $"{options.BaseUrl}?page={page}";
+            var url = page == 1 ? _options.BaseUrl : $"{_options.BaseUrl}?page={page}";
             var html = await http.GetStringAsync(url, ct); // retry via Polly handler
             var batch = parser.ParseOffers(html);
 
@@ -29,8 +31,8 @@ public class OtodomScraper(ScraperOptions options, IHttpClientFactory httpFactor
 
             results.AddRange(batch);
 
-            if (options.DelayMsBetweenPages > 0)
-                await Task.Delay(options.DelayMsBetweenPages, ct);
+            if (_options.DelayMsBetweenPages > 0)
+                await Task.Delay(_options.DelayMsBetweenPages, ct);
         }
 
         return results;
@@ -41,7 +43,6 @@ public class OtodomScraper(ScraperOptions options, IHttpClientFactory httpFactor
         var http = httpFactory.CreateClient("otodom");
         var html = await http.GetStringAsync(baseUrl, ct);
 
-        // 1) spróbuj JSON osadzony w stronie
         foreach (var p in new[]
                  {
                      "\"totalPages\"\\s*:\\s*(\\d+)",
@@ -52,10 +53,9 @@ public class OtodomScraper(ScraperOptions options, IHttpClientFactory httpFactor
         {
             var m = Regex.Match(html, p, RegexOptions.IgnoreCase);
             if (m.Success && int.TryParse(m.Groups[1].Value, out var pages) && pages > 0)
-                return Math.Min(pages, options.MaxPagesHardCap);
+                return Math.Min(pages, _options.MaxPagesHardCap);
         }
 
-        // 2) fallback: sprawdź kilka dalszych stron, czy mają oferty
         foreach (var probe in new[] { 100, 50, 20, 10 })
         {
             var u = $"{baseUrl}?page={probe}";
@@ -65,11 +65,11 @@ public class OtodomScraper(ScraperOptions options, IHttpClientFactory httpFactor
                 var doc = new HtmlDocument();
                 doc.LoadHtml(testHtml);
                 var offers = doc.DocumentNode.SelectNodes("//article"); // HAP
-                if (offers is { Count: > 0 }) return Math.Min(probe, options.MaxPagesHardCap);
+                if (offers is { Count: > 0 }) return Math.Min(probe, _options.MaxPagesHardCap);
             }
-            catch { /* zignoruj pojedyncze błędy */ }
+            catch { }
         }
 
-        return Math.Min(50, options.MaxPagesHardCap);
+        return Math.Min(50, _options.MaxPagesHardCap);
     }
 }
