@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BackgroundJobs\WebScraping\" />
     <Folder Include="UseCases\OtodomHousingListings\" />
   </ItemGroup>
 

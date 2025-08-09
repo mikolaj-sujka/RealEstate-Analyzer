@@ -7,7 +7,7 @@ using RealEstateAnalyzer.WebScraping.Domain;
 
 namespace RealEstateAnalyzer.WebScraping.Parsing;
 
-public sealed class OfferParser : IOfferParser<OtodomOfferRecord>
+public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
 {
     public IReadOnlyList<OtodomOfferRecord> ParseOffers(string htmlContent)
     {
