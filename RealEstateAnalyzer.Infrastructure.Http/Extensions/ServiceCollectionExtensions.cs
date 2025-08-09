@@ -1,7 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
-using Polly.Extensions.Http;
 using RealEstateAnalyzer.Infrastructure.Http.Handlers;
 using RealEstateAnalyzer.Infrastructure.Http.HttpOptions;
 
@@ -14,16 +12,21 @@ public static class ServiceCollectionExtensions
     {
         services.Configure<ScraperOptions>(configuration.GetSection("Scraper"));
 
+        services.AddSingleton<HttpRetryPolicyExtensions>();
+
         services.AddTransient<WebScrapingHandler>();
 
         services.AddHttpClient("otodom", client =>
-        {
-            client.Timeout = TimeSpan.FromSeconds(30);
-        })
+            {
+                client.Timeout = TimeSpan.FromSeconds(30);
+            })
             .AddHttpMessageHandler<WebScrapingHandler>()
-            .AddPolicyHandler(HttpPolicyExtensions
-                .HandleTransientHttpError()                   
-                .WaitAndRetryAsync(3, a => TimeSpan.FromSeconds(Math.Pow(2, a))));
+            .AddPolicyHandler((sp, _) =>
+            
+                sp.GetRequiredService<HttpRetryPolicyExtensions>()
+                    .GetHttpRetryPolicyAsync()
+            );
+
 
     }
 }

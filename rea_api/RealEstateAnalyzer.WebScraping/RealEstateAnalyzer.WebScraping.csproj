@@ -22,8 +22,4 @@
     <ProjectReference Include="..\RealEstateAnalyzer.WebScraping.Domain\RealEstateAnalyzer.WebScraping.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
-
 </Project>
