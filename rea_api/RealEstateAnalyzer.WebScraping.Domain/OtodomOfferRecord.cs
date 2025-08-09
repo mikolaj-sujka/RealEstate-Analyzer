@@ -2,6 +2,7 @@
 
 public class OtodomOfferRecord
 {
+    public string OfferId { get; private set; }
     public string Url { get; private set; }
     public string City { get; private set; }
     public string District { get; private set; }
@@ -16,6 +17,7 @@ public class OtodomOfferRecord
     public string Status { get; private set; }
 
     public OtodomOfferRecord(
+        string offerId,
         string url,
         string city,
         string district,
@@ -28,9 +30,9 @@ public class OtodomOfferRecord
         string marketType,
         string status)
     {
-
         var pricePerSquareMeter = (flatSize > 0 ? Math.Round(totalPrice/ flatSize, 2) : 0m);
 
+        OfferId = offerId;
         Url = url;
         City = city;
         District = district;

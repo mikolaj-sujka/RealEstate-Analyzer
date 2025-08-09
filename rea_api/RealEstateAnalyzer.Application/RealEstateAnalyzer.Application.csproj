@@ -20,6 +20,7 @@
     <ProjectReference Include="..\RealEstateAnalyzer.Application.Abstractions\RealEstateAnalyzer.Application.Abstractions.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.WebScraping\RealEstateAnalyzer.WebScraping.csproj" />
   </ItemGroup>
 
   <ItemGroup>
