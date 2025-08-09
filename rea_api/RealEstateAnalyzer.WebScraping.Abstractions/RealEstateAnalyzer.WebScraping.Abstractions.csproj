@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RealEstateAnalyzer.WebScrapping.Domain\RealEstateAnalyzer.WebScraping.Domain.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.WebScraping.Domain\RealEstateAnalyzer.WebScraping.Domain.csproj" />
   </ItemGroup>
 
 </Project>

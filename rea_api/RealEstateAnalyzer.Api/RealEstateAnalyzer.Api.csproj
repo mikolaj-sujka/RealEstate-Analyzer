@@ -33,6 +33,7 @@
     <ProjectReference Include="..\RealEstateAnalyzer.Hangfire\RealEstateAnalyzer.Infrastructure.Hangfire.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure.Redis\RealEstateAnalyzer.Infrastructure.Redis.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
+    <ProjectReference Include="..\RealEstateAnalyzer.WebScraping\RealEstateAnalyzer.WebScraping.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.WebScrapping\RealEstateAnalyzer.WebScraping.csproj" />
   </ItemGroup>
 </Project>
