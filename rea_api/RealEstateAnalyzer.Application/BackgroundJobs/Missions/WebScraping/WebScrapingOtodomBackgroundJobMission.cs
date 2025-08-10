@@ -5,7 +5,7 @@ using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings;
 using RealEstateAnalyzer.WebScraping.Abstractions;
 using RealEstateAnalyzer.WebScraping.Domain;
 
-namespace RealEstateAnalyzer.Application.BackgroundJobs.WebScraping;
+namespace RealEstateAnalyzer.Application.BackgroundJobs.Missions.WebScraping;
 
 
 [MissionLauncher(CategoryName = "Web Scraping Otodom")]

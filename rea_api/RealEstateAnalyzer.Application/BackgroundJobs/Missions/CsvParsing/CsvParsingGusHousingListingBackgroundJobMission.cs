@@ -3,7 +3,7 @@ using Hangfire.MissionControl;
 using MediatR;
 using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsFromCsv;
 
-namespace RealEstateAnalyzer.Application.BackgroundJobs.CsvParsing;
+namespace RealEstateAnalyzer.Application.BackgroundJobs.Missions.CsvParsing;
 
 [MissionLauncher(CategoryName = "CsvParsing Gus Files")]
 [Queue("import-files")]

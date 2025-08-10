@@ -5,7 +5,7 @@ using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RealEstateAnalyzer.Application.BackgroundJobs.CsvParsing;
+using RealEstateAnalyzer.Application.BackgroundJobs.Missions.CsvParsing;
 using SqlAlias;
 
 namespace RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
