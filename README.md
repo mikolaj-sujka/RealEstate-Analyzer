@@ -129,6 +129,8 @@ RealEstate-Analyzer/
 │   ├── RealEstateAnalyzer.Infrastructure.Http/     # Infrastrukturę HTTP (IHttpClientFactory, DelegatingHandlers, polityki retry, opcje)
 │   ├── RealEstateAnalyzer.Infrastructure.Hangfire/ # Konfiguracja i hostowanie Hangfire, dashboard, serwer, job activator
 │   ├── RealEstateAnalyzer.Infrastructure.Redis/    # Konfiguracja Redis, cache/adapters, polityki wygasania, helpery
+│   ├── RealEstateAnalyzer.ML.Forecasting/
+│   ├── RealEstateAnalyzer.ML.Contracts/ 
 │   ├── RealEstateAnalyzer.WebScraping/             # Implementacje scraperów (Otodom itp.), orkiestracja, wykrywanie stron, workflow scrapingu
 │   ├── RealEstateAnalyzer.WebScraping.Domain/      # Prosty model „scrapingowy” (rekordy prymitywów, np. OtodomOfferRecord, helpery)
 │   ├── RealEstateAnalyzer.WebScraping.Abstractions/ # Interfejsy dla scrapingu (IScraper<T>, IOfferParser<T>, kontrakty serwisów)
