@@ -4,6 +4,7 @@ public enum MarketType
 {
     SecondaryMarket = 0,
     PrimaryMarket = 1,
+    Unknown = 2
 }
 
 public static class MarketTypeExtensions
@@ -12,9 +13,9 @@ public static class MarketTypeExtensions
     {
         return value.ToLowerInvariant() switch
         {
-            "secondary" => MarketType.SecondaryMarket,
-            "primary" => MarketType.PrimaryMarket,
-            _ => throw new ArgumentException($"Unknown market type: {value}")
+            "SecondaryMarket" => MarketType.SecondaryMarket,
+            "PrimaryMarket" => MarketType.PrimaryMarket,
+            _ => MarketType.Unknown
         };
     }
 }

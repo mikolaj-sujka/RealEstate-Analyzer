@@ -82,13 +82,19 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
 
     private async Task RemoveOtodomListingsAsync(IReadOnlyList<OtodomHousingListing> listings, CancellationToken cancellationToken)
     {
-        var existingListings = await context.OtodomHousingListings
-            .Where(x => listings.Select(l => l.OfferId).Contains(x.OfferId))
+        var incomingIds = listings.Select(l => l.OfferId).ToHashSet(StringComparer.Ordinal);
+
+        var idsInDb = await context.OtodomHousingListings
+            .Select(x => x.OfferId)
             .ToListAsync(cancellationToken);
 
-        foreach (var listing in existingListings)
+        var toDelete = idsInDb.Where(id => !incomingIds.Contains(id)).ToList();
+
+        foreach (var batch in toDelete.Chunk(1000))
         {
-            context.OtodomHousingListings.Remove(listing);
+            await context.OtodomHousingListings
+                .Where(x => batch.Contains(x.OfferId))
+                .ExecuteDeleteAsync(cancellationToken);
         }
     }
 }

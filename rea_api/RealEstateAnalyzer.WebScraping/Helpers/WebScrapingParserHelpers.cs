@@ -64,9 +64,8 @@ public static class WebScrapingParserHelpers
                 "katowice",
                 "białystok", "gdynia", "częstochowa", "radom", "sosnowiec", "toruń", "kielce", "gliwice", "zabrze",
                 "olsztyn",
-                "rzeszów", "bielsko-biała", "bytom", "ruda", "rybnik", "opole", "tychy", "gorzów", "płock", "elbląg",
-                "wałbrzych", "włocławek", "tarnów", "chorzów", "koszalin", "legnica", "grudziądz", "słupsk", "jaworzno",
-                "jastrzębie"
+                "rzeszów", "bielsko-biała", "bytom", "ruda śląska", "rybnik", "opole", "tychy", "gorzów wielkopolski", "płock", "elbląg",
+                "wałbrzych", "włocławek", "tarnów", "chorzów", "koszalin", "dąbrowa górnicza", "zielona góra"
             };
 
         var addr = offer.SelectNodes(

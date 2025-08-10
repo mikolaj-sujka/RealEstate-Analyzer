@@ -30,6 +30,12 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
 
             var (city, district) = WebScrapingParserHelpers.ExtractLocation(n, text);
 
+            if (string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(district))
+            {
+                // If city or district is not found, skip this offer
+                continue;
+            }
+
             var publishedUtc = WebScrapingParserHelpers.ExtractPublishedUtc(n, text) ?? DateTime.UtcNow;
             var scrapedUtc = DateTime.UtcNow;
 
