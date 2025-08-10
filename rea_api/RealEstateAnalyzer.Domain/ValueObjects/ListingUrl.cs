@@ -16,4 +16,6 @@ public sealed class ListingUrl : ValueObject
     {
         yield return Url;
     }
+
+    public static ListingUrl FromString(string url) => new ListingUrl(url);
 }

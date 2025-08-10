@@ -14,6 +14,12 @@ public class OtodomHousingListingEntityTypeConfiguration : IEntityTypeConfigurat
         builder.Property(x => x.Id)
             .ValueGeneratedNever().IsRequired();
 
+        builder.Property(x => x.OfferId).IsRequired();
+
+        builder.HasIndex(x => x.OfferId)
+            .IsUnique()
+            .HasDatabaseName("IX_OtodomHousingListings_OfferId");
+
         builder.Property(x => x.Url)
             .HasListingUrlConversion()
             .IsRequired();

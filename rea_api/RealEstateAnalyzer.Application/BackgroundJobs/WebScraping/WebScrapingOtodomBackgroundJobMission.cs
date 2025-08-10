@@ -1,5 +1,7 @@
 ﻿using Hangfire;
 using Hangfire.MissionControl;
+using MediatR;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings;
 using RealEstateAnalyzer.WebScraping.Abstractions;
 using RealEstateAnalyzer.WebScraping.Domain;
 
@@ -9,7 +11,7 @@ namespace RealEstateAnalyzer.Application.BackgroundJobs.WebScraping;
 [MissionLauncher(CategoryName = "Web Scraping Otodom")]
 [Queue("long-running")]
 public class WebScrapingOtodomBackgroundJobMission(IJobCancellationToken cancellationToken, 
-    IScraper<OtodomOfferRecord> scraper)
+    IScraper<OtodomOfferRecord> scraper, IMediator mediator)
 {
     [Mission(Name = "Web Scraping Otodom",
         Description = "Scrapes real estate listings from Otodom website.")]
@@ -18,5 +20,12 @@ public class WebScrapingOtodomBackgroundJobMission(IJobCancellationToken cancell
     public async Task Run()
     {
         var results = await scraper.ScrapeAllAsync(cancellationToken.ShutdownToken);
+
+        if (results.Count == 0)
+        {
+            throw new InvalidOperationException("No listings found during scraping.");
+        }
+
+        await mediator.Send(new AddOrUpdateOtodomHousingListingsCommand(results));
     }
 }

@@ -4,9 +4,7 @@ using RealEstateAnalyzer.Infrastructure;
 
 namespace RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsFromCsv;
 
-
 public class GetGusHousingListingsFromCsvQuery : IRequest;
-
 public class GetGusHousingListingsFromCsvQueryHandler(IFileParser<Domain.Entities.GusHousingListing> parser,
     DatabaseContext context)
     : IRequestHandler<GetGusHousingListingsFromCsvQuery>

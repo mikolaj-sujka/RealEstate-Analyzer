@@ -17,4 +17,5 @@ public sealed class Area : ValueObject
     }
 
     public static Area Zero() => new Area(0);
+    public static Area FromDecimal(decimal sqm) => new Area(sqm);
 }

@@ -2,7 +2,7 @@
 
 namespace RealEstateAnalyzer.Domain.ValueObjects;
 
-public sealed class Location(string city, string district) : ValueObject
+public sealed class Location(string city, string? district) : ValueObject
 {
     public string City { get; } = city ?? throw new ArgumentNullException(nameof(city));
     public string District { get; } = district ?? throw new ArgumentNullException(nameof(district));
@@ -12,4 +12,6 @@ public sealed class Location(string city, string district) : ValueObject
         yield return City;
         yield return District;
     }
+
+    public static Location FromStrings(string city, string? district) => new Location(city, district);
 }

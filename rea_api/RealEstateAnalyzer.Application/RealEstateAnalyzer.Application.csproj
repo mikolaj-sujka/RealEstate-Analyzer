@@ -23,8 +23,4 @@
     <ProjectReference Include="..\RealEstateAnalyzer.WebScraping\RealEstateAnalyzer.WebScraping.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="UseCases\OtodomHousingListings\" />
-  </ItemGroup>
-
 </Project>

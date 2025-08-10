@@ -6,6 +6,7 @@ namespace RealEstateAnalyzer.Domain.Entities;
 
 public sealed class OtodomHousingListing : AuditableAggregateRoot
 {
+    public string OfferId { get; private set; } = null!; // Unique identifier for the listing, e.g., from Otodom
     public ListingUrl Url { get; private set; } = null!;
     public Location Location { get; private set; } = null!;
     public DateTime DatePublished { get; private set; } 
