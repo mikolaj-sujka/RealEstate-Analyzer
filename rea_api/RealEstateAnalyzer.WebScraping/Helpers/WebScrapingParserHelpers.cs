@@ -158,11 +158,45 @@ public static class WebScrapingParserHelpers
         return "Other";
     }
 
-    public static string GuessMarketType(string text)
+    public static string ExtractMarketType(HtmlNode offer)
     {
-        var t = text.ToLowerInvariant();
-        if (t.Contains("rynek pierwotny")) return "PrimaryMarket";
-        if (t.Contains("wtórny") || t.Contains("rynek wtorny")) return "SecondaryMarket";
+        var allNodes = offer.SelectNodes(".//*");
+        if (allNodes != null)
+        {
+            foreach (var node in allNodes)
+            {
+                var text = Condense(node.InnerText).ToLowerInvariant();
+                if (string.IsNullOrEmpty(text)) continue;
+
+                var inline = Regex.Match(text, @"rynek\s*[:\-–]\s*(wt[oó]rny|pierwotny)\b");
+                if (inline.Success)
+                {
+                    return inline.Groups[1].Value.StartsWith("wt") ? "SecondaryMarket" : "PrimaryMarket";
+                }
+
+                if (text.Contains("rynek"))
+                {
+                    HtmlNode? neighbor =
+                        node.SelectSingleNode("./following-sibling::dd[1]") ??
+                        node.SelectSingleNode("./following-sibling::*[1]") ??
+                        node.ParentNode?.SelectSingleNode("./dd[1]") ??
+                        node.ParentNode?.SelectSingleNode("./following-sibling::*[1]");
+
+                    if (neighbor != null)
+                    {
+                        var val = Condense(neighbor.InnerText).ToLowerInvariant();
+                        if (Regex.IsMatch(val, @"\bwt[oó]rny\b")) return "SecondaryMarket";
+                        if (Regex.IsMatch(val, @"\bpierwotny\b")) return "PrimaryMarket";
+                    }
+                }
+            }
+        }
+
+        var all = Condense(offer.InnerText).ToLowerInvariant();
+        var around = Regex.Match(all, @"rynek.{0,40}(wt[oó]rny|pierwotny)");
+        if (around.Success)
+            return around.Groups[1].Value.StartsWith("wt") ? "SecondaryMarket" : "PrimaryMarket";
+
         return "PrimaryMarket";
     }
 

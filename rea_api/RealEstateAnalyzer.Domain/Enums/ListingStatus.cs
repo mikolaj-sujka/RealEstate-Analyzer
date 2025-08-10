@@ -6,7 +6,8 @@ public enum ListingStatus
     Inactive = 2,
     Sold = 3,
     Pending = 4,
-    Archived = 5
+    Archived = 5,
+    Unknown = 6
 }
 
 public static class ListingStatusExtensions
@@ -20,7 +21,7 @@ public static class ListingStatusExtensions
             "sold" => ListingStatus.Sold,
             "pending" => ListingStatus.Pending,
             "archived" => ListingStatus.Archived,
-            _ => throw new ArgumentException($"Unknown listing status: {value}")
+            _ => ListingStatus.Unknown
         };
     }
 }

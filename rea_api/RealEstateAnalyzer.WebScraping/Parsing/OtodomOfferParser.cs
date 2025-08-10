@@ -43,7 +43,7 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
             var size = WebScrapingParserHelpers.ExtractAreaSqm(text);
 
             var propertyType = WebScrapingParserHelpers.GuessPropertyType(title, text);
-            var marketType = WebScrapingParserHelpers.GuessMarketType(text);
+            var marketType = WebScrapingParserHelpers.ExtractMarketType(n);
             var status = "Active";
 
             list.Add(new OtodomOfferRecord(
