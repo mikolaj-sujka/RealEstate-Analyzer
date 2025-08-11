@@ -7,14 +7,17 @@ import { MarketAnalyticsData } from "../../models/types/MarketAnalyticsData";
 
 type MarketAnalyticsChartProps = {
   data: MarketAnalyticsData[];
+  regionName: string;
   onChartReady?: (chart: ECharts) => void;
 };
 
 export const MarketAnalyticsChart = ({
+  regionName,
   data,
   onChartReady,
 }: MarketAnalyticsChartProps) => {
   const { containerRef, chartInstance } = useMarketAnalyticsChart(
+    regionName,
     data,
     (chart) => {
       onChartReady?.(chart);

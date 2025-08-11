@@ -1,7 +1,9 @@
 export type MarketAnalyticsData = {
-  month: string;
   averagePrice: number;
-  listings: number;
-  sales: number;
-  totalInventory: number;
+  averageAreaSize: number;
+  totalListings: number;
+  developerMarketShare: number;
+  primaryMarketShare: number;
+  medianPrice: number;
+  averageYearOfConstruction: number;
 };
