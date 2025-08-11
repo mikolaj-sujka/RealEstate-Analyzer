@@ -14,7 +14,7 @@ public class HttpRetryPolicyExtensions(ILogger<HttpRetryPolicyExtensions> logger
                     .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
                     .FallbackAsync((_) =>
                     {
-                        logger.LogWarning("HTTP request failed after maximum retry attempts.");
+                        logger.LogCritical("HTTP request failed after maximum retry attempts.");
                         throw new System.Exception("HTTP request failed after maximum retry attempts.");
                     })
                     .WrapAsync(
@@ -23,7 +23,7 @@ public class HttpRetryPolicyExtensions(ILogger<HttpRetryPolicyExtensions> logger
                                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                                 (result, timeSpan, retryCount, context) =>
                                 {
-                                    logger.LogInformation($"HTTP Retry {retryCount}/{NumberOfRetries} after {timeSpan}. Status: {result.Result?.StatusCode}");
+                                    logger.LogError($"HTTP Retry {retryCount}/{NumberOfRetries} after {timeSpan}. Status: {result.Result?.StatusCode}");
                                 })
                     );
         }

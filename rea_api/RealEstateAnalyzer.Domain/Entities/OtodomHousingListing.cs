@@ -18,6 +18,7 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
     public PropertyType PropertyType { get; private set; } = PropertyType.Apartment;
     public MarketType MarketType { get; private set; } = MarketType.PrimaryMarket;
     public ListingStatus Status { get; private set; } = ListingStatus.Active;
+    public bool IsDeveloperOffer { get; private set; } = false; 
 
     private OtodomHousingListing() { }
 
@@ -32,7 +33,8 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         string title,
         PropertyType propertyType,
         MarketType marketType,
-        ListingStatus status)
+        ListingStatus status,
+        bool isDeveloperOffer)
     {
         Id = Guid.NewGuid();
         Created("System", DateTimeOffset.Now);
@@ -48,6 +50,7 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         PropertyType = propertyType;
         MarketType = marketType;
         Status = status;
+        IsDeveloperOffer = isDeveloperOffer;
     }
 
     public static OtodomHousingListing Create(
@@ -61,7 +64,8 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         string title,
         PropertyType propertyType = PropertyType.Apartment,
         MarketType marketType = MarketType.PrimaryMarket,
-        ListingStatus status = ListingStatus.Active)
+        ListingStatus status = ListingStatus.Active,
+        bool isDeveloperOffer = false)
     {
         return new OtodomHousingListing(
             url,
@@ -74,7 +78,8 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
             title,
             propertyType,
             marketType,
-            status);
+            status,
+            isDeveloperOffer);
     }
 
     public void Update(
@@ -88,7 +93,8 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         string title,
         PropertyType propertyType = PropertyType.Apartment,
         MarketType marketType = MarketType.PrimaryMarket,
-        ListingStatus status = ListingStatus.Active)
+        ListingStatus status = ListingStatus.Active,
+        bool isDeveloperOffer = false)
     {
         Url = url;
         Location = location;
@@ -101,6 +107,7 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         PropertyType = propertyType;
         MarketType = marketType;
         Status = status;
+        IsDeveloperOffer = isDeveloperOffer;
 
         Updated("System", DateTimeOffset.Now);
     }

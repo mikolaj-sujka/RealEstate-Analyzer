@@ -7,7 +7,8 @@ namespace RealEstateAnalyzer.WebScraping.Parsing;
 
 public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
 {
-    public IReadOnlyList<OtodomOfferRecord> ParseOffers(string htmlContent)
+    public async Task<IReadOnlyList<OtodomOfferRecord>> ParseOffers(string htmlContent,
+        HttpClient client, CancellationToken ct = default)
     {
         var doc = new HtmlDocument();
         doc.LoadHtml(htmlContent);
@@ -43,14 +44,15 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
             var size = WebScrapingParserHelpers.ExtractAreaSqm(text);
 
             var propertyType = WebScrapingParserHelpers.GuessPropertyType(title, text);
-            var marketType = WebScrapingParserHelpers.ExtractMarketType(n);
+            var (marketType, isDeveloper) = await WebScrapingParserHelpers
+                .ExtractDetailsFromOfferUrlAsync(client, url, ct);
             var status = "Active";
 
             list.Add(new OtodomOfferRecord(
                 offerId,
                 url, city, district,
                 publishedUtc, scrapedUtc,
-                price, size, title, propertyType, marketType, status));
+                price, size, title, propertyType, marketType, status, isDeveloper));
         }
 
         return list;

@@ -1,33 +1,116 @@
 ﻿using HtmlAgilityPack;
 using System.Globalization;
 using System.Net;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace RealEstateAnalyzer.WebScraping.Helpers;
 
 public static class WebScrapingParserHelpers
 {
+    public static async Task<(string MarketType, bool IsDeveloper)> ExtractDetailsFromOfferUrlAsync(
+        HttpClient http, string url, CancellationToken ct = default)
+    {
+        var html = await http.GetStringAsync(url, ct);
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
+        var root = doc.DocumentNode;
+
+        var marketRaw = ExtractDetailValue(root, "rynek"); 
+        var marketType = MapMarketType(marketRaw);
+
+        var advTypeRaw = ExtractDetailValue(root, "typ ogłoszeniodawcy");
+        bool isDeveloper = false;
+        if (!string.IsNullOrWhiteSpace(advTypeRaw))
+        {
+            var v = Normalize(advTypeRaw);
+            if (v.Contains("deweloper")) isDeveloper = true;
+            else isDeveloper = false; 
+        }
+
+        return (marketType, isDeveloper);
+    }
+
+    private static string? ExtractDetailValue(HtmlNode root, string labelNormalized)
+    {
+        var containers = root.SelectNodes("//div[@data-sentry-element='ItemGridContainer']");
+        
+        foreach (var c in containers)
+        {
+            var label = Normalize(c.InnerText);
+            if (label.Contains(labelNormalized))
+                return Condense(c.InnerText);
+        }
+        return null;
+    }
+
+    private static string MapMarketType(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return "Unknown";
+        var v = Normalize(raw);
+        if (v.Contains("wtorny") || v.Contains("wtórny")) return "SecondaryMarket";
+        if (v.Contains("pierwotny")) return "PrimaryMarket";
+        return "Unknown";
+    }
+
+    private static string Normalize(string? s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return string.Empty;
+        var lower = Condense(s).ToLowerInvariant();
+        return RemoveDiacritics(lower);
+    }
+
+    private static string RemoveDiacritics(string text)
+    {
+        var normalized = text.Normalize(NormalizationForm.FormD);
+        var sb = new StringBuilder(text.Length);
+        foreach (var ch in normalized)
+        {
+            var cat = CharUnicodeInfo.GetUnicodeCategory(ch);
+            if (cat != UnicodeCategory.NonSpacingMark) sb.Append(ch);
+        }
+        return sb.ToString().Normalize(NormalizationForm.FormC);
+    }
+
     public static string ExtractOfferIdFromUrl(string url)
     {
         var m = Regex.Match(url, @"ID([A-Za-z0-9]+)$", RegexOptions.IgnoreCase);
         return m.Success ? $"ID{m.Groups[1].Value}" : string.Empty;
     }
-
     public static string? ExtractUrl(HtmlNode offer)
     {
-        var links = offer.SelectNodes(".//a[@href]");
-        if (links is null) return null;
+        var a = offer.SelectSingleNode(
+            ".//a[contains(@href, '/pl/oferta/') and contains(@href, 'ID') and " +
+            "not(contains(@href, '/hpr/')) and not(contains(@href, 'undefined'))]"
+        );
 
-        foreach (var a in links)
+        if (a is null) return null;
+
+        var href = WebUtility.HtmlDecode(a.GetAttributeValue("href", null!));
+        if (string.IsNullOrWhiteSpace(href)) return null;
+
+        if (href.Contains("/hpr/", StringComparison.OrdinalIgnoreCase) ||
+            href.Contains("undefined", StringComparison.OrdinalIgnoreCase))
+            return null;
+
+        if (!href.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+            href = $"https://www.otodom.pl{href}";
+
+        try
         {
-            var href = a.GetAttributeValue("href", null!);
-            if (string.IsNullOrWhiteSpace(href)) continue;
-            if (href.StartsWith("http", StringComparison.OrdinalIgnoreCase) ||
-                href.Contains("/pl/oferta", StringComparison.OrdinalIgnoreCase))
-                return NormalizeUrl(href);
+            var u = new Uri(href);
+            href = $"{u.Scheme}://{u.Host}{u.AbsolutePath}";
+        }
+        catch
+        {
+            // ignored
         }
 
-        return NormalizeUrl(links.FirstOrDefault()?.GetAttributeValue("href", null!));
+        if (!Regex.IsMatch(href, @"/pl/oferta/.+ID[a-zA-Z0-9]+$", RegexOptions.IgnoreCase))
+            return null;
+
+        return href;
     }
 
     public static string NormalizeUrl(string? href) =>
@@ -156,48 +239,6 @@ public static class WebScrapingParserHelpers
         if (t.Contains("działk") || t.Contains("dzialk") || t.Contains("grunt")) return "Land";
         if (t.Contains("lokal") || t.Contains("magazyn") || t.Contains("hala")) return "Industrial";
         return "Other";
-    }
-
-    public static string ExtractMarketType(HtmlNode offer)
-    {
-        var allNodes = offer.SelectNodes(".//*");
-        if (allNodes != null)
-        {
-            foreach (var node in allNodes)
-            {
-                var text = Condense(node.InnerText).ToLowerInvariant();
-                if (string.IsNullOrEmpty(text)) continue;
-
-                var inline = Regex.Match(text, @"rynek\s*[:\-–]\s*(wt[oó]rny|pierwotny)\b");
-                if (inline.Success)
-                {
-                    return inline.Groups[1].Value.StartsWith("wt") ? "SecondaryMarket" : "PrimaryMarket";
-                }
-
-                if (text.Contains("rynek"))
-                {
-                    HtmlNode? neighbor =
-                        node.SelectSingleNode("./following-sibling::dd[1]") ??
-                        node.SelectSingleNode("./following-sibling::*[1]") ??
-                        node.ParentNode?.SelectSingleNode("./dd[1]") ??
-                        node.ParentNode?.SelectSingleNode("./following-sibling::*[1]");
-
-                    if (neighbor != null)
-                    {
-                        var val = Condense(neighbor.InnerText).ToLowerInvariant();
-                        if (Regex.IsMatch(val, @"\bwt[oó]rny\b")) return "SecondaryMarket";
-                        if (Regex.IsMatch(val, @"\bpierwotny\b")) return "PrimaryMarket";
-                    }
-                }
-            }
-        }
-
-        var all = Condense(offer.InnerText).ToLowerInvariant();
-        var around = Regex.Match(all, @"rynek.{0,40}(wt[oó]rny|pierwotny)");
-        if (around.Success)
-            return around.Groups[1].Value.StartsWith("wt") ? "SecondaryMarket" : "PrimaryMarket";
-
-        return "PrimaryMarket";
     }
 
     public static string Condense(string s) =>

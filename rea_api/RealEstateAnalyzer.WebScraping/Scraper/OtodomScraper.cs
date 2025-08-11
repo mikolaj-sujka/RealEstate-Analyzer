@@ -24,7 +24,7 @@ public class OtodomScraper(IOptions<ScraperOptions> options, IHttpClientFactory 
 
             var url = page == 1 ? _options.BaseUrl : $"{_options.BaseUrl}?page={page}";
             var html = await http.GetStringAsync(url, ct); 
-            var batch = parser.ParseOffers(html);
+            var batch = await parser.ParseOffers(html, http, ct);
 
             if (batch.Count == 0 && page > 1) break;
 

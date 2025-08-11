@@ -15,6 +15,7 @@ public class OtodomOfferRecord
     public string PropertyType { get; private set; }
     public string MarketType { get; private set; }
     public string Status { get; private set; }
+    public bool IsDeveloperOffer { get; private set;  }
 
     public OtodomOfferRecord(
         string offerId,
@@ -28,9 +29,10 @@ public class OtodomOfferRecord
         string title,
         string propertyType,
         string marketType,
-        string status)
+        string status,
+        bool isDeveloperOffer)
     {
-        var pricePerSquareMeter = (flatSize > 0 ? Math.Round(totalPrice/ flatSize, 2) : 0m);
+        var pricePerSquareMeter = (flatSize > 0 ? Math.Round(totalPrice / flatSize, 2) : 0m);
 
         OfferId = offerId;
         Url = url;
@@ -45,5 +47,6 @@ public class OtodomOfferRecord
         PropertyType = propertyType;
         MarketType = marketType;
         Status = status;
+        IsDeveloperOffer = isDeveloperOffer;
     }
 }

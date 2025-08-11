@@ -63,5 +63,9 @@ public class OtodomHousingListingEntityTypeConfiguration : IEntityTypeConfigurat
         builder.Property(x => x.Status)
             .HasListingStatusConversion()
             .IsRequired();
+
+        builder.Property(x => x.IsDeveloperOffer)
+            .HasConversion<bool>()
+            .IsRequired();
     }
 }

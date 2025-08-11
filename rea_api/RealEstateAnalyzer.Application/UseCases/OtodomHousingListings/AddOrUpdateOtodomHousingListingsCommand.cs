@@ -27,7 +27,8 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
                 x.Title,
                 PropertyTypeExtensions.FromString(x.PropertyType),
                 MarketTypeExtensions.FromString(x.MarketType),
-                ListingStatusExtensions.FromString(x.Status))).ToList();
+                ListingStatusExtensions.FromString(x.Status),
+                x.IsDeveloperOffer)).ToList();
 
         if (otodomListings.Count == 0)
         {
@@ -70,7 +71,8 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
                     listing.Title,
                     listing.PropertyType,
                     listing.MarketType,
-                    listing.Status);
+                    listing.Status,
+                    listing.IsDeveloperOffer);
 
             }
             else

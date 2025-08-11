@@ -1,6 +1,6 @@
 ﻿namespace RealEstateAnalyzer.WebScraping.Abstractions;
 
-public interface IOfferParser<out T>
+public interface IOfferParser<T>
 {
-    IReadOnlyList<T> ParseOffers(string htmlContent);
+    Task<IReadOnlyList<T>> ParseOffers(string htmlContent, HttpClient client, CancellationToken cancellationToken);
 }
