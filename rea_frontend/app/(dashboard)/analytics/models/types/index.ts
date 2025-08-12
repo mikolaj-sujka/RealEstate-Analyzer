@@ -1,1 +1,1 @@
-export type { MarketData } from "./MarketAnalyticsData";
+export * from "./MarketAnalyticsData";

@@ -2,35 +2,31 @@ import {
   DollarSign,
   Home,
   ChartBar,
-  Users,
+  SquareDivide,
 } from "lucide-react";
 import { MarketAnalyticsData } from "../models/types/MarketAnalyticsData";
 
-export const getCitiesAnalyticsCards = (lastMonth: MarketAnalyticsData, changes: { price: any; listings: any; sales: any; inventory: any; }) => {
+export const getCitiesAnalyticsCards = (data: MarketAnalyticsData) => {
     return [
         {
             label: "Średnia Cena",
-            value: lastMonth?.averagePrice.toLocaleString("pl-PL") + " PLN/m²",
-            change: changes.price,
+            value: data?.averagePrice.toLocaleString("pl-PL") + " PLN/m²",
             icon: DollarSign,
         },
         {
-            label: "Nowe Oferty",
-            value: lastMonth?.listings.toLocaleString("pl-PL") || "–",
-            change: changes.listings,
+            label: "Liczba Ofert",
+            value: data?.totalListings.toLocaleString("pl-PL") + " szt." || "–",
             icon: Home,
         },
         {
-            label: "Wolumen Sprzedaży",
-            value: lastMonth?.sales.toLocaleString("pl-PL") || "–",
-            change: changes.sales,
+            label: "Udział deweloperów",
+            value: data?.developerMarketShare.toLocaleString("pl-PL") + " %" || "–",
             icon: ChartBar,
         },
         {
-            label: "Zapasy Rynkowe",
-            value: lastMonth?.totalInventory.toLocaleString("pl-PL") || "–",
-            change: changes.inventory,
-            icon: Users,
+            label: "Średnia powierzchnia",
+            value: data?.averageAreaSize.toLocaleString("pl-PL") + " m²" || "–",
+            icon: SquareDivide,
         },
     ];
 }

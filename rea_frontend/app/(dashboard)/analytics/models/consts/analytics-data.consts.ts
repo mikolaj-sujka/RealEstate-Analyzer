@@ -1,26 +1,51 @@
-import { MarketData } from "../types"
+import type { MarketAnalyticsData } from "../types";
 
-const generateVoivodeshipData = (basePrice: number, baseListings: number): MarketData[] => {
-    const data: MarketData[] = []
-    let currentPrice = basePrice
-    let currentListings = baseListings
-    for (const month of ["Jan", "Feb", "Mar", "Apr", "May", "Jun"]) {
-        currentPrice = currentPrice * (1 + (Math.random() - 0.4) * 0.05)
-        currentListings = currentListings * (1 + (Math.random() - 0.4) * 0.1)
-        const sales = currentListings * (0.7 + Math.random() * 0.2)
-        const inventory = currentListings * 1.5 - sales
-        data.push({
-            month,
-            averagePrice: Math.round(currentPrice),
-            listings: Math.round(currentListings),
-            sales: Math.round(sales),
-            totalInventory: Math.round(inventory),
-        })
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+const rand = (min: number, max: number) => min + Math.random() * (max - min);
+
+export const generateVoivodeshipData = (
+    basePrice: number,       // bazowa średnia cena
+    baseListings: number,    // bazowa liczba ofert
+    steps = 6
+): MarketAnalyticsData[] => {
+    const out: MarketAnalyticsData[] = [];
+
+    // wartości startowe / założenia
+    let avgPrice = basePrice;
+    let listings = baseListings;
+    let avgArea = rand(45, 65);                      // średni metraż startowy
+    let medianToAvg = rand(0.92, 0.98);               // mediana ~ 92–98% średniej (roboczo)
+    let avgYear = Math.round(rand(1995, 2015));       // średni rok budowy startowo
+    let devShare = clamp(rand(0.35, 0.65), 0, 1);     // udział deweloperów
+    let primShare = clamp(rand(0.3, 0.6), 0, 1);      // udział pierwotnego
+
+    for (let i = 0; i < steps; i++) {
+        // lekkie wahania — brak osi czasu, więc to tylko “kroki”
+        avgPrice *= 1 + (Math.random() - 0.4) * 0.05;   // ±3% (lekka tendencja)
+        listings *= 1 + (Math.random() - 0.4) * 0.10;   // ±6%
+        avgArea *= 1 + (Math.random() - 0.5) * 0.02;   // ±1%
+        medianToAvg = clamp(medianToAvg * (1 + (Math.random() - 0.5) * 0.01), 0.9, 1);
+        avgYear = clamp(avgYear + Math.round(rand(-1, 2)), 1970, new Date().getFullYear());
+        devShare = clamp(devShare + (Math.random() - 0.5) * 0.04, 0, 1);   // ±2pp
+        primShare = clamp(primShare + (Math.random() - 0.5) * 0.04, 0, 1); // ±2pp
+
+        const medianPrice = avgPrice * medianToAvg;
+
+        out.push({
+            averagePrice: Math.round(avgPrice),
+            averageAreaSize: Math.round(avgArea),
+            totalListings: Math.round(listings),
+            developerMarketShare: +devShare.toFixed(3),
+            primaryMarketShare: +primShare.toFixed(3),
+            medianPrice: Math.round(medianPrice),
+            averageYearOfConstruction: avgYear
+        });
     }
-    return data
-}
 
-export const voivodeshipMarketData: { [key: string]: MarketData[] } = {
+    return out;
+};
+
+export const voivodeshipMarketData: Record<string, MarketAnalyticsData[]> = {
     "Cała Polska": generateVoivodeshipData(8950, 1520),
     Dolnośląskie: generateVoivodeshipData(10500, 1300),
     "Kujawsko-pomorskie": generateVoivodeshipData(7500, 900),
@@ -38,6 +63,4 @@ export const voivodeshipMarketData: { [key: string]: MarketData[] } = {
     "Warmińsko-mazurskie": generateVoivodeshipData(7200, 500),
     Wielkopolskie: generateVoivodeshipData(9800, 1200),
     Zachodniopomorskie: generateVoivodeshipData(8500, 800),
-}
-
-
+};

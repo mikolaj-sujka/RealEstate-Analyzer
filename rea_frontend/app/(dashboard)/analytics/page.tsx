@@ -17,7 +17,7 @@ import { ECharts } from "echarts/types/dist/echarts";
 
 export default function AnalyticsPage() {
   const [voivodeship, setVoivodeship] = useState("Cała Polska");
-  const { marketData, lastMonth, changes } = useMarketAnalytics(voivodeship);
+  const { marketData, data } = useMarketAnalytics(voivodeship);
   const { t } = useTranslation();
 
   const chartRef = useRef<ECharts | null>(null);
@@ -29,7 +29,7 @@ export default function AnalyticsPage() {
     recentTransactions: marketData,
   });
 
-  const cards = getCitiesAnalyticsCards(lastMonth, changes).map((card) => {
+  const cards = getCitiesAnalyticsCards(data).map((card) => {
     const CardIcon = card.icon;
     return {
       ...card,
@@ -65,6 +65,7 @@ export default function AnalyticsPage() {
           {t("Analytics.stanRynku")}
         </Title>
         <MarketAnalyticsChart
+          regionName={voivodeship}
           data={marketData}
           onChartReady={(chart) => {
             chartRef.current = chart;
