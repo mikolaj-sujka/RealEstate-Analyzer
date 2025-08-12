@@ -81,15 +81,12 @@ public class OtodomScraper(IOptions<ScraperOptions> options, IHttpClientFactory 
         });
 
         var distinctResults = results
-            .GroupBy(GetStableKey)
+            .GroupBy(x => x.Url, StringComparer.OrdinalIgnoreCase)
             .Select(g => g.First())
             .ToList();
 
         return distinctResults;
     }
-
-    private static string GetStableKey(OtodomOfferRecord x)
-        => (x.OfferId ?? x.Url ?? "").Trim();
 
     public async Task<int> DetectTotalPagesAsync(string baseUrl, CancellationToken ct)
     {

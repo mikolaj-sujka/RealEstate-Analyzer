@@ -3,12 +3,13 @@ using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
+using RealEstateAnalyzer.Domain.Enums;
 
 namespace RealEstateAnalyzer.WebScraping.Helpers;
 
 public static class WebScrapingParserHelpers
 {
-    public static async Task<(string MarketType, bool IsDeveloper, uint buildingBuiltYear)> 
+    public static async Task<(MarketType MarketType, bool IsDeveloper, uint buildingBuiltYear)> 
         ExtractDetailsFromOfferUrlAsync(HttpClient http, string url, CancellationToken ct = default)
     {
         var html = await http.GetStringAsync(url, ct);
@@ -57,13 +58,13 @@ public static class WebScrapingParserHelpers
         return null;
     }
 
-    private static string MapMarketType(string? raw)
+    private static MarketType MapMarketType(string? raw)
     {
-        if (string.IsNullOrWhiteSpace(raw)) return "Unknown";
+        if (string.IsNullOrWhiteSpace(raw)) return MarketType.Unknown;
         var v = Normalize(raw);
-        if (v.Contains("wtorny") || v.Contains("wtórny")) return "SecondaryMarket";
-        if (v.Contains("pierwotny")) return "PrimaryMarket";
-        return "Unknown";
+        if (v.Contains("wtorny") || v.Contains("wtórny")) return MarketType.SecondaryMarket;
+        if (v.Contains("pierwotny")) return MarketType.PrimaryMarket;
+        return MarketType.Unknown;
     }
 
     private static string Normalize(string? s)
@@ -169,7 +170,6 @@ public static class WebScrapingParserHelpers
 
         string city = "", district = "", voiv = "";
 
-        // 1) Szukaj w węzłach address/location
         var addr = offer.SelectNodes(
             ".//*[" +
             "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'location') or " +
@@ -181,7 +181,6 @@ public static class WebScrapingParserHelpers
             {
                 var t = Condense(n.InnerText);
 
-                // City + District jak wcześniej
                 if (string.IsNullOrEmpty(city) && major.Any(m => t.Contains(m, StringComparison.OrdinalIgnoreCase)))
                 {
                     var parts = t.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
@@ -197,7 +196,6 @@ public static class WebScrapingParserHelpers
                     }
                 }
 
-                // Voivodeship
                 if (string.IsNullOrEmpty(voiv))
                 {
                     var vh = voivodeships.FirstOrDefault(v => t.Contains(v, StringComparison.OrdinalIgnoreCase));
@@ -209,7 +207,6 @@ public static class WebScrapingParserHelpers
             }
         }
 
-        // 2) Fallback: przeszukaj cały tekst oferty
         var lower = offerText.ToLowerInvariant();
 
         if (string.IsNullOrEmpty(city))

@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

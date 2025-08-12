@@ -26,9 +26,8 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
                 PricePerSquareMeter.FromDecimal(x.PricePerSquareMeter),
                 x.Title,
                 x.BuildingBuiltYear,
-                x.OfferId,
                 PropertyTypeExtensions.FromString(x.PropertyType),
-                MarketTypeExtensions.FromString(x.MarketType),
+                x.MarketType,
                 ListingStatusExtensions.FromString(x.Status),
                 x.IsDeveloperOffer)).ToList();
 

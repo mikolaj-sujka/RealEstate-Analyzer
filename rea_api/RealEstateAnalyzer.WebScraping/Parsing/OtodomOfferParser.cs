@@ -25,8 +25,6 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
             var url = WebScrapingParserHelpers.ExtractUrl(n);
             if (string.IsNullOrWhiteSpace(url)) continue;
 
-            var offerId = WebScrapingParserHelpers.ExtractOfferIdFromUrl(url);
-
             var title = WebScrapingParserHelpers.ExtractTitle(n) ?? WebScrapingParserHelpers.TryGuessTitle(text);
 
             var (city, district, voivodeship) = WebScrapingParserHelpers.ExtractLocation(n, text);
@@ -49,7 +47,6 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
             var status = "Active";
 
             list.Add(new OtodomOfferRecord(
-                offerId,
                 url, city, district,
                 publishedUtc, scrapedUtc,
                 price, size, title, propertyType, 

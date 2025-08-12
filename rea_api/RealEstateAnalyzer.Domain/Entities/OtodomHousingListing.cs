@@ -68,12 +68,13 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         PricePerSquareMeter pricePerSqm,
         string title,
         uint buildingBuiltYear,
-        string offerId,
         PropertyType propertyType = PropertyType.Apartment,
         MarketType marketType = MarketType.PrimaryMarket,
         ListingStatus status = ListingStatus.Active,
         bool isDeveloperOffer = false)
     {
+        var offerId = Guid.NewGuid().ToString(); // Generate a unique OfferId
+
         return new OtodomHousingListing(
             url,
             location,
