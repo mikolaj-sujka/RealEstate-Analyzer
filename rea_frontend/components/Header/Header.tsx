@@ -1,6 +1,6 @@
 "use client";
 
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   Menu,
   ActionIcon,
@@ -17,6 +17,7 @@ import {
   IconHelp,
 } from "@tabler/icons-react";
 import { headerBreadcrumbNames } from "./models";
+import Link from "next/link";
 
 export const Header = () => {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
@@ -25,6 +26,8 @@ export const Header = () => {
     section: "Przegląd",
     page: "Pulpit",
   };
+
+  const router = useRouter();
 
   const items = [
     <Anchor href="/dashboard" key="section" c="dimmed">
@@ -65,7 +68,14 @@ export const Header = () => {
         </ActionIcon>
         <Menu shadow="md" width={200}>
           <Menu.Target>
-            <ActionIcon variant="default" size="lg" radius="xl">
+            <ActionIcon
+              component="a"
+              variant="default"
+              size="lg"
+              radius="xl"
+              aria-label="Help Center"
+              onClick={() => router.push("/help-center")}
+            >
               <IconHelp size={18} />
             </ActionIcon>
           </Menu.Target>

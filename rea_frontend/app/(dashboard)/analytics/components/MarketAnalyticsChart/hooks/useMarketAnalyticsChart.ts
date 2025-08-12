@@ -19,7 +19,7 @@ const EMPTY: MarketAnalyticsData = {
 
 export const useMarketAnalyticsChart = (
     regionName: string,
-    series: MarketAnalyticsData[] | undefined | null,
+    series: MarketAnalyticsData | undefined | null,
     onReady?: (chart: ECharts) => void
 ) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -114,14 +114,12 @@ export const useMarketAnalyticsChart = (
         const chart = chartRef.current;
         if (!chart) return;
 
-        const safe = Array.isArray(series) ? series.filter(Boolean) : [];
-        if (safe.length === 0) {
-            chart.clear(); // nic nie rysuj – brak danych
+        if(!series || Object.keys(series).length === 0) {
+            chart.setOption(buildOption(EMPTY), { notMerge: true });
             return;
         }
 
-        const last = safe[safe.length - 1] ?? EMPTY;
-        chart.setOption(buildOption(last), { notMerge: true });
+        chart.setOption(buildOption(series!), { notMerge: true });
     }, [series, buildOption]);
 
     // resize

@@ -11,10 +11,6 @@ export class PDFBuilder {
   constructor() {
     this.doc = new jsPDF('p', 'mm', 'a4');
     this.currentY = 0;
-
-    // opcjonalnie: jeśli ktoś chce używać doc.autoTable(...) zamiast autoTable(doc,...)
-    // można odkomentować poniższą linię:
-    // applyPlugin(this.doc.constructor as any); // nie zawsze potrzebne; alternatywnie: applyPlugin(jsPDF);
   }
 
   addTitlePage(title: string, subtitle?: string, createdAt?: Date) {
@@ -51,7 +47,7 @@ export class PDFBuilder {
       this.currentY += 105;
     } catch (e) {
       this.doc.setFontSize(10);
-      this.doc.text('Nie udało się załadować wykresu.', 14, this.currentY);
+      this.doc.text('Nie udalo się zaladowac wykresu.', 14, this.currentY);
       this.currentY += 10;
     }
 
@@ -77,7 +73,6 @@ export class PDFBuilder {
       })
     );
 
-    // poprawne wywołanie autoTable zgodnie z dokumentacją. :contentReference[oaicite:1]{index=1}
     autoTable(this.doc as any, {
       startY: this.currentY,
       head: head as any,
@@ -98,9 +93,6 @@ export class PDFBuilder {
       },
     });
 
-    // aktualizacja currentY na podstawie ostatniej wstawionej tabeli
-    // autoTable zapisuje meta w lastAutoTable; guard na wypadek nieistnienia
-    // @ts-ignore
     this.currentY = (this.doc as any).lastAutoTable?.finalY || this.currentY + 30;
 
     this.doc.addPage();
