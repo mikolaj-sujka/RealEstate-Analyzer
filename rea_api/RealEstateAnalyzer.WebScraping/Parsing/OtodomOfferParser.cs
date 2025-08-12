@@ -29,7 +29,7 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
 
             var title = WebScrapingParserHelpers.ExtractTitle(n) ?? WebScrapingParserHelpers.TryGuessTitle(text);
 
-            var (city, district) = WebScrapingParserHelpers.ExtractLocation(n, text);
+            var (city, district, voivodeship) = WebScrapingParserHelpers.ExtractLocation(n, text);
 
             if (string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(district))
             {
@@ -53,7 +53,7 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
                 url, city, district,
                 publishedUtc, scrapedUtc,
                 price, size, title, propertyType, 
-                marketType, status, isDeveloper, buildingBuiltYear));
+                marketType, status, isDeveloper, buildingBuiltYear, voivodeship));
         }
 
         return list;

@@ -28,6 +28,7 @@ public class OtodomHousingListingEntityTypeConfiguration : IEntityTypeConfigurat
         {
             l.Property(x => x.City).HasMaxLength(100).IsRequired();
             l.Property(x => x.District).HasMaxLength(100).IsRequired();
+            l.Property(x => x.Voivodeship).HasMaxLength(100).IsRequired();
         });
 
         builder.Property(x => x.DatePublished)

@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsCustomRange;
 using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsRecentYears;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityData;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityDistricts;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomVoivodeshipData;
 
 namespace RealEstateAnalyzer.Api.Controllers;
 
@@ -31,7 +34,7 @@ public class ListingsController(IRedisCacheListingsService redis, IMediator medi
         return StatusCode(200, listings);
     }
 
-    [HttpGet("gus-housing-listings/custom-range")]
+    [HttpGet("gus-housing-listings/date-range")]
     public async Task<IActionResult> GetGusHousingListingsCustomRange(
         [FromQuery] string cityName,
         [FromQuery] uint yearsFrom,
@@ -43,4 +46,33 @@ public class ListingsController(IRedisCacheListingsService redis, IMediator medi
             new GetGusHousingListingsCustomRangeQuery(cityName, yearsFrom, yearsTo, monthFrom, monthTo));
         return StatusCode(200, listings);
     }
+
+    [HttpGet("otodom-listings/districts")]
+    public async Task<IActionResult> GetOtodomCityDistrictsListings(
+        [FromQuery] string cityName)
+    {
+        var listings = await mediator.Send(
+            new GetOtodomCityDistrictsQuery(cityName));
+        return StatusCode(200, listings);
+    }
+
+    [HttpGet("otodom-listings/voivodeship/{voivodeship}")]
+    public async Task<IActionResult> GetOtodomVoivodeshipDataListings(
+        [FromRoute] string voivodeship)
+    {
+        var listings = await mediator.Send(
+            new GetOtodomVoivodeshipDataQuery(voivodeship));
+        return StatusCode(200, listings);
+    }
+
+    [HttpGet("otodom-listings/city/{cityName}")]
+    public async Task<IActionResult> GetOtodomCityDataListings(
+        [FromRoute] string cityName)
+    {
+        var listings = await mediator.Send(
+            new GetOtodomCityDataListingsQuery(cityName));
+        return StatusCode(200, listings);
+    }
+
+
 }

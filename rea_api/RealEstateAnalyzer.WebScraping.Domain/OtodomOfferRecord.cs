@@ -16,7 +16,8 @@ public class OtodomOfferRecord
     public string MarketType { get; private set; }
     public string Status { get; private set; }
     public bool IsDeveloperOffer { get; private set;  }
-    public uint BuildingBuiltYear { get; private set; } 
+    public uint BuildingBuiltYear { get; private set; }
+    public string Voivodeship { get; private set; }
 
     public OtodomOfferRecord(
         string offerId,
@@ -32,7 +33,8 @@ public class OtodomOfferRecord
         string marketType,
         string status,
         bool isDeveloperOffer,
-        uint buildingBuiltYear)
+        uint buildingBuiltYear,
+        string voivodeship)
     {
         var pricePerSquareMeter = (flatSize > 0 ? Math.Round(totalPrice / flatSize, 2) : 0m);
 
@@ -51,5 +53,6 @@ public class OtodomOfferRecord
         Status = status;
         IsDeveloperOffer = isDeveloperOffer;
         BuildingBuiltYear = buildingBuiltYear;
+        Voivodeship = voivodeship;
     }
 }

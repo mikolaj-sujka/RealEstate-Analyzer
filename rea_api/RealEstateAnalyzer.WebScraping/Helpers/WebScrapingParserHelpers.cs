@@ -151,18 +151,25 @@ public static class WebScrapingParserHelpers
         return t.Length > 80 ? t[..80] : t;
     }
 
-    public static (string City, string District) ExtractLocation(HtmlNode offer, string offerText)
+    public static (string City, string District, string Voivodeship) ExtractLocation(HtmlNode offer, string offerText)
     {
         var major = new[]
         {
-                "warszawa", "kraków", "łódź", "wrocław", "poznań", "gdańsk", "szczecin", "bydgoszcz", "lublin",
-                "katowice",
-                "białystok", "gdynia", "częstochowa", "radom", "sosnowiec", "toruń", "kielce", "gliwice", "zabrze",
-                "olsztyn",
-                "rzeszów", "bielsko-biała", "bytom", "ruda śląska", "rybnik", "opole", "tychy", "gorzów wielkopolski", "płock", "elbląg",
-                "wałbrzych", "włocławek", "tarnów", "chorzów", "koszalin", "dąbrowa górnicza", "zielona góra"
-            };
+        "warszawa","kraków","łódź","wrocław","poznań","gdańsk","szczecin","bydgoszcz","lublin",
+        "katowice","białystok","gdynia","częstochowa","radom","sosnowiec","toruń","kielce","gliwice","zabrze",
+        "olsztyn","rzeszów","bielsko-biała","bytom","ruda śląska","rybnik","opole","tychy","gorzów wielkopolski","płock","elbląg",
+        "wałbrzych","włocławek","tarnów","chorzów","koszalin","dąbrowa górnicza","zielona góra"
+    };
 
+        var voivodeships = new[]
+        {
+        "dolnośląskie","kujawsko-pomorskie","lubelskie","lubuskie","łódzkie","małopolskie","mazowieckie","opolskie",
+        "podkarpackie","podlaskie","pomorskie","śląskie","świętokrzyskie","warmińsko-mazurskie","wielkopolskie","zachodniopomorskie"
+    };
+
+        string city = "", district = "", voiv = "";
+
+        // 1) Szukaj w węzłach address/location
         var addr = offer.SelectNodes(
             ".//*[" +
             "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'location') or " +
@@ -173,41 +180,69 @@ public static class WebScrapingParserHelpers
             foreach (var n in addr)
             {
                 var t = Condense(n.InnerText);
-                if (major.Any(m => t.Contains(m, StringComparison.OrdinalIgnoreCase)))
+
+                // City + District jak wcześniej
+                if (string.IsNullOrEmpty(city) && major.Any(m => t.Contains(m, StringComparison.OrdinalIgnoreCase)))
                 {
-                    var parts = t.Split(',',
-                        StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+                    var parts = t.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                     for (int i = 0; i < parts.Length; i++)
                     {
-                        var hit = major.FirstOrDefault(
-                            m => parts[i].Contains(m, StringComparison.OrdinalIgnoreCase));
+                        var hit = major.FirstOrDefault(m => parts[i].Contains(m, StringComparison.OrdinalIgnoreCase));
                         if (hit != null)
                         {
-                            var city = ToTitle(parts[i]);
-                            var district = i > 0 ? ToTitle(parts[i - 1]) : "";
-                            return (city, district);
+                            city = ToTitle(parts[i]);
+                            district = i > 0 ? ToTitle(parts[i - 1]) : district;
+                            break;
                         }
                     }
+                }
+
+                // Voivodeship
+                if (string.IsNullOrEmpty(voiv))
+                {
+                    var vh = voivodeships.FirstOrDefault(v => t.Contains(v, StringComparison.OrdinalIgnoreCase));
+                    if (vh != null) voiv = ToTitle(vh);
+                }
+
+                if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(voiv))
+                    break;
+            }
+        }
+
+        // 2) Fallback: przeszukaj cały tekst oferty
+        var lower = offerText.ToLowerInvariant();
+
+        if (string.IsNullOrEmpty(city))
+        {
+            foreach (var m in major)
+            {
+                var idx = lower.IndexOf(m, StringComparison.Ordinal);
+                if (idx >= 0)
+                {
+                    city = ToTitle(m);
+                    var before = offerText.Substring(Math.Max(0, idx - 50), Math.Min(50, idx));
+                    var mm = Regex.Match(before, @"([A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż\s-]+),\s*$");
+                    if (mm.Success) district = ToTitle(mm.Groups[1].Value);
+                    break;
                 }
             }
         }
 
-        var lower = offerText.ToLowerInvariant();
-        foreach (var m in major)
+        if (string.IsNullOrEmpty(voiv))
         {
-            var idx = lower.IndexOf(m, StringComparison.Ordinal);
-            if (idx >= 0)
+            foreach (var v in voivodeships)
             {
-                var city = ToTitle(m);
-                var before = offerText.Substring(Math.Max(0, idx - 50), Math.Min(50, idx));
-                var mm = Regex.Match(before, @"([A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż\s-]+),\s*$");
-                var district = mm.Success ? ToTitle(mm.Groups[1].Value) : "";
-                return (city, district);
+                if (lower.Contains(v, StringComparison.Ordinal))
+                {
+                    voiv = ToTitle(v);
+                    break;
+                }
             }
         }
 
-        return ("", "");
+        return (city, district, voiv);
     }
+
 
     public static DateTime? ExtractPublishedUtc(HtmlNode offer, string offerText)
     {

@@ -18,7 +18,7 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
         var otodomListings = request.Listings.Select(x => 
             OtodomHousingListing.Create(
                 ListingUrl.FromString(x.Url), 
-                Location.FromStrings(x.City, x.District),
+                Location.FromStrings(x.City, x.District, x.Voivodeship),
                 x.DatePublished,
                 x.DateWebScraped,
                 Money.FromDecimal(x.TotalPrice),
