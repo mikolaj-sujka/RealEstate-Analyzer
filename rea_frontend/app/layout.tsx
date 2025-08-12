@@ -4,6 +4,8 @@ import "./globals.css";
 import { I18nProvider } from "@/providers";
 import { Inter } from "next/font/google";
 import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +27,11 @@ export default function RootLayout({
       </head>
       <body className={inter.className}>
         <MantineProvider defaultColorScheme="auto">
-          <I18nProvider>{children}</I18nProvider>
+          <I18nProvider>
+            {children}
+            <SpeedInsights />
+            <Analytics />
+          </I18nProvider>
         </MantineProvider>
       </body>
     </html>
