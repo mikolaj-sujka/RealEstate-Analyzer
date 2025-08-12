@@ -53,6 +53,7 @@ Główne funkcjonalności obejmują:
 #### DevOps i hosting
 - Azure
 - Docker
+- Vercel
 
 ## :dart: Cel Projektu
 
@@ -65,6 +66,9 @@ Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzęd
 - pnpm (menedżer pakietów)
 - Python 3.x (dla części research)
 - Git
+- .NET 9 SDK
+- Docker / Docker Desktop
+- (opcjonalnie) SQL Server lokalnie lub w Dockerze
 
 ### 1. Klonowanie repozytorium
 
@@ -95,8 +99,10 @@ pnpm start      # Uruchom aplikację produkcyjną
 pnpm lint       # Sprawdź kod pod kątem błędów
 pnpm type-check # Sprawdź typy TypeScript
 ```
+### 3. Instalacja i uruchomienie Backend (wraz z Redis cache na dockerze)
 
-### 3. Research Environment (opcjonalne)
+
+### 4. Research Environment (opcjonalne)
 
 Jeśli chcesz uruchomić część badawczą projektu:
 
@@ -153,6 +159,16 @@ RealEstate-Analyzer/
     ├── olx_offers_final.csv          # Dane z OLX
     └── otodom_offers_final.csv       # Dane z Otodom
 ```
+## :outbox_tray: Endpointy
+| Method | URL                                                                 | Parametry                                                                                                                                                                    | Opis                                              |
+| ------ | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| GET    | `{BASE_URL}/api/listings/gus-housing-listings`                      | `cityName` (query, required)                                                                                                                                                 | GUS – listingi dla miasta (z cache Redis).        |
+| GET    | `{BASE_URL}/api/listings/gus-housing-listings/{yearsBack}`          | `yearsBack` (route, uint, required), `cityName` (query, required)                                                                                                            | GUS – dane z ostatnich *N* lat dla miasta.        |
+| GET    | `{BASE_URL}/api/listings/gus-housing-listings/date-range`           | `cityName` (query, required), `yearsFrom` (query, uint, required), `yearsTo` (query, uint, required), `monthFrom` (query, 1–12, required), `monthTo` (query, 1–12, required) | GUS – niestandardowy zakres (rok/miesiąc).        |
+| GET    | `{BASE_URL}/api/listings/otodom-listings/districts`                 | `cityName` (query, required)                                                                                                                                                 | Otodom – agregaty dla dzielnic wskazanego miasta. |
+| GET    | `{BASE_URL}/api/listings/otodom-listings/voivodeship/{voivodeship}` | `voivodeship` (route, required)                                                                                                                                              | Otodom – agregaty dla województwa.                |
+| GET    | `{BASE_URL}/api/listings/otodom-listings/city/{cityName}`           | `cityName` (route, required)                                                                                                                                                 | Otodom – agregaty dla miasta.                     |
+
 
 ## :chart_with_upwards_trend: Funkcjonalności
 
@@ -162,6 +178,18 @@ RealEstate-Analyzer/
 - **Kalkulator inwestycyjny** - Ocena potencjału inwestycyjnego używając metody AHP
 - **Help Center** - Centrum pomocy z FAQ
 - **Responsywny design** - Optymalizacja na wszystkie urządzenia
+
+### Backend
+- **REST API (ASP.NET Core Web API)** – ListingsController z endpointami dla GUS (miasto, ostatnie N lat, niestandardowy zakres) oraz Otodom (miasto, województwo, dzielnice).
+- **Persistencja (MSSQL + EF Core)** – zapisy i odczyty ofert/statystyk; migracje; indeksy po najczęstszych filtrach (miasto/województwo/okres); projekcje (Select) i AsNoTracking dla szybkich odczytów; idempotentne upserty (deduplikacja po OfferId/Url).
+- **Cache rozproszony (Redis)** – wzorzec cache-aside (np. GUS dla miasta), spójne klucze (REA:{entity}:{key}), kontrola TTL, pre-warm najpopularniejszych lokalizacji, opcjonalna invalidacja po imporcie.
+- **Odporność na błędy (Polly)** – retry z exponential/jitter backoff, honorowanie Retry-After, timeout, (opcjonalnie) circuit breaker/bulkhead dla integracji HTTP i scrapera.
+- **Web scraping (Otodom)** – IHttpClientFactory + SocketsHttpHandler, nagłówki „jak przeglądarka”, CookieContainer, limiter RPS (token-bucket), jitter, AIMD; wykrywanie liczby stron, batchowanie i deduplikacja rekordów; parsowanie HTML (Html Agility Pack / AngleSharp).
+- **Import/ETL danych CSV (GUS)** – walidacja i konwersje typów, mapowanie nagłówków na Value Objects (Money, Area, PricePerSqm, Location), obsługa braków danych i wartości odstających; batch insert/bulk (gdzie ma sens).
+- **Zadania w tle (Hangfire)** – harmonogram: scraping (okno N najnowszych stron), import CSV, odświeżanie cache, rekalkulacje agregatów/forecastów; dashboard, retry jobów, chunking dużych wsadów.
+- **Wydajność** – paginacja i stabilne sortowanie; zapytania skompilowane; (opcjonalnie) Dapper do ciężkich raportów; strategie redukcji payloadu (seletywne pola, kompresja transportu).
+- **Telemetria i monitoring** – OpenTelemetry (traces/metrics), korelacja żądań, Serilog; health-checki dla SQL/Redis/HTTP (/healthz, /readyz).
+- **Bezpieczeństwo** – CORS dla frontendu, HTTPS, (opcjonalnie) ograniczenie pochodzenia/klucz aplikacyjny, rate limiting po IP dla endpointów publicznych.
 
 ### Research & Data Collection
 - **Web scraping** - Automatyczne pobieranie danych z portali (Otodom, OLX)
