@@ -205,6 +205,9 @@ Projekt zawiera zaawansowaną część badawczą w katalogu [`rea_research`](rea
 
 Jeśli masz pytania lub sugestie dotyczące projektu, skontaktuj się z nami przez Issues na GitHubie.
 
+##  :rocket: Deployment linki
+https://real-estate-analyzer-bay.vercel.app
+
 ## :page_facing_up: Licencja
 
 Ten projekt jest objęty licencją zawartą w pliku [`LICENSE`](LICENSE).
