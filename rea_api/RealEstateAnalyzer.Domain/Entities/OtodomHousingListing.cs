@@ -19,6 +19,7 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
     public MarketType MarketType { get; private set; } = MarketType.PrimaryMarket;
     public ListingStatus Status { get; private set; } = ListingStatus.Active;
     public bool IsDeveloperOffer { get; private set; } = false; 
+    public uint BuildingBuiltYear { get; private set; } 
 
     private OtodomHousingListing() { }
 
@@ -34,7 +35,9 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         PropertyType propertyType,
         MarketType marketType,
         ListingStatus status,
-        bool isDeveloperOffer)
+        bool isDeveloperOffer,
+        uint buildingBuiltYear,
+        string offerId)
     {
         Id = Guid.NewGuid();
         Created("System", DateTimeOffset.Now);
@@ -51,6 +54,8 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         MarketType = marketType;
         Status = status;
         IsDeveloperOffer = isDeveloperOffer;
+        BuildingBuiltYear = buildingBuiltYear;
+        OfferId = offerId ?? throw new ArgumentNullException(nameof(offerId), "OfferId cannot be null");
     }
 
     public static OtodomHousingListing Create(
@@ -62,6 +67,8 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         Area flatSize,
         PricePerSquareMeter pricePerSqm,
         string title,
+        uint buildingBuiltYear,
+        string offerId,
         PropertyType propertyType = PropertyType.Apartment,
         MarketType marketType = MarketType.PrimaryMarket,
         ListingStatus status = ListingStatus.Active,
@@ -79,7 +86,9 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
             propertyType,
             marketType,
             status,
-            isDeveloperOffer);
+            isDeveloperOffer,
+            buildingBuiltYear,
+            offerId);
     }
 
     public void Update(
@@ -91,6 +100,7 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         Area flatSize,
         PricePerSquareMeter pricePerSqm,
         string title,
+        uint buildingBuiltYear,
         PropertyType propertyType = PropertyType.Apartment,
         MarketType marketType = MarketType.PrimaryMarket,
         ListingStatus status = ListingStatus.Active,
@@ -108,6 +118,7 @@ public sealed class OtodomHousingListing : AuditableAggregateRoot
         MarketType = marketType;
         Status = status;
         IsDeveloperOffer = isDeveloperOffer;
+        BuildingBuiltYear = buildingBuiltYear;
 
         Updated("System", DateTimeOffset.Now);
     }

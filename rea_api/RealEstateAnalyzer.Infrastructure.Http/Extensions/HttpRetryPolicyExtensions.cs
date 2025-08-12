@@ -1,13 +1,13 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Polly;
 
 namespace RealEstateAnalyzer.Infrastructure.Http.Extensions;
-public class HttpRetryPolicyExtensions(ILogger<HttpRetryPolicyExtensions> logger)
+public class HttpRetryPolicyExtensions(ILogger<HttpRetryPolicyExtensions> logger, IConfiguration configuration)
 {
-    private const int NumberOfRetries = 3;
-
     public IAsyncPolicy<HttpResponseMessage> GetHttpRetryPolicyAsync()
     {
+        var numberOfRetries = configuration.GetValue("Scraper:RetryCount", 3);
         {
             return
                 Policy
@@ -19,11 +19,11 @@ public class HttpRetryPolicyExtensions(ILogger<HttpRetryPolicyExtensions> logger
                     })
                     .WrapAsync(
                         Policy.HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
-                            .WaitAndRetryAsync(NumberOfRetries, retryAttempt =>
+                            .WaitAndRetryAsync(numberOfRetries, retryAttempt =>
                                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                                 (result, timeSpan, retryCount, context) =>
                                 {
-                                    logger.LogError($"HTTP Retry {retryCount}/{NumberOfRetries} after {timeSpan}. Status: {result.Result?.StatusCode}");
+                                    logger.LogError($"HTTP Retry {retryCount}/{numberOfRetries} after {timeSpan}. Status: {result.Result?.StatusCode}");
                                 })
                     );
         }

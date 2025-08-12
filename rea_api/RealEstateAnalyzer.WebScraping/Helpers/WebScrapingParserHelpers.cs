@@ -8,8 +8,8 @@ namespace RealEstateAnalyzer.WebScraping.Helpers;
 
 public static class WebScrapingParserHelpers
 {
-    public static async Task<(string MarketType, bool IsDeveloper)> ExtractDetailsFromOfferUrlAsync(
-        HttpClient http, string url, CancellationToken ct = default)
+    public static async Task<(string MarketType, bool IsDeveloper, uint buildingBuiltYear)> 
+        ExtractDetailsFromOfferUrlAsync(HttpClient http, string url, CancellationToken ct = default)
     {
         var html = await http.GetStringAsync(url, ct);
         var doc = new HtmlDocument();
@@ -29,7 +29,19 @@ public static class WebScrapingParserHelpers
             else isDeveloper = false; 
         }
 
-        return (marketType, isDeveloper);
+        var buildingYearRaw = ExtractDetailValue(root, "rok budowy");
+
+        uint buildingBuiltYear = 0;
+        if (!string.IsNullOrWhiteSpace(buildingYearRaw))
+        {
+            var yearStr = Regex.Match(buildingYearRaw, @"\d{4}").Value;
+            if (uint.TryParse(yearStr, out var year) && year > 1900 && year <= (uint)DateTime.UtcNow.Year)
+            {
+                buildingBuiltYear = year;
+            }
+        }
+
+        return (marketType, isDeveloper, buildingBuiltYear);
     }
 
     private static string? ExtractDetailValue(HtmlNode root, string labelNormalized)

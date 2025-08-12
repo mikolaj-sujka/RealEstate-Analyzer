@@ -1,8 +1,10 @@
-﻿using System.Text.RegularExpressions;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using RealEstateAnalyzer.Infrastructure.Http.HttpOptions;
 using RealEstateAnalyzer.WebScraping.Abstractions;
 using RealEstateAnalyzer.WebScraping.Domain;
+using System.Collections.Concurrent;
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace RealEstateAnalyzer.WebScraping.Scraper;
 
@@ -10,32 +12,84 @@ public class OtodomScraper(IOptions<ScraperOptions> options, IHttpClientFactory 
     IOfferParser<OtodomOfferRecord> parser) : IScraper<OtodomOfferRecord>
 {
     private readonly ScraperOptions _options = options.Value;
+
     public async Task<IReadOnlyList<OtodomOfferRecord>> ScrapeAllAsync(CancellationToken ct = default)
     {
         var http = httpFactory.CreateClient("otodom");
         var totalPages = await DetectTotalPagesAsync(_options.BaseUrl, ct);
         var maxPages = Math.Min(totalPages, _options.MaxPagesToScrape);
 
-        var results = new List<OtodomOfferRecord>(capacity: maxPages * 50);
+        var results = new ConcurrentBag<OtodomOfferRecord>();
 
-        for (int page = 1; page <= maxPages; page++)
+        var parallelOptions = new ParallelOptions
         {
-            ct.ThrowIfCancellationRequested();
+            CancellationToken = ct,
+            MaxDegreeOfParallelism = _options.MaxParallelRequests
+        };
 
+        var rnd = new Random();
+
+        var pages = Enumerable.Range(1, maxPages).ToList();
+
+        await Parallel.ForEachAsync(pages, parallelOptions, async (page, token) =>
+        {
             var url = page == 1 ? _options.BaseUrl : $"{_options.BaseUrl}?page={page}";
-            var html = await http.GetStringAsync(url, ct); 
-            var batch = await parser.ParseOffers(html, http, ct);
 
-            if (batch.Count == 0 && page > 1) break;
+            await Task.Delay(rnd.Next(_options.MinJitterMs, _options.MaxJitterMs), token);
 
-            results.AddRange(batch);
+                try
+                {
+                    using var req = new HttpRequestMessage(HttpMethod.Get, url);
+                    req.VersionPolicy = HttpVersionPolicy.RequestVersionOrLower;
+                    req.Headers.Referrer = new Uri(_options.BaseUrl);
 
-            if (_options.DelayMsBetweenPages > 0)
-                await Task.Delay(_options.DelayMsBetweenPages, ct);
-        }
+                    using var resp = await http.SendAsync(
+                        req,
+                        HttpCompletionOption.ResponseHeadersRead,
+                        token);
 
-        return results;
+                    if (resp.StatusCode == (HttpStatusCode)429 ||
+                        resp.StatusCode == HttpStatusCode.Forbidden ||
+                        (int)resp.StatusCode >= 500)
+                    {
+                        var wait =  TimeSpan.FromMilliseconds(rnd.Next(_options.MinJitterMs, _options.MaxJitterMs));
+                        await Task.Delay(wait, token);
+                    }
+
+                    resp.EnsureSuccessStatusCode();
+
+                    var html = await resp.Content.ReadAsStringAsync(token);
+                    var batch = await parser.ParseOffers(html, http, token);
+
+                    foreach (var item in batch)
+                        results.Add(item);
+
+                    await Task.Delay(rnd.Next(_options.MinJitterMs, _options.MaxJitterMs), token);
+                }
+                catch (TaskCanceledException) when (!token.IsCancellationRequested)
+                {
+                    await Task.Delay(
+                        TimeSpan.FromMilliseconds(rnd.Next(_options.MinJitterMs, _options.MaxJitterMs)),
+                        token);
+                }
+                catch (HttpRequestException)
+                {
+                    await Task.Delay(
+                        TimeSpan.FromMilliseconds(rnd.Next(_options.MinJitterMs, _options.MaxJitterMs)),
+                        token);
+                }
+        });
+
+        var distinctResults = results
+            .GroupBy(GetStableKey)
+            .Select(g => g.First())
+            .ToList();
+
+        return distinctResults;
     }
+
+    private static string GetStableKey(OtodomOfferRecord x)
+        => (x.OfferId ?? x.Url ?? "").Trim();
 
     public async Task<int> DetectTotalPagesAsync(string baseUrl, CancellationToken ct)
     {
