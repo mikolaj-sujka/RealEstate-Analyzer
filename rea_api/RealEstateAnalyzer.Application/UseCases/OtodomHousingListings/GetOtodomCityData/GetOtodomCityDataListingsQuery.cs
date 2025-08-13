@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RealEstateAnalyzer.Application.Extensions;
 using RealEstateAnalyzer.Infrastructure;
 
 namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityData;
@@ -30,10 +31,18 @@ public class GetOtodomCityDataListingsQueryHandler(DatabaseContext databaseConte
         }
 
         var totalOffers = (uint)listings.Count;
-        var averagePricePerSqm = listings.Average(x => x.PricePerSqm.Price);
-        var averageBuildingsBuiltYear = (uint)listings.Average(x => x.BuildingBuiltYear);
-        var developerMarketShare = listings.Count(x => x.IsDeveloperOffer) / (decimal)totalOffers * 100;
-        
+
+        var prices = listings.Select(x => x.PricePerSqm.Price);
+        var years = listings.Select(x => (int?)x.BuildingBuiltYear);
+
+
+        var averagePricePerSqm = prices.AverageIgnoreZero();
+        var averageBuildingsBuiltYear = years.AverageYearIgnoreZero();
+        var developerMarketShare = totalOffers == 0 ? 0m
+            : listings.Count(x => x.IsDeveloperOffer) / (decimal)totalOffers * 100m;
+
+        var medianPricePerSqm = prices.MedianIgnoreZero();
+
         return new List<GetOtodomCityDataListingsResponse>
         {
             new(totalOffers, averagePricePerSqm, 
