@@ -1,168 +1,183 @@
-import { cityTrendData, correlationData, riskAnalysisData } from "@/app/(dashboard)/investor-center/models";
+import { MarketAnalyticsData } from "@/app/(dashboard)/analytics/models";
 import { ChartSection, ReportDefinition, TableSection } from "@/models";
-import { formatCurrency, formatDatePdfReport } from "@/utils";
+import { formatDatePdfReport } from "@/utils";
 import { ECharts } from "echarts";
-import { useMemo } from "react";
-
-
-type TrendPoint = {
-    month: string;
-    avgPrice: number;
-    listings: number;
-    sales: number;
-    inventory: number;
-    demand?: number;
-};
+import { RefObject, useMemo } from "react";
 
 export const useLocationReportDefinition = ({
     locationName,
     isCity,
-    chartInstance,
     recentTransactions,
+    voivodeshipMarketData
 }: {
     locationName: string;
     isCity: boolean;
-    chartInstance: ECharts | null;
-    recentTransactions: any[]; // dopasuj typ
+    chartInstance: RefObject<ECharts> | null;
+    recentTransactions: any;
+    voivodeshipMarketData?: MarketAnalyticsData
 }) => {
     const report = useMemo(() => {
-        const trendData: TrendPoint[] = isCity
-            ? (cityTrendData[locationName] as any)
-            : [];
-
-        const risk = isCity
-            ? riskAnalysisData[locationName]
-            : undefined;
-
-        const correlations = correlationData;
-
-        // sekcja wykresu (jeśli wykres dostępny)
-        const chartSection: ChartSection = {
-            id: 'trend-chart',
-            type: 'chart',
-            title: 'Trendy rynkowe',
-            subtitle: `Lokalizacja: ${locationName}`,
-            getImage: async () => {
-                if (!chartInstance) throw new Error('Wykres niedostępny');
-                return chartInstance.getDataURL({ type: 'png', pixelRatio: 2, backgroundColor: '#fff' });
-            },
-        };
-
-        // podsumowanie ostatniego punktu trendu
-        const latestTrend = trendData[trendData.length - 1] || {};
+        if (!voivodeshipMarketData) {
+            return {
+                title: `Raport inwestycyjny — ${locationName}`,
+                subtitle: `Brak danych dla lokalizacji: ${locationName}`,
+                createdAt: new Date(),
+                sections: [],
+            }
+        }
 
         const summaryTable: TableSection = {
-            id: 'summary',
-            type: 'table',
-            title: 'Podsumowanie stanu rynku',
-            subtitle: `Dane za ostatni dostępny miesiąc`,
+            id: "summary",
+            type: "table",
+            title: "Podsumowanie stanu rynku",
+            subtitle: `Kluczowe wskazniki dla ${locationName}`,
             columns: [
-                {
-                    header: 'Średnia cena',
-                    key: 'avgPrice',
-                    render: (v) => formatCurrency(Number(v)),
-                },
-                {
-                    header: 'Oferty',
-                    key: 'listings',
-                    render: (v) => String(v),
-                },
-                {
-                    header: 'Sprzedaże',
-                    key: 'sales',
-                    render: (v) => String(v),
-                },
-                {
-                    header: 'Zapas',
-                    key: 'inventory',
-                    render: (v) => String(v),
-                },
+                { header: "Wskaznik", key: "metric" },
+                { header: "Wartosc", key: "value" },
             ],
             data: [
                 {
-                    avgPrice: latestTrend.avgPrice,
-                    listings: latestTrend.listings,
-                    sales: latestTrend.sales,
-                    inventory: latestTrend.inventory,
+                    metric: "Srednia cena za m²",
+                    value: new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                        minimumFractionDigits: 0,
+                    }).format(voivodeshipMarketData.averagePrice)
+                },
+                {
+                    metric: "Mediana ceny",
+                    value: new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                        minimumFractionDigits: 0,
+                    }).format(voivodeshipMarketData.medianPrice),
+                },
+                {
+                    metric: "Liczba ofert",
+                    value: voivodeshipMarketData.totalListings.toLocaleString("pl-PL"),
+                },
+                {
+                    metric: "Sredni metraz",
+                    value: `${voivodeshipMarketData.averageAreaSize} m²`,
+                },
+                {
+                    metric: "Udzial deweloperow",
+                    value: `${(voivodeshipMarketData.developerMarketShare * 100).toFixed(1)}%`,
+                },
+                {
+                    metric: "Rynek pierwotny",
+                    value: `${(voivodeshipMarketData.primaryMarketShare * 100).toFixed(1)}%`,
                 },
             ],
-        };
+        }
 
-        const riskTable: TableSection = {
-            id: 'risk',
-            type: 'table',
-            title: 'Analiza ryzyka',
-            subtitle: `Wskaźniki ryzyka dla ${locationName}`,
+        const detailsTable: TableSection = {
+            id: "details",
+            type: "table",
+            title: "Szczegółowe dane rynkowe",
+            subtitle: `Aktualne dane za ${formatDatePdfReport(new Date())}`,
             columns: [
-                { header: 'Ryzyko całkowite', key: 'riskScore' },
-                { header: 'Zmienność', key: 'volatility' },
-                { header: 'Ryzyko bańki', key: 'bubbleRisk' },
-                { header: 'Stabilność ekonomiczna', key: 'economicStability' },
+                { header: "Parametr", key: "parameter" },
+                { header: "Wartość", key: "value" },
+                { header: "Opis", key: "description" },
             ],
-            data: risk
-                ? [
-                    {
-                        riskScore: risk.riskScore,
-                        volatility: risk.factors.volatility,
-                        bubbleRisk: risk.factors.bubbleRisk,
-                        economicStability: risk.factors.economicStability,
-                    },
-                ]
-                : [],
-        };
-
-        const correlationTable: TableSection = {
-            id: 'correlation',
-            type: 'table',
-            title: 'Korelacje',
-            subtitle: `Relacje między metrykami`,
-            columns: [
-                { header: 'Metryka', key: 'metric' },
-                { header: 'Korelacja', key: 'correlation' },
-                { header: 'Zmiana', key: 'change' },
+            data: [
+                {
+                    parameter: "Srednia cena za m²",
+                    value: new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                        minimumFractionDigits: 0,
+                    }).format(voivodeshipMarketData.averagePrice),
+                    description: "Srednia cena transakcyjna za metr kwadratowy",
+                },
+                {
+                    parameter: "Mediana ceny",
+                    value: new Intl.NumberFormat("pl-PL", {
+                        style: "currency",
+                        currency: "PLN",
+                        minimumFractionDigits: 0,
+                    }).format(voivodeshipMarketData.medianPrice),
+                    description: "Wartosc srodkowa cen transakcyjnych",
+                },
+                {
+                    parameter: "Liczba ofert",
+                    value: voivodeshipMarketData.totalListings.toLocaleString("pl-PL"),
+                    description: "Calowita liczba aktywnych ofert na rynku",
+                },
+                {
+                    parameter: "Sredni metraz",
+                    value: `${voivodeshipMarketData.averageAreaSize} m²`,
+                    description: "Srednia powierzchnia oferowanych mieszkań",
+                },
+                {
+                    parameter: "Udzial deweloperow",
+                    value: `${(voivodeshipMarketData.developerMarketShare * 100).toFixed(1)}%`,
+                    description: "Procent ofert pochodzacych od deweloperow",
+                },
+                {
+                    parameter: "Rynek pierwotny",
+                    value: `${(voivodeshipMarketData.primaryMarketShare * 100).toFixed(1)}%`,
+                    description: "Udzial nowych mieszkan w calkowitej ofercie",
+                },
+                {
+                    parameter: "Sredni rok budowy",
+                    value: voivodeshipMarketData.averageYearOfConstruction.toString(),
+                    description: "Sredni rok budowy oferowanych nieruchomosci",
+                },
             ],
-            data: correlations,
-        };
+        }
 
         const transactionsSection: TableSection = {
-            id: 'transactions',
-            type: 'table',
-            title: 'Ostatnie transakcje',
-            subtitle: `Wybrane lokalizacje: ${locationName}`,
+            id: "transactions",
+            type: "table",
+            title: "Ostatnie transakcje",
+            subtitle: `Wybrane transakcje w lokalizacji: ${locationName}`,
             columns: [
-                { header: 'Nieruchomość', key: 'property' },
-                { header: 'Lokalizacja', key: 'location' },
+                { header: "Nieruchomość", key: "property" },
+                { header: "Lokalizacja", key: "location" },
                 {
-                    header: 'Data',
-                    key: 'date',
+                    header: "Data",
+                    key: "date",
                     render: (v) => formatDatePdfReport(new Date(v)),
                 },
                 {
-                    header: 'Cena',
-                    key: 'price',
+                    header: "Cena",
+                    key: "price",
                     render: (v) =>
-                        new Intl.NumberFormat('pl-PL', {
-                            style: 'currency',
-                            currency: 'PLN',
+                        new Intl.NumberFormat("pl-PL", {
+                            style: "currency",
+                            currency: "PLN",
                             minimumFractionDigits: 0,
                         }).format(Number(v)),
                 },
-                { header: 'Status', key: 'status' },
+                { header: "Metraż", key: "area", render: (v) => `${v} m²` },
+                {
+                    header: "Cena/m²",
+                    key: "pricePerSqm",
+                    render: (v) =>
+                        new Intl.NumberFormat("pl-PL", {
+                            style: "currency",
+                            currency: "PLN",
+                            minimumFractionDigits: 0,
+                        }).format(Number(v)),
+                },
+                { header: "Status", key: "status" },
             ],
             data: recentTransactions,
-        };
+        }
 
-        const sections: any[] = [chartSection, summaryTable, riskTable, correlationTable, transactionsSection];
+        const sections: any[] = [summaryTable, detailsTable, transactionsSection]
 
         const reportDef: ReportDefinition = {
             title: `Raport inwestycyjny — ${locationName}`,
-            subtitle: `Analiza ${isCity ? 'miasta' : 'województwa'}: ${locationName}`,
+            subtitle: `Szczegolowa analiza ${isCity ? "miasta" : "wojewodztwa"}: ${locationName}`,
             createdAt: new Date(),
             sections,
-        };
+        }
 
-        return reportDef;
-    }, [locationName, isCity, chartInstance, recentTransactions]);
+        return reportDef
+    }, [locationName, isCity, voivodeshipMarketData, recentTransactions])
 
     return report;
 }

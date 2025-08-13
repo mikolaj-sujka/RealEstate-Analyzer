@@ -6,7 +6,7 @@ import { useMarketAnalyticsChart } from "./hooks";
 import { MarketAnalyticsData } from "../../models/types/MarketAnalyticsData";
 
 type MarketAnalyticsChartProps = {
-  data: MarketAnalyticsData[];
+  data: MarketAnalyticsData;
   regionName: string;
   onChartReady?: (chart: ECharts) => void;
 };

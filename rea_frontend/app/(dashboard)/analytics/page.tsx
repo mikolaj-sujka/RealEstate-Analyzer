@@ -17,19 +17,21 @@ import { ECharts } from "echarts/types/dist/echarts";
 
 export default function AnalyticsPage() {
   const [voivodeship, setVoivodeship] = useState("Cała Polska");
-  const { marketData, data } = useMarketAnalytics(voivodeship);
+  const { marketData, recentTransactions } = useMarketAnalytics(voivodeship);
+
   const { t } = useTranslation();
 
-  const chartRef = useRef<ECharts | null>(null);
+  const chartRef = useRef<ECharts>(null!);
 
   const reportDefinition = useLocationReportDefinition({
     locationName: voivodeship,
     isCity: false,
-    chartInstance: chartRef.current,
-    recentTransactions: marketData,
+    chartInstance: chartRef,
+    recentTransactions: recentTransactions,
+    voivodeshipMarketData: marketData,
   });
 
-  const cards = getCitiesAnalyticsCards(data).map((card) => {
+  const cards = getCitiesAnalyticsCards(marketData!).map((card) => {
     const CardIcon = card.icon;
     return {
       ...card,
@@ -66,13 +68,12 @@ export default function AnalyticsPage() {
         </Title>
         <MarketAnalyticsChart
           regionName={voivodeship}
-          data={marketData}
+          data={marketData!}
           onChartReady={(chart) => {
             chartRef.current = chart;
           }}
         />
       </Paper>
-
       <ReportGenerator report={reportDefinition} />
     </ContainerSection>
   );

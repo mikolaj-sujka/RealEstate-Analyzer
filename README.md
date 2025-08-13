@@ -124,40 +124,40 @@ RealEstate-Analyzer/
 ├── .gitignore
 ├── LICENSE
 ├── README.md
-├── rea_api/                           # Backend API (.NET)
-│   ├── rea_api.sln                    # Solution (spina wszystkie projekty)
-│   ├── RealEstateAnalyzer-csv/        # Dane wejściowe CSV (GUS) – surowe pliki do importu/testów
-│   ├── RealEstateAnalyzer.Api/        # Warstwa prezentacji (ASP.NET Core): Controllers/Minimal API, DI, appsettings, start aplikacji
-│   ├── RealEstateAnalyzer.Application/        # Logika use-case’ów (CQRS/MediatR), handlery, validacje, mappingi, DTO/Responses
-│   ├── RealEstateAnalyzer.Application.Abstractions/     # Kontrakty dla Application (interfejsy portów: repozytoria, gatewaye, usługi)
-│   ├── RealEstateAnalyzer.Domain/             # Model domenowy (encje, value objects, agregaty, eventy domenowe, enumy, reguły)
-│   ├── RealEstateAnalyzer.Infrastructure/     # Implementacje portów (EF Core DbContext, repozytoria, migracje, I/O, pliki, integracje)
-│   ├── RealEstateAnalyzer.Infrastructure.Http/     # Infrastrukturę HTTP (IHttpClientFactory, DelegatingHandlers, polityki retry, opcje)
-│   ├── RealEstateAnalyzer.Infrastructure.Hangfire/ # Konfiguracja i hostowanie Hangfire, dashboard, serwer, job activator
-│   ├── RealEstateAnalyzer.Infrastructure.Redis/    # Konfiguracja Redis, cache/adapters, polityki wygasania, helpery
+├── rea_api/                           
+│   ├── rea_api.sln                    
+│   ├── RealEstateAnalyzer-csv/        
+│   ├── RealEstateAnalyzer.Api/        
+│   ├── RealEstateAnalyzer.Application/        
+│   ├── RealEstateAnalyzer.Application.Abstractions/    
+│   ├── RealEstateAnalyzer.Domain/             
+│   ├── RealEstateAnalyzer.Infrastructure/     
+│   ├── RealEstateAnalyzer.Infrastructure.Http/     
+│   ├── RealEstateAnalyzer.Infrastructure.Hangfire/ 
+│   ├── RealEstateAnalyzer.Infrastructure.Redis/    
 │   ├── RealEstateAnalyzer.ML.Forecasting/
 │   ├── RealEstateAnalyzer.ML.Contracts/ 
-│   ├── RealEstateAnalyzer.WebScraping/             # Implementacje scraperów (Otodom itp.), orkiestracja, wykrywanie stron, workflow scrapingu
-│   ├── RealEstateAnalyzer.WebScraping.Domain/      # Prosty model „scrapingowy” (rekordy prymitywów, np. OtodomOfferRecord, helpery)
-│   ├── RealEstateAnalyzer.WebScraping.Abstractions/ # Interfejsy dla scrapingu (IScraper<T>, IOfferParser<T>, kontrakty serwisów)
-│   └── docker-compose/ # Plik yml zawierający konfiguracje kontenerów dla solution i redis
-├── rea_frontend/                      # Frontend (Next.js)
-│   ├── app/                          # App Router (Next.js 13+)
-│   ├── components/                   # Komponenty React
-│   ├── hooks/                        # Custom React hooks
-│   ├── services/                     # Serwisy (API calls, PDF generation)
-│   ├── models/                       # TypeScript models
-│   ├── utils/                        # Funkcje pomocnicze
-│   ├── styles/                       # Style CSS
-│   ├── i18n/                         # Internationalization
-│   ├── providers/                    # Context providers
-│   ├── public/                       # Pliki statyczne
+│   ├── RealEstateAnalyzer.WebScraping/             
+│   ├── RealEstateAnalyzer.WebScraping.Domain/      
+│   ├── RealEstateAnalyzer.WebScraping.Abstractions/ 
+│   └── docker-compose/ 
+├── rea_frontend/                      
+│   ├── app/                          
+│   ├── components/                   
+│   ├── hooks/                        
+│   ├── services/                     
+│   ├── models/                       
+│   ├── utils/                        
+│   ├── styles/                       
+│   ├── i18n/                         
+│   ├── providers/                    
+│   ├── public/                       
 │   ├── package.json
 │   └── tsconfig.json
-└── rea_research/                      # Research & Data Analysis
-    ├── rea_research.ipynb            # Jupyter notebook z analizą
-    ├── olx_offers_final.csv          # Dane z OLX
-    └── otodom_offers_final.csv       # Dane z Otodom
+└── rea_research/                     
+    ├── rea_research.ipynb            
+    ├── olx_offers_final.csv          
+    └── otodom_offers_final.csv       
 ```
 ## :outbox_tray: Endpointy
 | Method | URL                                                                 | Parametry                                                                                                                                                                    | Opis                                              |
