@@ -26,7 +26,6 @@ export function createAxiosInstance(
     instance.interceptors.response.use(
         response => response,
         error => {
-            // Normalizuj błędy, logowanie, ewentualne retry/backoff itd. :contentReference[oaicite:4]{index=4}
             return Promise.reject(error);
         }
     );
