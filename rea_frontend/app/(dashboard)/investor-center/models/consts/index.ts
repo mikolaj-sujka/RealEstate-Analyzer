@@ -1,1 +1,1 @@
-export * from './trends.conts';
+export * from './investorCenterMock';

@@ -1,5 +1,2 @@
-export * from "./useInvestorCenterData"
-export * from "./useAdvancedMetrics"
-export * from "./useInvestmentMetrics"
-export * from "./useRiskAnalysis"
-export * from "./useCorrelationData"
+export * from "./useInvestorCharts"
+export * from "./useInvestorCenter"
