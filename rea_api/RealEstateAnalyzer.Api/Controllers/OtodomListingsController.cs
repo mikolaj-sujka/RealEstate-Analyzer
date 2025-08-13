@@ -6,9 +6,8 @@ using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomVoi
 
 namespace RealEstateAnalyzer.Api.Controllers;
 
-[Route("api/v{version:apiVersion}/[controller]")]
+[Route("api/[controller]")]
 [ApiController]
-[ApiVersion("1.0")]
 public class OtodomListingsController(IMediator mediator) : ControllerBase
 {
     [HttpGet("districts")]

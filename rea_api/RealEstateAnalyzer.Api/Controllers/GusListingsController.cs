@@ -6,8 +6,7 @@ using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingLi
 
 namespace RealEstateAnalyzer.Api.Controllers;
 
-[Route("api/v{version:apiVersion}/[controller]")]
-[ApiVersion("1.0")]
+[Route("api/[controller]")]
 [ApiController]
 public class GusListingsController(IRedisCacheListingsService redis, IMediator mediator) : ControllerBase
 {
