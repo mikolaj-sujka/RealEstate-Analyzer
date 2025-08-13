@@ -19,7 +19,7 @@ public static class ServiceCollectionExtensions
 
         services.AddTransient<RequestRateLimiterHandler>();
 
-        services.AddHttpClient("otodom", client =>
+        services.AddHttpClient("scraper", client =>
             {
                 client.Timeout = TimeSpan.FromSeconds(30);
             })

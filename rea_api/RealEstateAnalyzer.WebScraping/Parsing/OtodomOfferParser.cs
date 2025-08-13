@@ -46,6 +46,20 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
                 .ExtractDetailsFromOfferUrlAsync(client, url, ct);
             var status = "Active";
 
+            if (size <= 0m || price <= 0m)
+                continue;
+
+            if (string.IsNullOrWhiteSpace(propertyType))
+                continue;
+
+            var year = buildingBuiltYear; 
+            var currentYear = DateTime.UtcNow.Year;
+
+            if (year != 0 && year> currentYear)
+            {
+                continue;
+            }
+
             list.Add(new OtodomOfferRecord(
                 url, city, district,
                 publishedUtc, scrapedUtc,

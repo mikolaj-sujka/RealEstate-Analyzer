@@ -4,7 +4,8 @@ using System.Net;
 
 namespace RealEstateAnalyzer.Infrastructure.Http.Handlers;
 
-public sealed class WebScrapingHandler(IOptions<ScraperOptions> options) : DelegatingHandler
+public sealed class WebScrapingHandler(IOptions<ScraperOptions> options) 
+    : DelegatingHandler
 {
     readonly ScraperOptions _options = options.Value;
     protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken ct)

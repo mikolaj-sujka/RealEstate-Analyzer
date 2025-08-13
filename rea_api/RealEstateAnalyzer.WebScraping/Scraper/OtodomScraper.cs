@@ -15,7 +15,7 @@ public class OtodomScraper(IOptions<ScraperOptions> options, IHttpClientFactory 
 
     public async Task<IReadOnlyList<OtodomOfferRecord>> ScrapeAllAsync(CancellationToken ct = default)
     {
-        var http = httpFactory.CreateClient("otodom");
+        var http = httpFactory.CreateClient("scraper");
         var totalPages = await DetectTotalPagesAsync(_options.BaseUrl, ct);
         var maxPages = Math.Min(totalPages, _options.MaxPagesToScrape);
 
@@ -90,7 +90,7 @@ public class OtodomScraper(IOptions<ScraperOptions> options, IHttpClientFactory 
 
     public async Task<int> DetectTotalPagesAsync(string baseUrl, CancellationToken ct)
     {
-        var http = httpFactory.CreateClient("otodom");
+        var http = httpFactory.CreateClient("scraper");
         var html = await http.GetStringAsync(baseUrl, ct);
 
         var maxToScrape = _options.MaxPagesToScrape > 0 ? _options.MaxPagesToScrape : int.MaxValue;

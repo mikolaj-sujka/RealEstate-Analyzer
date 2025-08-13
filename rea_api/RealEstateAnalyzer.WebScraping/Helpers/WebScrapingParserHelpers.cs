@@ -49,6 +49,9 @@ public static class WebScrapingParserHelpers
     {
         var containers = root.SelectNodes("//div[@data-sentry-element='ItemGridContainer']");
         
+        if (containers.Count == 0)
+            return null;
+
         foreach (var c in containers)
         {
             var label = Normalize(c.InnerText);
