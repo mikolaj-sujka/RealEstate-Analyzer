@@ -52,33 +52,46 @@ public static class WebScrapingParserHelpers
     {
         decimal price = 0m, pricePerSqm = 0m;
 
-        var priceNode = root.SelectSingleNode(
-            "//div[contains(@data-sentry-source-file,'AdHeader') or contains(@data-sentry-source-file,'AdPrice')]" +
-            "//strong[@aria-label='Cena' or @data-cy='adPageHeaderPrice' or @data-sentry-element='Price']"
-        );
+        var priceSection = root.SelectSingleNode("//div[@data-sentry-element='PriceSection']") ?? root;
 
-        var pricePerSqmNode = root.SelectSingleNode(
-            "//*[@aria-label='Cena za metr kwadratowy' or contains(translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'zł/m')]"
+        var priceNode = priceSection.SelectSingleNode(
+            ".//strong[@aria-label='Cena' or @data-cy='adPageHeaderPrice' or @data-sentry-element='Price']"
         );
 
         if (priceNode != null)
+        {
             price = ParsePln(priceNode.InnerText);
+        }
+
+        if (price == 0m)
+        {
+            var sectionText = NormalizeSpaces(priceSection.InnerText);
+            var matches = Regex.Matches(sectionText, @"(\d[\d\s.,]*)\s*zł\b(?!\s*/\s*m)", RegexOptions.IgnoreCase);
+            if (matches.Count > 0)
+            {
+                var numeric = matches[^1].Groups[1].Value;
+                price = ParsePln(numeric);
+            }
+        }
+
+        var pricePerSqmNode = priceSection.SelectSingleNode(
+            ".//*[@aria-label='Cena za metr kwadratowy']"
+        );
 
         if (pricePerSqmNode != null)
+        {
             pricePerSqm = ParsePln(pricePerSqmNode.InnerText);
+        }
 
         if (pricePerSqm == 0m)
         {
-            var m2 = Regex.Match(NormalizeSpaces(root.InnerText), @"([\d\s.,]+)\s*zł\s*/\s*m(?:2|²)\b", RegexOptions.IgnoreCase);
-            if (m2.Success) pricePerSqm = ParsePln(m2.Value);
-        }
-        if (price == 0m)
-        {
-            var all = Regex.Matches(NormalizeSpaces(root.InnerText), @"([\d\s.,]+)\s*zł\b", RegexOptions.IgnoreCase)
-                           .Cast<Match>()
-                           .Select(m => m.Value)
-                           .FirstOrDefault(v => !v.Contains("/m", StringComparison.OrdinalIgnoreCase));
-            if (!string.IsNullOrWhiteSpace(all)) price = ParsePln(all);
+            var sectionText = NormalizeSpaces(priceSection.InnerText);
+            var m2 = Regex.Matches(sectionText, @"(\d[\d\s.,]*)\s*zł\s*/\s*m(?:2|²)\b", RegexOptions.IgnoreCase);
+            if (m2.Count > 0)
+            {
+                var numeric = m2[^1].Groups[1].Value;
+                pricePerSqm = ParsePln(numeric);
+            }
         }
 
         return (price, pricePerSqm);
