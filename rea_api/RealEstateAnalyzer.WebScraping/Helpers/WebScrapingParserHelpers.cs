@@ -9,7 +9,8 @@ namespace RealEstateAnalyzer.WebScraping.Helpers;
 
 public static class WebScrapingParserHelpers
 {
-    public static async Task<(MarketType MarketType, bool IsDeveloper, uint buildingBuiltYear)> 
+    public static async Task<(MarketType MarketType, bool IsDeveloper, uint buildingBuiltYear, decimal price, 
+            decimal pricePerSqm)> 
         ExtractDetailsFromOfferUrlAsync(HttpClient http, string url, CancellationToken ct = default)
     {
         var html = await http.GetStringAsync(url, ct);
@@ -42,8 +43,83 @@ public static class WebScrapingParserHelpers
             }
         }
 
-        return (marketType, isDeveloper, buildingBuiltYear);
+        var (price, pricePerSqm) = ExtractPriceData(root);
+
+        return (marketType, isDeveloper, buildingBuiltYear, price, pricePerSqm);
     }
+
+    private static (decimal Price, decimal PricePerSqm) ExtractPriceData(HtmlNode root)
+    {
+        decimal price = 0m, pricePerSqm = 0m;
+
+        var priceNode = root.SelectSingleNode(
+            "//div[contains(@data-sentry-source-file,'AdHeader') or contains(@data-sentry-source-file,'AdPrice')]" +
+            "//strong[@aria-label='Cena' or @data-cy='adPageHeaderPrice' or @data-sentry-element='Price']"
+        );
+
+        var pricePerSqmNode = root.SelectSingleNode(
+            "//*[@aria-label='Cena za metr kwadratowy' or contains(translate(normalize-space(text()), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'zł/m')]"
+        );
+
+        if (priceNode != null)
+            price = ParsePln(priceNode.InnerText);
+
+        if (pricePerSqmNode != null)
+            pricePerSqm = ParsePln(pricePerSqmNode.InnerText);
+
+        if (pricePerSqm == 0m)
+        {
+            var m2 = Regex.Match(NormalizeSpaces(root.InnerText), @"([\d\s.,]+)\s*zł\s*/\s*m(?:2|²)\b", RegexOptions.IgnoreCase);
+            if (m2.Success) pricePerSqm = ParsePln(m2.Value);
+        }
+        if (price == 0m)
+        {
+            var all = Regex.Matches(NormalizeSpaces(root.InnerText), @"([\d\s.,]+)\s*zł\b", RegexOptions.IgnoreCase)
+                           .Cast<Match>()
+                           .Select(m => m.Value)
+                           .FirstOrDefault(v => !v.Contains("/m", StringComparison.OrdinalIgnoreCase));
+            if (!string.IsNullOrWhiteSpace(all)) price = ParsePln(all);
+        }
+
+        return (price, pricePerSqm);
+    }
+
+    private static decimal ParsePln(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return 0m;
+
+        var s = HtmlEntity.DeEntitize(raw);
+        s = s.Replace("\u00A0", " ");     // NBSP
+        s = Regex.Replace(s, @"\s+", " "); // sklej spacje
+
+        s = Regex.Replace(s, @"zł.*$", "", RegexOptions.IgnoreCase).Trim();
+
+        s = Regex.Replace(s, @"[^0-9,.\s]", "");
+        s = s.Replace(" ", "");
+
+        if (s.Contains(',') && s.Contains('.'))
+        {
+            s = s.Replace(".", "");
+            s = s.Replace(",", ".");
+        }
+        else
+        {
+            if (s.Contains(',') && !s.Contains('.'))
+                s = s.Replace(",", ".");
+            else if (s.Contains('.') && !s.Contains(','))
+                s = s.Replace(".", "");
+        }
+
+        return decimal.TryParse(s, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var val)
+            ? val
+            : 0m;
+    }
+    private static string NormalizeSpaces(string s)
+    {
+        var t = HtmlEntity.DeEntitize(s).Replace("\u00A0", " ");
+        return Regex.Replace(t, @"\s+", " ").Trim();
+    }
+
 
     private static string? ExtractDetailValue(HtmlNode root, string labelNormalized)
     {
@@ -89,11 +165,6 @@ public static class WebScrapingParserHelpers
         return sb.ToString().Normalize(NormalizationForm.FormC);
     }
 
-    public static string ExtractOfferIdFromUrl(string url)
-    {
-        var m = Regex.Match(url, @"ID([A-Za-z0-9]+)$", RegexOptions.IgnoreCase);
-        return m.Success ? $"ID{m.Groups[1].Value}" : string.Empty;
-    }
     public static string? ExtractUrl(HtmlNode offer)
     {
         var a = offer.SelectSingleNode(

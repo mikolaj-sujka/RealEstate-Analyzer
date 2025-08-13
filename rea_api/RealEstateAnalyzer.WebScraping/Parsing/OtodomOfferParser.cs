@@ -38,12 +38,13 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
             var publishedUtc = WebScrapingParserHelpers.ExtractPublishedUtc(n, text) ?? DateTime.UtcNow;
             var scrapedUtc = DateTime.UtcNow;
 
-            var price = WebScrapingParserHelpers.ExtractPricePln(text);
             var size = WebScrapingParserHelpers.ExtractAreaSqm(text);
 
             var propertyType = WebScrapingParserHelpers.GuessPropertyType(title, text);
-            var (marketType, isDeveloper, buildingBuiltYear) = await WebScrapingParserHelpers
+
+            var (marketType, isDeveloper, buildingBuiltYear,price, pricePerSqm) = await WebScrapingParserHelpers
                 .ExtractDetailsFromOfferUrlAsync(client, url, ct);
+
             var status = "Active";
 
             if (size <= 0m || price <= 0m)
@@ -64,7 +65,7 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
                 url, city, district,
                 publishedUtc, scrapedUtc,
                 price, size, title, propertyType, 
-                marketType, status, isDeveloper, buildingBuiltYear, voivodeship));
+                marketType, status, isDeveloper, buildingBuiltYear, voivodeship, pricePerSqm));
         }
 
         return list;

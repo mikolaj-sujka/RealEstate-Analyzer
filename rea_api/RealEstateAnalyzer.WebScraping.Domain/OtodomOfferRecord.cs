@@ -34,9 +34,9 @@ public class OtodomOfferRecord
         string status,
         bool isDeveloperOffer,
         uint buildingBuiltYear,
-        string voivodeship)
+        string voivodeship,
+        decimal pricePerSquareMeter)
     {
-        var pricePerSquareMeter = (flatSize > 0 ? Math.Round(totalPrice / flatSize, 2) : 0m);
 
         Url = url;
         City = city;
