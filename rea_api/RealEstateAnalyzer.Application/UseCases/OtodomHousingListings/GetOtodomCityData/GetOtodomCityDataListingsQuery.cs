@@ -21,7 +21,6 @@ public class GetOtodomCityDataListingsQueryHandler(DatabaseContext databaseConte
             .Where(x => x.Location.City.Equals(cityName))
             .AsSplitQuery()
             .AsNoTracking()
-            .Include(otodomHousingListing => otodomHousingListing.PricePerSqm)
             .ToListAsync(cancellationToken);
 
         if (listings.Count == 0)

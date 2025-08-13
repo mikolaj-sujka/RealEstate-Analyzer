@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RealEstateAnalyzer.Domain.Enums;
 using RealEstateAnalyzer.Infrastructure;
 
 namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomVoivodeshipData;
@@ -9,7 +10,9 @@ public record GetOtodomVoivodeshipDataResponse(
     uint TotalOffers,
     decimal AveragePricePerSqm,
     uint AverageBuildingsBuiltYear,
-    decimal DeveloperMarketShare);
+    decimal DeveloperMarketShare,
+    decimal PrimaryMarketShare,
+    decimal MedianPricePerSqm);
 public record GetOtodomVoivodeshipDataQuery(string VoivodeshipName) 
     : IRequest<IReadOnlyList<GetOtodomVoivodeshipDataResponse>>;
 
@@ -24,7 +27,6 @@ public class GetOtodomVoivodeshipDataQueryHandler(DatabaseContext databaseContex
             .Where(x => x.Location.Voivodeship.Equals(voivodeshipName))
             .AsSplitQuery()
             .AsNoTracking()
-            .Include(otodomHousingListing => otodomHousingListing.PricePerSqm)
             .ToListAsync(cancellationToken);
 
         if (listings.Count == 0)
@@ -37,12 +39,18 @@ public class GetOtodomVoivodeshipDataQueryHandler(DatabaseContext databaseContex
         var averagePricePerSqm = listings.Average(x => x.PricePerSqm.Price);
         var averageBuildingsBuiltYear = (uint)listings.Average(x => x.BuildingBuiltYear);
         var developerMarketShare = listings.Count(x => x.IsDeveloperOffer) / (decimal)totalOffers * 100;
-        
+        var primaryMarketShare = listings.Count(x => x.MarketType == MarketType.PrimaryMarket) / (decimal)totalOffers * 100;
+        var medianPricePerSqm = listings
+            .Select(x => x.PricePerSqm.Price)
+            .OrderBy(price => price)
+            .Skip((int)(totalOffers / 2))
+            .FirstOrDefault();
 
         return new List<GetOtodomVoivodeshipDataResponse>
         {
             new(totalOffers, averagePricePerSqm, 
-                averageBuildingsBuiltYear, developerMarketShare)
+                averageBuildingsBuiltYear, developerMarketShare,
+                primaryMarketShare, medianPricePerSqm)
         };
     }
 }
