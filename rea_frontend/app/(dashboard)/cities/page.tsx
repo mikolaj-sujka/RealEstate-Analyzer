@@ -11,8 +11,6 @@ export default function CityComparison() {
   const {
     filteredData,
     selectedCities,
-    extendedPriceHistoryData,
-    cityColors,
     filterConfig,
     handleFilterChange,
   } = useCityComparison();
@@ -26,13 +24,6 @@ export default function CityComparison() {
       <FiltersWrapper config={filterConfig} onChange={handleFilterChange} />
 
       <BarChart data={filteredData} selectedCities={selectedCities} />
-
-      <TitleSection title={t("CityComparison.historiaCenWedlugMiast")} />
-      <LineChart
-        months={extendedPriceHistoryData}
-        cities={selectedCities}
-        colors={cityColors}
-      />
     </ContainerSection>
   );
 }

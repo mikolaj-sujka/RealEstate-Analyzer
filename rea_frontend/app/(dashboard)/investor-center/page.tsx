@@ -1,18 +1,20 @@
 "use client";
 
-import { Paper, Grid, Group, Box, LoadingOverlay } from "@mantine/core";
-import { IconShieldCheck, IconChartBar } from "@tabler/icons-react";
-import {
-  CorrelationChart,
-  InvestorCenterHeader,
-  MainAnalysisChart,
-  RiskAnalysisChart,
-} from "./components";
+import { Paper, Grid, Group, Box, LoadingOverlay, Flex } from "@mantine/core";
+import { IconShieldCheck } from "@tabler/icons-react";
 import { useTranslate } from "@/hooks/useTranslate";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TextDescription, TitleSection } from "@/components/UI";
 import * as classes from "./styles/investorCenterStyles.css";
-import { useInvestorCenter } from "./hooks";
+
+import { useInvestorCenter } from "./hooks/useInvestorCenter";
+import {
+  ChartMethodHelp,
+  InvestorCenterHeader,
+  MainAnalysisChart,
+  RiskAnalysisChart,
+  RiskGaugeHelp,
+} from "./components";
 
 type InvestorCenterProps = {
   title?: string;
@@ -21,6 +23,7 @@ type InvestorCenterProps = {
 
 export default function InvestorCenter({}: InvestorCenterProps) {
   const { t } = useTranslate();
+
   const {
     selectedCity,
     setSelectedCity,
@@ -41,6 +44,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
         onCityChange={(value) => setSelectedCity(value || "Warszawa")}
         cityOptions={cityOptions}
       />
+
       <Box className={classes.relativeBox}>
         <LoadingOverlay
           visible={isSwitching}
@@ -49,21 +53,24 @@ export default function InvestorCenter({}: InvestorCenterProps) {
         />
         <Box className={classes.chartWrapper}>
           <MainAnalysisChart
-            type={analysisType}
+            type={analysisType as "basic" | "advanced"}
             city={selectedCity}
             onChartInit={handleChartInit}
           />
         </Box>
       </Box>
+
       <Grid className={classes.controlGrid}>
-        <Grid.Col span={{ base: 12, lg: 6 }}>
+        <Grid.Col span={{ base: 12 }}>
           <Paper className={classes.paperCard}>
-            <Group className={classes.mb}>
+            <Flex className={classes.flex}>
               <IconShieldCheck size={20} />
               <TitleSection
                 title={t("InvestorCenter.analizaRyzykaInwestycyjnego")}
               />
-            </Group>
+              <RiskGaugeHelp absolute={false} />
+            </Flex>
+
             <TextDescription
               description={
                 t("InvestorCenter.ogólnyWskaźnikRyzykaDla", {
@@ -72,19 +79,8 @@ export default function InvestorCenter({}: InvestorCenterProps) {
               }
               className={classes.mb}
             />
+
             <RiskAnalysisChart city={selectedCity} />
-          </Paper>
-        </Grid.Col>
-        <Grid.Col span={{ base: 12, lg: 6 }}>
-          <Paper className={classes.paperCard}>
-            <Group className={classes.mb}>
-              <IconChartBar size={20} />
-              <TitleSection title={t("InvestorCenter.analizaKorelacji")} />
-              <TextDescription
-                description={t("InvestorCenter.analizaKorelacjiOpis")}
-              />
-            </Group>
-            <CorrelationChart />
           </Paper>
         </Grid.Col>
       </Grid>

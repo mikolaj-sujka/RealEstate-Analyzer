@@ -3,8 +3,10 @@ import { rem } from "@mantine/core";
 
 export const headerTop = style({
   display: 'flex',
-  flexDirection: 'column',
-  marginBottom: rem(16),
+  flexDirection: 'row',
+  marginBottom: rem(2),
+  gap: rem(16),
+  alignItems: 'center',
 });
 
 export const headerControls = style({

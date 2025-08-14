@@ -61,6 +61,4 @@ export type DistrictData = {
   district: string;
   averagePrice: number;
   properties: number;
-  trend: "up" | "down";
-  change: string;
 }

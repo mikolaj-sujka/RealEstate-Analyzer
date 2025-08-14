@@ -16,4 +16,5 @@ export * from "./ReportGeneratorWrapper";
 export * from './ContainerSection';
 export * from './AnalysisSwitcher';
 export * from './UI';
-export * from "./CustomDateRangePicker";
+export * from './CustomDateRangePicker';
+export * from './EmptyPage';

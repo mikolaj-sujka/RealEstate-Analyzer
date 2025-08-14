@@ -1,12 +1,15 @@
+"use client";
+
 import { TitleSection, TextDescription } from "@/components/UI";
 import { useTranslate } from "@/hooks/useTranslate";
 import { Flex, SegmentedControl } from "@mantine/core";
 import * as classes from "./styles";
 import { CitySelect } from "@/components/CitySelect";
+import { ChartMethodHelp } from "../ChartMethodHelp";
 
 type InvestorCenterHeaderProps = {
   title: string;
-  analysisType: string;
+  analysisType: string; // "basic" | "advanced"
   onAnalysisTypeChange: (value: string) => void;
   selectedCity: string;
   onCityChange: (value: string | null) => void;
@@ -22,24 +25,28 @@ export const InvestorCenterHeader = ({
   cityOptions,
 }: InvestorCenterHeaderProps) => {
   const { t } = useTranslate();
+
   return (
     <>
       <Flex className={classes.headerTop}>
         <TitleSection title={title} />
+        <ChartMethodHelp absolute={false} analysisType={analysisType as "basic" | "advanced"} />
+      </Flex>
         <TextDescription
           description={t("InvestorCenter.centrumInwestoraOpis")}
         />
-      </Flex>
+
       <Flex className={classes.headerControls}>
         <SegmentedControl
           className={classes.segmentedControl}
           value={analysisType}
           onChange={onAnalysisTypeChange}
           data={[
-            { label: "Podstawowa", value: "basic" },
-            { label: "Zaawansowana", value: "advanced" },
+            { label: "Deal Finder", value: "basic" },
+            { label: "Premia za nowość", value: "advanced" },
           ]}
         />
+
         <CitySelect
           options={cityOptions}
           value={selectedCity}

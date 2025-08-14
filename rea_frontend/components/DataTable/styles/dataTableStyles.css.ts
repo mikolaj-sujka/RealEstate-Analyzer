@@ -5,7 +5,7 @@ export const wrapper = style({
     width: '100%',
     overflow: 'hidden',
     borderRadius: rem(8),
-    border: '1px solid rgba(0,0,0,0.08)',
+    border: '1px solid var(--mantine-color-border)',
     fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, sans-serif',
 });
 
@@ -18,32 +18,43 @@ export const table = style({
 export const theadTh = style({
     position: 'sticky',
     top: 0,
-    background: '#fff',
+    background: 'var(--mantine-color-paper)',
     zIndex: 2,
-    borderBottom: '2px solid rgba(0,0,0,0.1)',
+    borderBottom: '2px solid var(--mantine-color-border)',
     padding: `${rem(8)} ${rem(12)}`,
     textAlign: 'center',
     fontWeight: 600,
     whiteSpace: 'nowrap',
     cursor: 'pointer',
     userSelect: 'none',
+    color: 'var(--mantine-color-text)',
 });
 
 export const thPlain = style({
     padding: `${rem(8)} ${rem(12)}`,
     textAlign: 'center',
+    background: 'var(--mantine-color-paper)',
+    color: 'var(--mantine-color-text)',
 });
 
 export const tbodyTr = style({
     selectors: {
         '&:hover': {
-            backgroundColor: '#f5f9ff',
+            backgroundColor: 'var(--mantine-color-default-hover)',
+        },
+        '[data-mantine-color-scheme="dark"] &:hover': {
+            backgroundColor: 'var(--mantine-color-dark-6)',
         },
     },
 });
 
 export const evenRow = style({
-    backgroundColor: '#fafbfc',
+    backgroundColor: 'var(--mantine-color-default)',
+    selectors: {
+        '[data-mantine-color-scheme="dark"] &': {
+            backgroundColor: 'var(--mantine-color-dark-7)',
+        },
+    },
 });
 
 export const td = style({
@@ -53,7 +64,8 @@ export const td = style({
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     textOverflow: 'ellipsis',
-    borderBottom: '1px solid rgba(0,0,0,0.06)',
+    borderBottom: '1px solid var(--mantine-color-border-light)',
+    color: 'var(--mantine-color-text)',
 });
 
 export const statusBadge = style({
@@ -78,6 +90,7 @@ export const headerButton = style({
     border: 'none',
     padding: 0,
     alignItems: 'center',
+    color: 'var(--mantine-color-text)',
 });
 
 export const paginationWrapper = style({
@@ -93,13 +106,12 @@ export const paginationButton = style({
     fontSize: rem(14),
     cursor: 'pointer',
     borderRadius: rem(4),
-    backgroundColor: '#f0f0f0',
-    border: '1px solid rgba(0,0,0,0.1)',
-    color: '#333',
+    backgroundColor: 'var(--mantine-color-default)',
+    border: '1px solid var(--mantine-color-border)',
+    color: 'var(--mantine-color-text)',
     transition: 'background-color 0.2s, color 0.2s',
     ':hover': {
-        backgroundColor: '#e0e0e0',
-        color: '#000',
+        backgroundColor: 'var(--mantine-color-default-hover)',
     },
     selectors: {
         '&:disabled': {
@@ -112,9 +124,10 @@ export const paginationButton = style({
 export const dataTablePaper = style({
     padding: rem(16),
     borderRadius: rem(8),
-    boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+    boxShadow: 'var(--mantine-shadow-sm)',
     marginTop: rem(16),
-    border: '1px solid rgba(0,0,0,0.08)'
+    border: '1px solid var(--mantine-color-border)',
+    backgroundColor: 'var(--mantine-color-paper)',
 });
 
 export const dataTableGroup = style({

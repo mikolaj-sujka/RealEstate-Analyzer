@@ -41,5 +41,33 @@ public static class ServiceCollectionExtensions
             })
             .AddInMemoryStorage();
     }
+
+    public static string ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        var section = configuration.GetSection("CorsPolicyName");
+        var name = section.GetValue<string>("Name") ?? "DefaultCors";
+        var origins = section.GetSection("Origins").Get<string[]>() ?? Array.Empty<string>();
+        var methods = section.GetSection("Methods").Get<string[]>() ?? new[] { "GET", "POST" };
+        var headers = section.GetSection("Headers").Get<string[]>() ?? new[] { "Content-Type", "Authorization" };
+        var allowCreds = section.GetValue<bool>("AllowCredentials");
+
+        services.AddCors(options =>
+        {
+            options.AddPolicy(name, builder =>
+            {
+                if (origins.Length > 0)
+                    builder.WithOrigins(origins);
+
+                builder.WithMethods(methods)
+                    .WithHeaders(headers);
+
+                if (allowCreds)
+                    builder.AllowCredentials(); 
+            });
+        });
+
+        return name;
+    }
+
 }
 
