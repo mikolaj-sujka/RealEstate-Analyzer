@@ -89,7 +89,9 @@ export const useHistoricalData = (
     }
 
     const extraPoints: HistoricalDataPoint[] = [];
-    for (let i = 0; i < 1000; i++) {
+    // Reduced from 1000 to 200 to prevent large string serialization warnings
+    const maxExtraPoints = 200;
+    for (let i = 0; i < maxExtraPoints; i++) {
       const ts =
         startDate.getTime() +
         Math.random() * (today.getTime() - startDate.getTime());

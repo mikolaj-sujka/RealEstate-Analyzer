@@ -10,8 +10,11 @@ export const runMonteCarloSimulation = ({
     stdDevRentYield,
     simulations,
 }: SimulationParams): number[] => {
+    // Limit simulations to prevent large string serialization issues
+    const maxSimulations = Math.min(simulations, 10000);
     const results: number[] = [];
-    for (let i = 0; i < simulations; i++) {
+    
+    for (let i = 0; i < maxSimulations; i++) {
         let value = initialInvestment;
         for (let y = 0; y < years; y++) {
             const priceGrowth =
