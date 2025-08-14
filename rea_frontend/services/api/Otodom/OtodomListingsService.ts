@@ -1,6 +1,7 @@
+import { url } from "inspector/promises";
 import { ApiUrlService } from "../ApiUrl";
 import { createAxiosInstance } from "../axiosClient";
-import { OtodomDistrictStat, GetOtodomCityDistrictsResponse } from "../models/types/otodom-listings";
+import { OtodomDistrictStat, GetOtodomCityDistrictsResponse, OtodomCityResponse } from "../models/types/otodom-listings";
 import { SettingsService } from "../Settings";
 
 const backendAxios = createAxiosInstance(
@@ -8,7 +9,7 @@ const backendAxios = createAxiosInstance(
     false
 );
 
-function extractDistricts(payload: any): OtodomDistrictStat[] {
+const extractDistricts = (payload: any): OtodomDistrictStat[] => {
     if (Array.isArray(payload)) return payload as OtodomDistrictStat[];
 
     if (payload?.cityDisctricts && Array.isArray(payload.cityDisctricts)) {
@@ -29,6 +30,18 @@ function extractDistricts(payload: any): OtodomDistrictStat[] {
     return [];
 }
 
+const mapCities = (payload: any): OtodomCityResponse[] => {
+    var mappedCities: OtodomCityResponse[] = [];
+    console.log("Mapping cities:", payload[0].cities);
+    if (payload?.[0]?.cities) {
+        mappedCities = payload[0].cities.map((item: string, index: { toString: () => any; }) => ({
+            id: index.toString(), // lub inny unikalny identyfikator
+            name: item,
+        }));
+    }
+    return mappedCities;
+}
+
 export const OtodomListingsService = {
     async getDistrictStats(cityName: string, signal?: AbortSignal): Promise<OtodomDistrictStat[]> {
         const url = ApiUrlService.getOtodomDistrictsUrl(cityName);
@@ -44,4 +57,12 @@ export const OtodomListingsService = {
         const resp = await backendAxios.get(url, { signal });
         return resp.data;
     },
+
+    async getAllCities(signal?: AbortSignal) : Promise<OtodomCityResponse[]> {
+        const url = ApiUrlService.getOtodomAllCitiesUrl();
+        const resp = await backendAxios.get(url, { signal });
+        const cities = mapCities(resp.data);
+
+        return cities;
+    }
 };

@@ -1,6 +1,7 @@
 "use client";
 import {
   MapRow,
+  OtodomCityResponse,
   OtodomDistrictStat,
 } from "@/services/api/models/types/otodom-listings";
 import { OtodomListingsService } from "@/services/api/Otodom";
@@ -18,7 +19,9 @@ export const toMapRow = (item: OtodomDistrictStat): MapRow => {
 
 export const useDistrictMap = (initialCity: string = "Warszawa") => {
   const [selectedCity, setSelectedCity] = useState<string>(initialCity);
+  const [cities, setCities] = useState<OtodomCityResponse[]>([]);
 
+  const [isLoadingCities, setIsLoadingCities] = useState(false);
   const [raw, setRaw] = useState<OtodomDistrictStat[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,6 +30,26 @@ export const useDistrictMap = (initialCity: string = "Warszawa") => {
   const [propertiesRange, setPropertiesRange] = useState<[number, number]>([
     0, 1,
   ]);
+
+  useEffect(() => {
+    const controller = new AbortController();
+    (async () => {
+      try {
+        setIsLoadingCities(true);
+        const data = await OtodomListingsService.getAllCities(
+          controller.signal
+        );
+        setCities(data ?? []);
+        if (data?.length && !data.some((c) => c.name === selectedCity)) {
+          setSelectedCity(data[0].name);
+        }
+      } catch (e: any) {
+      } finally {
+        setIsLoadingCities(false);
+      }
+    })();
+    return () => controller.abort();
+  }, []); // tylko na mount
 
   const fetchData = useCallback(async () => {
     if (!selectedCity) return;
@@ -105,36 +128,40 @@ export const useDistrictMap = (initialCity: string = "Warszawa") => {
     [mapData, priceRange, propertiesRange]
   );
 
-  const filterConfig = [
-    {
-      id: "selectedCity",
-      type: "select",
-      label: "Miasto",
-      options: [{ value: selectedCity, label: selectedCity }],
-      defaultValue: selectedCity,
-    },
-    {
-      id: "priceRange",
-      type: "range",
-      label: "Zakres cen (PLN/m²)",
-      min: priceConfig.min,
-      max: priceConfig.max,
-      step: Math.max(1, Math.round((priceConfig.max - priceConfig.min) / 100)),
-      defaultValue: [priceConfig.min, priceConfig.max],
-    },
-    {
-      id: "propertiesRange",
-      type: "range",
-      label: "Liczba ofert",
-      min: propertiesConfig.min,
-      max: propertiesConfig.max,
-      step: Math.max(
-        1,
-        Math.round((propertiesConfig.max - propertiesConfig.min) / 100)
-      ),
-      defaultValue: [propertiesConfig.min, propertiesConfig.max],
-    },
-  ] as const;
+  const cityOptions = useMemo(
+    () => cities.map((c) => ({ value: c.name, label: c.name })), 
+    [cities]
+  );
+
+  const filterConfig =
+    mapData.length > 0
+      ? ([
+          {
+            id: "selectedCity",
+            type: "select",
+            label: "Miasto",
+            options: cityOptions,
+            defaultValue: selectedCity,
+            disabled: isLoadingCities || cityOptions.length === 0,
+          },
+          {
+            id: "priceRange",
+            type: "range",
+            label: "Zakres cen (PLN/m²)",
+            min: priceConfig.min,
+            max: priceConfig.max,
+            defaultValue: [priceConfig.min, priceConfig.max],
+          },
+          {
+            id: "propertiesRange",
+            type: "range",
+            label: "Liczba ofert",
+            min: propertiesConfig.min,
+            max: propertiesConfig.max,
+            defaultValue: [propertiesConfig.min, propertiesConfig.max],
+          },
+        ] as const)
+      : undefined;
 
   return {
     selectedCity,

@@ -1,4 +1,4 @@
-export interface OtodomDistrictStat {
+export type OtodomDistrictStat = {
     district: string;                 // nazwa dzielnicy
     averagePricePerSqm: number;       // średnia cena za m²
     averageFlatSize: number;          // średni metraż mieszkań
@@ -7,7 +7,7 @@ export interface OtodomDistrictStat {
     [key: string]: any;
 }
 
-export interface GetOtodomCityDistrictsResponse {
+export type GetOtodomCityDistrictsResponse = {
     cityDisctricts: OtodomDistrictStat[];
 }
 
@@ -18,7 +18,7 @@ export type MapRow = {
     [k: string]: any;                 // dodatkowe pola do tooltipów
 };
 
-export interface OtodomVoivodeshipStat {
+export type OtodomVoivodeshipStat = {
     totalOffers: number;                // uint
     averagePricePerSqm: number;         // decimal
     averageBuildingsBuiltYear: number;  // uint
@@ -27,7 +27,7 @@ export interface OtodomVoivodeshipStat {
     medianPricePerSqm: number;          // decimal
 }
 
-export interface VoivodeshipMarketData {
+export type VoivodeshipMarketData = {
     totalOffers: number;
     averagePricePerSqm: number;
     averageBuildingsBuiltYear: number;
@@ -35,3 +35,8 @@ export interface VoivodeshipMarketData {
     primaryMarketShare: number;
     medianPricePerSqm: number;
 }
+
+export type OtodomCityResponse = {
+    id?: string;
+    name: string;
+};
