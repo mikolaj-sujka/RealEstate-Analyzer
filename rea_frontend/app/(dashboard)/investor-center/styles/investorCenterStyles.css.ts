@@ -25,6 +25,12 @@ export const fullHeight = style({
   height: '100%',
 });
 
+export const flex = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: rem(8),
+});
+
 export const mb = style({
   marginBottom: rem(16),
 });

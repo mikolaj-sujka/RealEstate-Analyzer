@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper, Grid, Group, Box, LoadingOverlay } from "@mantine/core";
+import { Paper, Grid, Group, Box, LoadingOverlay, Flex } from "@mantine/core";
 import { IconShieldCheck } from "@tabler/icons-react";
 import { useTranslate } from "@/hooks/useTranslate";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
@@ -63,13 +63,13 @@ export default function InvestorCenter({}: InvestorCenterProps) {
       <Grid className={classes.controlGrid}>
         <Grid.Col span={{ base: 12 }}>
           <Paper className={classes.paperCard}>
-            <Group className={classes.mb}>
+            <Flex className={classes.flex}>
               <IconShieldCheck size={20} />
               <TitleSection
                 title={t("InvestorCenter.analizaRyzykaInwestycyjnego")}
               />
               <RiskGaugeHelp absolute={false} />
-            </Group>
+            </Flex>
 
             <TextDescription
               description={
