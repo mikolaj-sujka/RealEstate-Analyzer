@@ -1,10 +1,8 @@
 "use client";
 import { useRef, useState } from "react";
 import { Grid, Select, Title, Group, Paper, Flex } from "@mantine/core";
-import { useMarketAnalytics } from "./hooks";
 import { StatisticsCardData } from "@/components/StatisticsCardData";
 import { MarketAnalyticsChart } from "./components";
-import { voivodeshipMarketData } from "./models";
 import { useTranslation } from "react-i18next";
 import { ReportGenerator } from "@/components/ReportGenerator/ReportGenerator";
 import { TitleSection } from "@/components/UI/TitleSection";
@@ -14,10 +12,17 @@ import { getCitiesAnalyticsCards } from "./utils";
 import * as styles from "./styles";
 import { useLocationReportDefinition } from "@/hooks";
 import { ECharts } from "echarts/types/dist/echarts";
+import { useVoivodeshipAnalytics } from "./hooks/useVoivodeshipAnalytics";
+import { useVoivodeshipOptions } from "./hooks";
 
 export default function AnalyticsPage() {
-  const [voivodeship, setVoivodeship] = useState("Cała Polska");
-  const { marketData, recentTransactions } = useMarketAnalytics(voivodeship);
+  const {
+    options: voivodeshipOptions,
+    selected: voivodeship,
+    setSelected: setVoivodeship,
+    loading: loadingVoivodeships,
+  } = useVoivodeshipOptions("Cała Polska");
+  const { marketData } = useVoivodeshipAnalytics(voivodeship);
 
   const { t } = useTranslation();
 
@@ -27,8 +32,7 @@ export default function AnalyticsPage() {
     locationName: voivodeship,
     isCity: false,
     chartInstance: chartRef,
-    recentTransactions: recentTransactions,
-    voivodeshipMarketData: marketData,
+    voivodeshipMarketData: marketData!,
   });
 
   const cards = getCitiesAnalyticsCards(marketData!).map((card) => {
@@ -48,9 +52,13 @@ export default function AnalyticsPage() {
         </Flex>
         <Select
           label={t("Analytics.wybierzWojewództwo")}
-          data={Object.keys(voivodeshipMarketData)}
+          data={voivodeshipOptions} 
           value={voivodeship}
-          onChange={(v) => setVoivodeship(v!)}
+          onChange={(v) => v && setVoivodeship(v)}
+          searchable
+          clearable={false}
+          disabled={loadingVoivodeships || voivodeshipOptions.length === 0}
+          placeholder={loadingVoivodeships ? t("Wczytywanie...") : t("Wybierz")}
         />
       </Group>
 

@@ -13,7 +13,8 @@ public record GetOtodomVoivodeshipDataResponse(
     uint AverageBuildingsBuiltYear,
     decimal DeveloperMarketShare,
     decimal PrimaryMarketShare,
-    decimal MedianPricePerSqm);
+    decimal MedianPricePerSqm,
+    decimal AverageFlatSize);
 public record GetOtodomVoivodeshipDataQuery(string VoivodeshipName) 
     : IRequest<IReadOnlyList<GetOtodomVoivodeshipDataResponse>>;
 
@@ -40,10 +41,12 @@ public class GetOtodomVoivodeshipDataQueryHandler(DatabaseContext databaseContex
 
         var prices = listings.Select(x => x.PricePerSqm.Price);
         var years = listings.Select(x => (int?)x.BuildingBuiltYear);
+        var flatSizes = listings.Select(x => x.FlatSize.SquareMeters);
 
         var averagePricePerSqm = prices.AverageIgnoreZero();
         var averageBuildingsBuiltYear = years.AverageYearIgnoreZero();
         var medianPricePerSqm = prices.MedianIgnoreZero();
+        var averageFlatSize = flatSizes.AverageIgnoreZero();
 
         var developerMarketShare = totalOffers == 0 ? 0m
             : listings.Count(x => x.IsDeveloperOffer) / (decimal)totalOffers * 100m;
@@ -59,7 +62,8 @@ public class GetOtodomVoivodeshipDataQueryHandler(DatabaseContext databaseContex
                 AverageBuildingsBuiltYear: averageBuildingsBuiltYear,
                 DeveloperMarketShare: developerMarketShare,
                 PrimaryMarketShare: primaryMarketShare,
-                MedianPricePerSqm: medianPricePerSqm
+                MedianPricePerSqm: medianPricePerSqm,
+                AverageFlatSize: averageFlatSize
             )
         };
     }

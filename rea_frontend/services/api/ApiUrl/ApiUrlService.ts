@@ -33,6 +33,9 @@ export const ApiUrlService = {
   getListingsByCityUrl: (city: string) =>
     `${backendApiUrl}/api/OtodomListings/city/${encode(city)}`,
 
+  getOtodomAllVoivodeshipsUrl: () =>
+    `${backendApiUrl}/api/OtodomListings/all-voivodeships`,
+
   getOtodomAllCitiesUrl: () =>
     `${backendApiUrl}/api/OtodomListings/all-cities`
 };

@@ -1,5 +1,5 @@
-import { MarketAnalyticsData } from "@/app/(dashboard)/analytics/models";
-import { ChartSection, ReportDefinition, TableSection } from "@/models";
+import { ReportDefinition, TableSection } from "@/models";
+import { VoivodeshipMarketData } from "@/services/api/models";
 import { formatDatePdfReport } from "@/utils";
 import { ECharts } from "echarts";
 import { RefObject, useMemo } from "react";
@@ -7,14 +7,12 @@ import { RefObject, useMemo } from "react";
 export const useLocationReportDefinition = ({
     locationName,
     isCity,
-    recentTransactions,
     voivodeshipMarketData
 }: {
     locationName: string;
     isCity: boolean;
     chartInstance: RefObject<ECharts> | null;
-    recentTransactions: any;
-    voivodeshipMarketData?: MarketAnalyticsData
+    voivodeshipMarketData?: VoivodeshipMarketData
 }) => {
     const report = useMemo(() => {
         if (!voivodeshipMarketData) {
@@ -42,7 +40,7 @@ export const useLocationReportDefinition = ({
                         style: "currency",
                         currency: "PLN",
                         minimumFractionDigits: 0,
-                    }).format(voivodeshipMarketData.averagePrice)
+                    }).format(voivodeshipMarketData.averagePricePerSqm)
                 },
                 {
                     metric: "Mediana ceny",
@@ -50,15 +48,15 @@ export const useLocationReportDefinition = ({
                         style: "currency",
                         currency: "PLN",
                         minimumFractionDigits: 0,
-                    }).format(voivodeshipMarketData.medianPrice),
+                    }).format(voivodeshipMarketData.medianPricePerSqm),
                 },
                 {
                     metric: "Liczba ofert",
-                    value: voivodeshipMarketData.totalListings.toLocaleString("pl-PL"),
+                    value: voivodeshipMarketData.totalOffers.toLocaleString("pl-PL"),
                 },
                 {
                     metric: "Sredni metraz",
-                    value: `${voivodeshipMarketData.averageAreaSize} m²`,
+                    value: `${voivodeshipMarketData.averageFlatSize} m²`,
                 },
                 {
                     metric: "Udzial deweloperow",
@@ -88,7 +86,7 @@ export const useLocationReportDefinition = ({
                         style: "currency",
                         currency: "PLN",
                         minimumFractionDigits: 0,
-                    }).format(voivodeshipMarketData.averagePrice),
+                    }).format(voivodeshipMarketData.averagePricePerSqm),
                     description: "Srednia cena transakcyjna za metr kwadratowy",
                 },
                 {
@@ -97,17 +95,17 @@ export const useLocationReportDefinition = ({
                         style: "currency",
                         currency: "PLN",
                         minimumFractionDigits: 0,
-                    }).format(voivodeshipMarketData.medianPrice),
+                    }).format(voivodeshipMarketData.medianPricePerSqm),
                     description: "Wartosc srodkowa cen transakcyjnych",
                 },
                 {
                     parameter: "Liczba ofert",
-                    value: voivodeshipMarketData.totalListings.toLocaleString("pl-PL"),
+                    value: voivodeshipMarketData.totalOffers.toLocaleString("pl-PL"),
                     description: "Calowita liczba aktywnych ofert na rynku",
                 },
                 {
                     parameter: "Sredni metraz",
-                    value: `${voivodeshipMarketData.averageAreaSize} m²`,
+                    value: `${voivodeshipMarketData.averageFlatSize} m²`,
                     description: "Srednia powierzchnia oferowanych mieszkań",
                 },
                 {
@@ -122,52 +120,13 @@ export const useLocationReportDefinition = ({
                 },
                 {
                     parameter: "Sredni rok budowy",
-                    value: voivodeshipMarketData.averageYearOfConstruction.toString(),
+                    value: voivodeshipMarketData.averageBuildingsBuiltYear.toString(),
                     description: "Sredni rok budowy oferowanych nieruchomosci",
                 },
             ],
         }
 
-        const transactionsSection: TableSection = {
-            id: "transactions",
-            type: "table",
-            title: "Ostatnie transakcje",
-            subtitle: `Wybrane transakcje w lokalizacji: ${locationName}`,
-            columns: [
-                { header: "Nieruchomość", key: "property" },
-                { header: "Lokalizacja", key: "location" },
-                {
-                    header: "Data",
-                    key: "date",
-                    render: (v) => formatDatePdfReport(new Date(v)),
-                },
-                {
-                    header: "Cena",
-                    key: "price",
-                    render: (v) =>
-                        new Intl.NumberFormat("pl-PL", {
-                            style: "currency",
-                            currency: "PLN",
-                            minimumFractionDigits: 0,
-                        }).format(Number(v)),
-                },
-                { header: "Metraż", key: "area", render: (v) => `${v} m²` },
-                {
-                    header: "Cena/m²",
-                    key: "pricePerSqm",
-                    render: (v) =>
-                        new Intl.NumberFormat("pl-PL", {
-                            style: "currency",
-                            currency: "PLN",
-                            minimumFractionDigits: 0,
-                        }).format(Number(v)),
-                },
-                { header: "Status", key: "status" },
-            ],
-            data: recentTransactions,
-        }
-
-        const sections: any[] = [summaryTable, detailsTable, transactionsSection]
+        const sections: any[] = [summaryTable, detailsTable]
 
         const reportDef: ReportDefinition = {
             title: `Raport inwestycyjny — ${locationName}`,
@@ -177,7 +136,7 @@ export const useLocationReportDefinition = ({
         }
 
         return reportDef
-    }, [locationName, isCity, voivodeshipMarketData, recentTransactions])
+    }, [locationName, isCity, voivodeshipMarketData])
 
     return report;
 }

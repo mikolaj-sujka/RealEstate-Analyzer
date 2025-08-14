@@ -25,6 +25,7 @@ export type OtodomVoivodeshipStat = {
     developerMarketShare: number;       // decimal (0..1 lub 0..100% - użyj zgodnie z backendem)
     primaryMarketShare: number;         // decimal
     medianPricePerSqm: number;          // decimal
+    averageFlatSize: number;
 }
 
 export type VoivodeshipMarketData = {
@@ -34,6 +35,7 @@ export type VoivodeshipMarketData = {
     developerMarketShare: number;
     primaryMarketShare: number;
     medianPricePerSqm: number;
+    averageFlatSize: number;
 }
 
 export type OtodomCityResponse = {

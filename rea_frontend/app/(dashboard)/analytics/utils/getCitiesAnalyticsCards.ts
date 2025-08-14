@@ -4,18 +4,19 @@ import {
   ChartBar,
   SquareDivide,
 } from "lucide-react";
-import { MarketAnalyticsData } from "../models/types/MarketAnalyticsData";
+import { VoivodeshipMarketData } from "@/services/api/models";
 
-export const getCitiesAnalyticsCards = (data: MarketAnalyticsData) => {
+export const getCitiesAnalyticsCards = (data: VoivodeshipMarketData) => {
+    console.log(data);
     return [
         {
             label: "Średnia Cena",
-            value: data?.averagePrice.toLocaleString("pl-PL") + " PLN/m²",
+            value: data?.averagePricePerSqm.toLocaleString("pl-PL") + " PLN/m²",
             icon: DollarSign,
         },
         {
             label: "Liczba Ofert",
-            value: data?.totalListings.toLocaleString("pl-PL") + " szt." || "–",
+            value: data?.totalOffers.toLocaleString("pl-PL") + " szt." || "–",
             icon: Home,
         },
         {
@@ -25,7 +26,7 @@ export const getCitiesAnalyticsCards = (data: MarketAnalyticsData) => {
         },
         {
             label: "Średnia powierzchnia",
-            value: data?.averageAreaSize.toLocaleString("pl-PL") + " m²" || "–",
+            value: data?.averageFlatSize?.toLocaleString("pl-PL") + " m²" || "–",
             icon: SquareDivide,
         },
     ];

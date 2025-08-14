@@ -32,7 +32,6 @@ const extractDistricts = (payload: any): OtodomDistrictStat[] => {
 
 const mapCities = (payload: any): OtodomCityResponse[] => {
     var mappedCities: OtodomCityResponse[] = [];
-    console.log("Mapping cities:", payload[0].cities);
     if (payload?.[0]?.cities) {
         mappedCities = payload[0].cities.map((item: string, index: { toString: () => any; }) => ({
             id: index.toString(), // lub inny unikalny identyfikator
@@ -40,6 +39,17 @@ const mapCities = (payload: any): OtodomCityResponse[] => {
         }));
     }
     return mappedCities;
+}
+
+const mapVoivodeships = (payload: any): OtodomCityResponse[] => {
+    var mappedVoivodeships: OtodomCityResponse[] = [];
+    if (payload?.[0]?.voivodeships) {
+        mappedVoivodeships = payload[0].voivodeships.map((item: string, index: { toString: () => any; }) => ({
+            id: index.toString(), // lub inny unikalny identyfikator
+            name: item,
+        }));
+    }
+    return mappedVoivodeships;
 }
 
 export const OtodomListingsService = {
@@ -64,5 +74,13 @@ export const OtodomListingsService = {
         const cities = mapCities(resp.data);
 
         return cities;
+    },
+
+    async getAllVoivodeships(signal?: AbortSignal) : Promise<OtodomCityResponse[]> {
+        const url = ApiUrlService.getOtodomAllVoivodeshipsUrl();
+        const resp = await backendAxios.get(url, { signal });
+        const voivodeships = mapVoivodeships(resp.data);
+
+        return voivodeships;
     }
 };

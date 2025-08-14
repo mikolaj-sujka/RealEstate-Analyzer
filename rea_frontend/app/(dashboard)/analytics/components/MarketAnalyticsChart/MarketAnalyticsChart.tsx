@@ -3,10 +3,10 @@
 import * as React from "react";
 import type { ECharts } from "echarts";
 import { useMarketAnalyticsChart } from "./hooks";
-import { MarketAnalyticsData } from "../../models/types/MarketAnalyticsData";
+import { VoivodeshipMarketData } from "@/services/api/models";
 
 type MarketAnalyticsChartProps = {
-  data: MarketAnalyticsData;
+  data: VoivodeshipMarketData;
   regionName: string;
   onChartReady?: (chart: ECharts) => void;
 };
