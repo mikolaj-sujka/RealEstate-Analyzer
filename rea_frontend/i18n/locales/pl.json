@@ -29,7 +29,7 @@
     "CityMap": {
         "mapaNieruchomościDzielnice": "Mapa Nieruchomości - Dzielnice",
         "mapaNieruchomosciOpis": "Zobacz rozkład nieruchomości w Twoim mieście. Kliknij na dzielnicę, aby zobaczyć szczegółowe dane.",
-        "brakDanych": "Brak danych dla wybranych filtrów"
+        "brakDanych": "Brak danych. Sprobuj ponownie później lub zresetuj filtry."
     },
     "Analytics": {
         "analitykaRynku": "Analityka Rynku",
