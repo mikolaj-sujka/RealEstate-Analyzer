@@ -2,11 +2,10 @@ import { OtodomDistrictStat } from "@/services/api/models";
 import { linearRegression, regressionLine } from "@/utils/regression";
 import { quantiles, fmt } from "@/utils/stats";
 
-export function getDealFinderOption(rows: OtodomDistrictStat[]) {
+export const getDealFinderOption = (rows: OtodomDistrictStat[]) => {
     const data = rows.map(r => [r.averagePricePerSqm, r.averageFlatSize, r.totalBuildingOffers, r.district]);
 
     const size = (offers: number) => {
-        // łagodne skalowanie bąbla — sqrt i ograniczenia
         const s = Math.sqrt(Math.max(offers, 1));
         return Math.max(10, Math.min(42, s * 3.2));
     };
@@ -45,8 +44,7 @@ export function getDealFinderOption(rows: OtodomDistrictStat[]) {
     };
 }
 
-/** #2 Premia za nowość: X=rok budowy, Y=cena/m² + linia regresji */
-export function getNewnessPremiumOption(rows: OtodomDistrictStat[]) {
+export const getNewnessPremiumOption = (rows: OtodomDistrictStat[]) => {
     const pts = rows.map(r => [r.averageBuildingBuiltYear, r.averagePricePerSqm, r.district]);
 
     const xs = pts.map(p => p[0] as number);
@@ -93,8 +91,7 @@ export function getNewnessPremiumOption(rows: OtodomDistrictStat[]) {
     };
 }
 
-/** #5 Rozkład ryzyka (boxplot) dla cen/m² w mieście, outliery jako scatter */
-export function getRiskBoxplotOption(rows: OtodomDistrictStat[], cityName: string) {
+export const getRiskBoxplotOption = (rows: OtodomDistrictStat[], cityName: string) => {
     const prices = rows.map(r => r.averagePricePerSqm).sort((a, b) => a - b);
     const { q1, q2, q3, whiskerLow, whiskerHigh, outliers } = quantiles(prices);
 
@@ -130,7 +127,7 @@ export function getRiskBoxplotOption(rows: OtodomDistrictStat[], cityName: strin
             {
                 type: "scatter",
                 name: "Outliers",
-                data: outliers.map(v => [0, v]), // kategoria 0 (jedno pudełko)
+                data: outliers.map(v => [0, v]), 
                 symbolSize: 10,
                 tooltip: { trigger: "item" }
             }

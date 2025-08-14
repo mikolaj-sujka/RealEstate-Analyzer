@@ -1,4 +1,3 @@
-// utils/options/getNewnessPremiumProOption.ts
 type Row = {
     district: string;
     averagePricePerSqm: number;
@@ -28,17 +27,17 @@ function linReg(xs: number[], ys: number[]) {
     return { m, b, rmse };
 }
 
-export function newnessOption(
+export const newnessOption = (
     rows: Row[],
-    opts?: { residRange?: [number, number] } // (opcjonalnie) preselect zakresu slidera
-) {
+    opts?: { residRange?: [number, number] }
+) => {
     const xs = rows.map(r => r.averageBuildingBuiltYear);
     const ys = rows.map(r => r.averagePricePerSqm);
     const { m, b, rmse } = linReg(xs, ys);
 
     const points = rows.map(r => {
         const yhat = m * r.averageBuildingBuiltYear + b;
-        const resid = r.averagePricePerSqm - yhat; // <0 = bardziej opłacalne
+        const resid = r.averagePricePerSqm - yhat;
         return { year: r.averageBuildingBuiltYear, price: r.averagePricePerSqm, resid, district: r.district };
     });
 
@@ -54,7 +53,6 @@ export function newnessOption(
 
     return {
         dataset: [{
-            // KLUCZ: jawne wymiary + encode po NAZWACH
             dimensions: ["year", "price", "resid", "district"],
             source: points
         }],
@@ -65,48 +63,58 @@ export function newnessOption(
                 if (p.seriesType === "line") {
                     return `y = ${m.toFixed(2)}x + ${b.toFixed(0)} (±RMSE: ${fmt(rmse)})`;
                 }
-                // BEZPIECZNY ODCZYT: z params.value (tablica) ALBO z params.data (obiekt)
-                const v = p.value;
-                const d = p.data;
-                const year = Array.isArray(v) ? v[0] : (v?.year ?? d?.year);
-                const price = Array.isArray(v) ? v[1] : (v?.price ?? d?.price);
-                const resid = Array.isArray(v) ? v[2] : (v?.resid ?? d?.resid);
-                const name = p.name ?? d?.district ?? "";
+                const v = Array.isArray(p?.value) ? p.value : (p?.data ?? {});
+                const year = Array.isArray(v) ? v[0] : v.year;
+                const price = Array.isArray(v) ? v[1] : v.price;
+                const resid = Array.isArray(v) ? v[2] : v.resid;
+                const name = p.name ?? v.district ?? "";
 
                 const tag = (resid ?? 0) < 0 ? "poniżej linii (bardziej opłacalne)" : "powyżej linii (mniej opłacalne)";
                 return `<b>${name}</b><br/>Rok: ${year}<br/>Cena/m²: ${fmt(price)} PLN<br/>Residuum: ${fmt(resid)} – ${tag}`;
             }
         },
 
-        toolbox: { feature: { saveAsImage: {}, restore: {} } },
+        toolbox: { feature: { dataZoom: {}, restore: {}, saveAsImage: {} } },
         brush: { toolbox: ["rect", "polygon", "keep", "clear"], xAxisIndex: 0, yAxisIndex: 0 },
 
-        grid: { left: 60, right: 24, top: 30, bottom: 54 },
+        grid: { left: 80, right: 20, top: 30, bottom: 64, containLabel: true },
 
-        // Slider „bardziej ↔ mniej opłacalne” po residuum (taki sam UX jak w Deal Finder)
         visualMap: {
             type: "continuous",
             seriesIndex: 0,
             dimension: "resid",
-            min: rMin,
-            max: rMax,
-            // Uwaga: część wersji nie respektuje initial range w opcji.
-            // Jeśli chcesz preset (np. tylko resid < 0), ustawisz go później przez dispatchAction('selectDataRange').
+            min: vmMin,
+            max: vmMax,
+            text: ["lepiej", "gorzej"],     // spójnie z DF
             calculable: true,
             realtime: true,
             inRange: { colorAlpha: 1 },
-            outOfRange: { colorAlpha: 0.18 }
+            outOfRange: { colorAlpha: 0.18 },
+            left: 0                         
         },
 
-        xAxis: { name: "Śr. rok budowy", type: "value" },
-        yAxis: { name: "Cena (PLN/m²)", type: "value", axisLabel: { formatter: (v: number) => fmt(v) } },
+        xAxis: {
+            name: "Śr. rok budowy",
+            type: "value",
+            nameLocation: "middle",
+            nameGap: 30
+        },
+        yAxis: {
+            name: "Cena (PLN/m²)",
+            type: "value",
+            axisLabel: { formatter: (v: number) => fmt(v) }
+        },
 
-        // BEZ dataZoom (tak jak prosiłeś)
         series: [
-            { type: "scatter", encode: { x: "year", y: "price", itemName: "district", tooltip: ["year", "price", "resid"] }, symbolSize: 14 },
+            {
+                type: "scatter",
+                encode: { x: "year", y: "price", itemName: "district", tooltip: ["year", "price", "resid"] },
+                symbolSize: 14,
+                emphasis: { focus: "series" }
+            },
             { type: "line", name: "Regresja", data: line, showSymbol: false, silent: true },
             { type: "line", name: "+RMSE", data: up, showSymbol: false, lineStyle: { type: "dashed" }, silent: true },
             { type: "line", name: "-RMSE", data: down, showSymbol: false, lineStyle: { type: "dashed" }, silent: true }
         ]
     };
-}
+};

@@ -1,7 +1,6 @@
 import { ChartContainer } from "@/components/ChartContainer";
 import { investorCityDistricts } from "../../models";
-import { dealFinderProOption } from "../../utils/dealFinderOption";
-import { newnessOption } from "../../utils/newnessOption";
+import { dealFinderProOption, newnessOption } from "../../utils";
 
 export const MainAnalysisChart = ({
   type,

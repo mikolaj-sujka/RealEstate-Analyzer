@@ -5,6 +5,7 @@ import { useTranslate } from "@/hooks/useTranslate";
 import { Flex, SegmentedControl } from "@mantine/core";
 import * as classes from "./styles";
 import { CitySelect } from "@/components/CitySelect";
+import { ChartMethodHelp } from "../ChartMethodHelp";
 
 type InvestorCenterHeaderProps = {
   title: string;
@@ -29,10 +30,11 @@ export const InvestorCenterHeader = ({
     <>
       <Flex className={classes.headerTop}>
         <TitleSection title={title} />
+        <ChartMethodHelp absolute={false} analysisType={analysisType as "basic" | "advanced"} />
+      </Flex>
         <TextDescription
           description={t("InvestorCenter.centrumInwestoraOpis")}
         />
-      </Flex>
 
       <Flex className={classes.headerControls}>
         <SegmentedControl
@@ -40,8 +42,8 @@ export const InvestorCenterHeader = ({
           value={analysisType}
           onChange={onAnalysisTypeChange}
           data={[
-            { label: "Deal Finder", value: "basic" }, // X=cena/m², Y=metraż, size=liczba ofert
-            { label: "Premia za nowość", value: "advanced" }, // X=rok budowy, Y=cena/m² (+ regresja)
+            { label: "Deal Finder", value: "basic" },
+            { label: "Premia za nowość", value: "advanced" },
           ]}
         />
 

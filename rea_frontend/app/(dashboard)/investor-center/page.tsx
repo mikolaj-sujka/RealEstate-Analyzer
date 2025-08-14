@@ -1,6 +1,6 @@
 "use client";
 
-import { Paper, Grid, Group, Box, LoadingOverlay, Flex } from "@mantine/core";
+import { Paper, Grid, Group, Box, LoadingOverlay } from "@mantine/core";
 import { IconShieldCheck } from "@tabler/icons-react";
 import { useTranslate } from "@/hooks/useTranslate";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
@@ -8,8 +8,13 @@ import { TextDescription, TitleSection } from "@/components/UI";
 import * as classes from "./styles/investorCenterStyles.css";
 
 import { useInvestorCenter } from "./hooks/useInvestorCenter";
-import { InvestorCenterHeader, MainAnalysisChart } from "./components";
-import { RiskAnalysisChart } from "./components/RiskAnalysisChart/RiskAnalysisChart";
+import {
+  ChartMethodHelp,
+  InvestorCenterHeader,
+  MainAnalysisChart,
+  RiskAnalysisChart,
+  RiskGaugeHelp,
+} from "./components";
 
 type InvestorCenterProps = {
   title?: string;
@@ -22,7 +27,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
   const {
     selectedCity,
     setSelectedCity,
-    analysisType, // "basic" = Deal Finder, "advanced" = Premia za nowość
+    analysisType,
     isSwitching,
     handleAnalysisTypeChange,
     cityOptions,
@@ -40,7 +45,6 @@ export default function InvestorCenter({}: InvestorCenterProps) {
         cityOptions={cityOptions}
       />
 
-      {/* Główny wykres: Deal Finder / Premia za nowość */}
       <Box className={classes.relativeBox}>
         <LoadingOverlay
           visible={isSwitching}
@@ -56,7 +60,6 @@ export default function InvestorCenter({}: InvestorCenterProps) {
         </Box>
       </Box>
 
-      {/* Sekcja: Rozkład ryzyka w mieście (boxplot) */}
       <Grid className={classes.controlGrid}>
         <Grid.Col span={{ base: 12 }}>
           <Paper className={classes.paperCard}>
@@ -65,6 +68,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
               <TitleSection
                 title={t("InvestorCenter.analizaRyzykaInwestycyjnego")}
               />
+              <RiskGaugeHelp absolute={false} />
             </Group>
 
             <TextDescription
@@ -75,6 +79,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
               }
               className={classes.mb}
             />
+
             <RiskAnalysisChart city={selectedCity} />
           </Paper>
         </Grid.Col>

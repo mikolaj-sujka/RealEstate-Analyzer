@@ -1,4 +1,3 @@
-// utils/options/getRiskGaugeOption.ts
 import * as echarts from "echarts/core";
 
 type Row = {
@@ -9,8 +8,6 @@ type Row = {
     averageBuildingBuiltYear: number;
 };
 
-// jeśli masz własne computeRisk – możesz go tu podstawić;
-// niżej jest lekka heurystyka 0..1: drożej + mniej ofert + starsze ⇒ bardziej ryzykownie
 function avgRisk01(rows: Row[]): number {
     if (!rows.length) return 0.5;
     const prices = rows.map(r => r.averagePricePerSqm);
@@ -29,16 +26,14 @@ function avgRisk01(rows: Row[]): number {
     return Math.max(0, Math.min(1, scores.reduce((s, x) => s + x, 0) / rows.length));
 }
 
-/** Estetyczna wersja: półpierścień, gradient, brak „szumu” etykiet. */
-export function riskGaugeOption(rows: Row[], cityName: string) {
+export const riskGaugeOption = (rows: Row[], cityName: string) => {
     const value = Math.round(avgRisk01(rows) * 100); // 0..100
 
-    // gradient na progress (działa w ECharts 5; gdyby styl nie wchodził, użyj segmentów w axisLine.color)
     const grad = new echarts.graphic.LinearGradient(0, 1, 1, 0, [
-        { offset: 0.0, color: "#2ecc71" }, // zielony
-        { offset: 0.5, color: "#f1c40f" }, // żółty
-        { offset: 1.0, color: "#e74c3c" }  // czerwony
-    ], /*globalCoord*/ true); // gradient w przestrzeni ekranu, nie „wycinku” wartości :contentReference[oaicite:1]{index=1}
+        { offset: 0.0, color: "#2ecc71" },
+        { offset: 0.5, color: "#f1c40f" },
+        { offset: 1.0, color: "#e74c3c" }
+    ], true);
 
     return {
         tooltip: { formatter: `${cityName}<br/><b>Ryzyko: ${value}/100</b>` },
@@ -48,13 +43,11 @@ export function riskGaugeOption(rows: Row[], cityName: string) {
             endAngle: -30,
             min: 0, max: 100,
 
-            // tło „szyny”
             axisLine: {
                 roundCap: true,
                 lineStyle: { width: 14, color: [[1, "#EEF2F7"]] }
             },
 
-            // kolorowy postęp (półpierścień)
             progress: {
                 show: true,
                 width: 14,
@@ -62,7 +55,6 @@ export function riskGaugeOption(rows: Row[], cityName: string) {
                 itemStyle: { color: grad }
             },
 
-            // elegancka igła; możesz wyłączyć (pointer: { show:false }) dla „czystego” pierścienia
             pointer: {
                 show: true,
                 length: "62%",
@@ -71,8 +63,7 @@ export function riskGaugeOption(rows: Row[], cityName: string) {
             },
             anchor: { show: true, size: 6, itemStyle: { color: "#3b5bdb" } },
 
-            // ZERO „szumu”: brak tików, podziałek i cyfr
-            axisTick: { show: false },            // :contentReference[oaicite:2]{index=2}
+            axisTick: { show: false },
             splitLine: { show: false },
             axisLabel: { show: false },
 

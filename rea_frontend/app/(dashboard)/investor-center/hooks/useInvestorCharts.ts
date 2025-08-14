@@ -1,5 +1,5 @@
 import { investorCityDistricts } from "../models/consts/investorCenterMock";
-import { getDealFinderOption, getNewnessPremiumOption, getRiskBoxplotOption } from "../utils/investorChartOptions";
+import { getDealFinderOption, getNewnessPremiumOption, getRiskBoxplotOption } from "../utils";
 
 export function useInvestorCharts(city: string, type: "basic" | "advanced") {
     const rows = investorCityDistricts[city] ?? [];

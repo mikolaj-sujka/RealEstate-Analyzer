@@ -1,15 +1,14 @@
-// utils/options/getDealFinderProOption.ts
+import { fmt } from "@/utils";
+import { computeRisk, Row } from "@/utils/investorMath";
 
-import { computeRisk, fmt, Row } from "@/utils/investorMath";
-
-export function dealFinderProOption(rows: Row[]) {
+export const dealFinderProOption = (rows: Row[]) => {
     const risk = computeRisk(rows);
     const data = rows.map(r => ([
-        r.averagePricePerSqm,     // dim 0 (X)
-        r.averageFlatSize,        // dim 1 (Y)
-        r.totalBuildingOffers,    // dim 2 (size)
-        Number((1 - risk[r.district]).toFixed(3)), // dim 3 (kolor: im większe = lepiej)
-        r.district                // dim 4 (label)
+        r.averagePricePerSqm,
+        r.averageFlatSize,
+        r.totalBuildingOffers,
+        Number((1 - risk[r.district]).toFixed(3)),
+        r.district
     ]));
 
     const size = (offers: number) => {
@@ -22,20 +21,28 @@ export function dealFinderProOption(rows: Row[]) {
         tooltip: {
             trigger: "item",
             formatter: (p: any) => {
-                const [x, y, o, score, name] = p.data;
-                return `<b>${name}</b><br/>Cena/m²: ${fmt(x)} PLN<br/>Śr. metraż: ${fmt(y)} m²<br/>Oferty: ${fmt(o)}<br/>Deal score: ${(score * 100 | 0)}/100`;
+                const v = Array.isArray(p?.value) ? p.value : (Array.isArray(p?.data) ? p.data : []);
+                const [x, y, o, score, name] = v;
+                return `<b>${name ?? ""}</b><br/>Cena/m²: ${fmt(x)} PLN<br/>Śr. metraż: ${fmt(y)} m²<br/>Oferty: ${fmt(o)}<br/>Deal score: ${(((score ?? 0) * 100) | 0)}/100`;
             }
         },
         toolbox: { feature: { dataZoom: {}, restore: {}, saveAsImage: {} } },
-        brush: { toolbox: ['rect', 'polygon', 'keep', 'clear'], xAxisIndex: 0, yAxisIndex: 0 }, // interaktywna selekcja :contentReference[oaicite:5]{index=5}
-        grid: { left: 60, right: 20, top: 30, bottom: 45 },
-        visualMap: { // kolor wg dim 3 (score)
+        brush: { toolbox: ['rect', 'polygon', 'keep', 'clear'], xAxisIndex: 0, yAxisIndex: 0 },
+        grid: { left: 80, right: 20, top: 30, bottom: 64, containLabel: true }, // ⬅️ ważne
+        visualMap: {
             type: "continuous",
             min: 0, max: 1, dimension: 3,
             text: ["lepiej", "gorzej"],
-            calculable: true
-        }, // visualMap mapuje wartości na kolor/rozmiar. :contentReference[oaicite:6]{index=6}
-        xAxis: { name: "Cena (PLN/m²)", type: "value", axisLabel: { formatter: (v: number) => fmt(v) } },
+            calculable: true,
+            left: 0
+        },
+        xAxis: {
+            name: "Cena (PLN/m²)",
+            type: "value",
+            nameLocation: "middle",  
+            nameGap: 36,             
+            axisLabel: { formatter: (v: number) => fmt(v) }
+        },
         yAxis: { name: "Śr. metraż (m²)", type: "value", axisLabel: { formatter: (v: number) => fmt(v) } },
         series: [
             {
@@ -44,14 +51,14 @@ export function dealFinderProOption(rows: Row[]) {
                 symbolSize: (val: any[]) => size(val[2]),
                 emphasis: { focus: "series" }
             },
-            { // „strefa słodka” – markArea (przykład: taniej + większy metraż)
+            {
                 type: "scatter",
                 data: [],
                 markArea: {
                     itemStyle: { opacity: 0.06 },
                     data: [[{ xAxis: 'min', yAxis: 60 }, { xAxis: 13000, yAxis: 'max' }]]
                 }
-            } // markArea: obszar na układzie współrzędnych. :contentReference[oaicite:7]{index=7}
+            }
         ]
     };
 }
