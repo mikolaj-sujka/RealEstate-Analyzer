@@ -34,24 +34,29 @@ export const useHistoricalAnalysisChartState = (): {
     const secondaryColor = "#818cf8";
     const showDetailedTooltip = false;
 
+    // Detect dark mode for dynamic border colors
+    const isDarkMode = typeof document !== 'undefined' && 
+        document.documentElement.getAttribute('data-mantine-color-scheme') === 'dark';
+    const itemBorderColor = isDarkMode ? '#1a1b1e' : '#fff';
+
     const series: SeriesOption[] = useMemo(
         () =>
             selectedMetrics.map((key) => {
                 const m = metrics.find((x) => x.value === key)!;
                 return {
                     name: m.label,
-                    type: "line",
+                    type: "line" as const,
                     smooth: true,
                     data: data.map((d) => d[key as keyof typeof d]),
                     lineStyle: {
                         color: m.color,
                         width: key === "forecast" ? 2 : 3,
-                        type: key === "forecast" ? "dashed" : "solid",
+                        type: key === "forecast" ? ("dashed" as const) : ("solid" as const),
                     },
                     itemStyle: {
                         color: m.color,
                         borderWidth: 2,
-                        borderColor: "#fff",
+                        borderColor: itemBorderColor,
                     },
                     areaStyle: {
                         opacity: 0.2,
@@ -68,7 +73,7 @@ export const useHistoricalAnalysisChartState = (): {
                     },
                 } as SeriesOption;
             }),
-        [data, selectedMetrics]
+        [data, selectedMetrics, itemBorderColor]
     );
 
     const height = parseInt(rem(400), 10); 

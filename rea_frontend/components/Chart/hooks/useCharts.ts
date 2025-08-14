@@ -1,4 +1,4 @@
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useEffect, useState } from "react";
 import * as echarts from "echarts";
 import type { SeriesOption } from "echarts";
 
@@ -24,6 +24,26 @@ export const useEcharts = (
     showDetailedTooltip = false,
   }: ChartProps
 ) => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  // Track dark mode changes
+  useEffect(() => {
+    const updateTheme = () => {
+      setIsDarkMode(document.documentElement.getAttribute('data-mantine-color-scheme') === 'dark');
+    };
+    
+    updateTheme(); // Initial check
+    
+    // Listen for theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['data-mantine-color-scheme']
+    });
+    
+    return () => observer.disconnect();
+  }, []);
+
   useLayoutEffect(() => {
     if (!ref.current) return;
 
@@ -32,27 +52,41 @@ export const useEcharts = (
 
     const chart = echarts.init(ref.current);
 
+    // Dynamic colors based on theme
+    const textColor = isDarkMode ? '#ced4da' : '#6b7280';
+    const borderColor = isDarkMode ? '#2c2e33' : '#e5e7eb';
+    const splitLineColor = isDarkMode ? '#373a40' : '#f3f4f6';
+    const tooltipBg = isDarkMode ? 'rgba(26, 27, 30, 0.95)' : 'rgba(255,255,255,0.95)';
+    const tooltipBorder = isDarkMode ? '#2c2e33' : '#e5e7eb';
+    const tooltipTextColor = isDarkMode ? '#ced4da' : '#374151';
+    const itemBorderColor = isDarkMode ? '#1a1b1e' : '#fff';
+
     const option: echarts.EChartsOption = {
       backgroundColor: "transparent",
       grid: { left: "3%", right: "4%", bottom: "18%", containLabel: true },
       tooltip: showDetailedTooltip
         ? {
           trigger: "axis",
-          backgroundColor: "rgba(255,255,255,0.95)",
-          borderColor: "#e5e7eb",
+          backgroundColor: tooltipBg,
+          borderColor: tooltipBorder,
           borderWidth: 1,
-          textStyle: { color: "#374151" },
+          textStyle: { color: tooltipTextColor },
           axisPointer: { type: "cross", crossStyle: { color: "#999" } },
         }
-        : { trigger: "axis" },
+        : { 
+          trigger: "axis",
+          backgroundColor: tooltipBg,
+          borderColor: tooltipBorder,
+          textStyle: { color: tooltipTextColor },
+        },
       legend: {
         show: true,
-        data: (series || []).length
+        data: (series && series.length)
           ? series.map((s) => s.name as string)
           : ["Actual Price", ...(showPrediction ? ["Prediction"] : [])],
         top: "5%",
         left: "center",
-        textStyle: { color: "#6b7280" },
+        textStyle: { color: textColor },
         itemGap: 20,
       },
       dataZoom: [
@@ -62,21 +96,24 @@ export const useEcharts = (
           bottom: "8%",
           height: 20,
           handleSize: "80%",
-          handleStyle: { borderColor: "#888" },
+          handleStyle: { borderColor: isDarkMode ? "#495057" : "#888" },
+          backgroundColor: isDarkMode ? '#25262b' : '#f8f9fa',
+          borderColor: borderColor,
+          textStyle: { color: textColor },
         },
       ],
       xAxis: {
         type: "category",
         boundaryGap: false,
         data: data.map((item) => item.month),
-        axisLine: { lineStyle: { color: "#e5e7eb" } },
-        axisLabel: { color: "#6b7280" },
+        axisLine: { lineStyle: { color: borderColor } },
+        axisLabel: { color: textColor },
       },
       yAxis: {
         type: "value",
-        axisLine: { lineStyle: { color: "#e5e7eb" } },
-        axisLabel: { color: "#6b7280" },
-        splitLine: { lineStyle: { color: "#f3f4f6", type: "dashed" } },
+        axisLine: { lineStyle: { color: borderColor } },
+        axisLabel: { color: textColor },
+        splitLine: { lineStyle: { color: splitLineColor, type: "dashed" } },
       },
       series:
         series && series.length
@@ -84,14 +121,14 @@ export const useEcharts = (
           : [
             {
               name: "Actual Price",
-              type: "line",
+              type: "line" as const,
               data: data.map((item) => item.price),
               smooth: true,
               lineStyle: { color: accentColor, width: 3 },
               itemStyle: {
                 color: accentColor,
                 borderWidth: 2,
-                borderColor: "#fff",
+                borderColor: itemBorderColor,
               },
               areaStyle: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
@@ -99,26 +136,26 @@ export const useEcharts = (
                   { offset: 1, color: `${accentColor}05` },
                 ]),
               },
-              emphasis: { focus: "series" },
+              emphasis: { focus: "series" as const },
             },
             ...(showPrediction
               ? [
                 {
                   name: "Prediction",
-                  type: "line",
+                  type: "line" as const,
                   data: data.map((item) => item.prediction),
                   smooth: true,
                   lineStyle: {
                     color: secondaryColor,
                     width: 2,
-                    type: "dashed",
+                    type: "dashed" as const,
                   },
                   itemStyle: {
                     color: secondaryColor,
                     borderWidth: 2,
-                    borderColor: "#fff",
+                    borderColor: itemBorderColor,
                   },
-                  emphasis: { focus: "series" },
+                  emphasis: { focus: "series" as const },
                 },
               ]
               : []),
@@ -141,5 +178,6 @@ export const useEcharts = (
     secondaryColor,
     series,
     showDetailedTooltip,
+    isDarkMode,
   ]);
 };

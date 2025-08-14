@@ -3,12 +3,13 @@ import { rem } from "@mantine/core";
 
 export const card = style({
     padding: rem(16),
-    backgroundColor: '#fff',
+    backgroundColor: 'var(--mantine-color-paper)',
     marginBottom: rem(32),
     borderRadius: rem(8),
-    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-    border: `1px solid rgba(0, 0, 0, 0.1)`,
+    boxShadow: 'var(--mantine-shadow-sm)',
+    border: '1px solid var(--mantine-color-border)',
     display: 'flex',
+    color: 'var(--mantine-color-text)',
 });
 
 export const group = style({
