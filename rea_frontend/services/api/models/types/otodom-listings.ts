@@ -9,12 +9,10 @@ export interface OtodomDistrictStat {
 
 export interface GetOtodomCityDistrictsResponse {
     cityDisctricts: OtodomDistrictStat[];
-    total?: number;
-    meta?: any;
 }
 
 export type MapRow = {
-    averagePrice: number;             // PLN/m² (mapujemy z averagePricePerSqm)
+    averagePrice: string;             // PLN/m² (mapujemy z averagePricePerSqm)
     properties: number;               // liczba ofert (mapujemy z totalBuildingOffers)
     label?: string;                   // nazwa dzielnicy
     [k: string]: any;                 // dodatkowe pola do tooltipów

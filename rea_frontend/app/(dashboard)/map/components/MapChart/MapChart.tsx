@@ -1,11 +1,22 @@
 "use client";
 import { useECharts } from "@/hooks";
-import { DistrictData } from "@/models";
-import { elegantColors } from "../../models";
 import { useRef } from "react";
+import { MapRow } from "@/services/api/models";
+
+export const elegantColors = [
+  "#5470c6",
+  "#91cc75",
+  "#fac858",
+  "#ee6666",
+  "#73c0de",
+  "#3ba272",
+  "#fc8452",
+  "#9a60b4",
+  "#ea7ccc",
+];
 
 type MapChartProps = {
-  data: DistrictData[];
+  data: MapRow[];
 };
 
 export const MapChart = ({ data }: MapChartProps) => {
@@ -19,7 +30,7 @@ export const MapChart = ({ data }: MapChartProps) => {
       tooltip: {},
       series: [
         {
-          name: "Dzielnice",
+          name: "Dzielnica",
           type: "pie",
           radius: ["30%", "75%"],
           center: ["50%", "50%"],
@@ -28,10 +39,8 @@ export const MapChart = ({ data }: MapChartProps) => {
           label: {},
           data: data.map((item) => ({
             value: item.properties,
-            name: item.district,
+            name: item.label,
             price: item.averagePrice,
-            trend: item.trend,
-            change: item.change,
           })),
         },
       ],

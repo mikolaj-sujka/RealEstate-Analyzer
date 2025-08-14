@@ -24,12 +24,12 @@ export const ApiUrlService = {
 
 
   getListingsByVoivodeshipUrl: (wojewodztwo: string) =>
-    `${backendApiUrl}/api/listings/otodom-listings/voivodeship/${encode(
+    `${backendApiUrl}/api/OtodomListings/voivodeship/${encode(
       wojewodztwo)}`,
 
   getOtodomDistrictsUrl: (cityName: string) =>
-    `${backendApiUrl}/api/listings/otodom-listings/districts?cityName=${encode(cityName)}`,
+    `${backendApiUrl}/api/OtodomListings/districts?cityName=${encode(cityName)}`,
 
   getListingsByCityUrl: (city: string) =>
-    `${backendApiUrl}/api/listings/otodom-listings/city/${encode(city)}`,
+    `${backendApiUrl}/api/OtodomListings/city/${encode(city)}`,
 };

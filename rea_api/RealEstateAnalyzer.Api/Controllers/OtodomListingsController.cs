@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomAllCities;
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityData;
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityDistricts;
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomVoivodeshipData;
@@ -34,6 +35,14 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
     {
         var listings = await mediator.Send(
             new GetOtodomCityDataListingsQuery(cityName));
+        return StatusCode(200, listings);
+    }
+
+    [HttpGet("all-cities")]
+    public async Task<IActionResult> GetOtodomAllCitiesListings()
+    {
+        var listings = await mediator.Send(
+            new GetOtodomAllCitiesQuery());
         return StatusCode(200, listings);
     }
 }

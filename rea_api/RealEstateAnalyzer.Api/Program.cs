@@ -30,6 +30,8 @@ builder.Services.AddWebScrapingServices(builder.Configuration);
 
 builder.Services.AddHttpScrapingServices(builder.Configuration);
 
+var policyCors = builder.Services.ConfigureCors(builder.Configuration);
+
 var app = builder.Build();
 
 app.MapScalarApiReference();
@@ -49,6 +51,8 @@ app.UseHealthChecksUI(delegate (Options options)
 {
     options.UIPath = "/healthcheck-ui";
 });
+
+app.UseCors(policyCors);
 
 app.UseAuthentication();
 app.UseAuthorization();

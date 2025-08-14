@@ -2,13 +2,13 @@
 
 import React from "react";
 import { Grid, Text } from "@mantine/core";
-import { usePropertyMap } from "./hooks/usePropertyMap";
 import { Filter } from "@/components/Filters";
 import { DistrictCard, MapChart } from "./components";
 import { useTranslate } from "@/hooks";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TextDescription, TitleSection } from "@/components/UI";
 import * as classes from "./styles";
+import { useDistrictMap } from "./hooks/useDistrictMap";
 
 export default function PropertyMap() {
   const {
@@ -17,7 +17,9 @@ export default function PropertyMap() {
     setPropertiesRange,
     filteredData,
     filterConfig,
-  } = usePropertyMap();
+    priceConfig,
+    propertiesConfig,
+  } = useDistrictMap();
 
   const { t } = useTranslate();
 
@@ -31,18 +33,21 @@ export default function PropertyMap() {
     <ContainerSection>
       <TitleSection title={t("CityMap.mapaNieruchomościDzielnice")} />
       <TextDescription description={t("CityMap.mapaNieruchomosciOpis")} />
-      <Filter
-        config={filterConfig}
-        onFilterChange={handleFilters}
-        defaultExpanded
-      />
+      {filterConfig ? (
+        <Filter
+          key={`${priceConfig.min}-${priceConfig.max}-${propertiesConfig.min}-${propertiesConfig.max}`}
+          config={filterConfig}
+          onFilterChange={handleFilters}
+          defaultExpanded
+        />
+      ) : null}
 
       <MapChart data={filteredData} />
 
       <Grid>
         {filteredData.length > 0 ? (
           filteredData.map((d) => (
-            <Grid.Col key={d.district} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
+            <Grid.Col key={d.label} span={{ base: 12, sm: 6, md: 4, lg: 3 }}>
               <DistrictCard district={d} />
             </Grid.Col>
           ))
