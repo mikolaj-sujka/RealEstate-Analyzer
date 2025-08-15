@@ -1,127 +1,156 @@
-import { useMemo } from "react";
+"use client";
+
+import { GusListingsService } from "@/services/api/Gus";
 import {
-  addMonths,
-  subMonths,
-  subYears,
-  format,
-  isWithinInterval,
-} from "date-fns";
-import { cityBasePrices, HistoricalDataPoint } from "../models";
+  GusHousingListingData,
+  HistoricalPoint,
+  RangeKey,
+} from "@/services/api/models/types/gus-listings";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-type Range = "3m" | "6m" | "1y" | "2y" | "3y" | "5y" | "all" | "custom";
+const quarterToMonth = (quarter: number): number =>
+  Math.min(Math.max(quarter, 1), 4) * 3;
 
-export const useHistoricalData = (
-  city: string | null,
-  range: Range,
-  custom: [Date | null, Date | null]
-): HistoricalDataPoint[] =>
-  useMemo(() => {
-    const today = new Date();
-    let startDate: Date;
+const toHistoricalPoints = (
+  rows: GusHousingListingData[]
+): HistoricalPoint[] => {
+  const sorted = [...rows].sort((a, b) =>
+    a.year === b.year ? a.quarter - b.quarter : a.year - b.year
+  );
 
-    switch (range) {
-      case "3m":
-        startDate = subMonths(today, 3);
-        break;
-      case "6m":
-        startDate = subMonths(today, 6);
-        break;
-      case "1y":
-        startDate = subYears(today, 1);
-        break;
-      case "2y":
-        startDate = subYears(today, 2);
-        break;
-      case "3y":
-        startDate = subYears(today, 3);
-        break;
-      case "5y":
-        startDate = subYears(today, 5);
-        break;
-      case "all":
-        startDate = subYears(today, 5);
-        break;
-      case "custom":
-        startDate = custom[0] || subYears(today, 1);
-        break;
-      default:
-        startDate = subYears(today, 1);
+  const points: HistoricalPoint[] = sorted.map((r) => {
+    const month = quarterToMonth(r.quarter);
+    const yyyy = r.year;
+    const mm = String(month).padStart(2, "0");
+    const dateStr = `${yyyy}-${mm}-01`;
+
+    return {
+      date: dateStr,
+      month: `${yyyy}-Q${r.quarter}`,
+      price: r.averagePricePerSqm,
+      medianPricePerSqm: r.medianPricePerSqm,
+      averagePricePerSqm: r.averagePricePerSqm,
+      flatsCompleted: r.flatsCompleted,
+      flatsSold: r.flatsSold,
+      totalValueSold: r.totalValueSold,
+      averageTotalPrice: r.averageTotalPrice,
+    };
+  });
+
+  for (let i = 0; i < points.length; i++) {
+    if (i >= 2) {
+      const sma =
+        (points[i].price + points[i - 1].price + points[i - 2].price) / 3;
+      points[i].forecast = +sma.toFixed(2);
+    } else {
+      points[i].forecast = points[i].price;
     }
+  }
+  return points;
+};
 
-    const [begin, end] = custom;
-    const base = cityBasePrices[city || "warszawa"] || 10000;
-    const monthlyPoints: HistoricalDataPoint[] = [];
+const rangeToYearsBack = (range: RangeKey): number | null => {
+  switch (range) {
+    case "1y":
+      return 1;
+    case "2y":
+      return 2;
+    case "3y":
+      return 3;
+    case "5y":
+      return 5;
+    case "10y":
+      return 10;
+    default:
+      return null; // 3m/6m/all/custom obsłużymy inaczej
+  }
+};
 
-    for (
-      let current = startDate;
-      current <= today;
-      current = addMonths(current, 1)
-    ) {
-      const month = current.getMonth();
-      const year = current.getFullYear();
-      const yearsDiff =
-        today.getFullYear() - year + (today.getMonth() - month) / 12;
-      const trend = 1 + (5 - yearsDiff) * 0.02;
-      let season = 1;
-      if (month >= 4 && month <= 8) {
-        season = 1 + Math.sin(((month - 4) / 4) * Math.PI) * 0.05;
-      }
-      const rand = 1 + (Math.random() - 0.5) * 0.03;
-      const price = base * trend * season * rand;
+export const useGusHistoricalAnalysis = (
+  city: string | null = "Warszawa",
+  range: RangeKey,
+  customRange: [Date | null, Date | null]
+) => {
+  const [data, setData] = useState<HistoricalPoint[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-      const point: HistoricalDataPoint = {
-        date: format(current, "yyyy-MM-dd"),
-        month: format(current, "yyyy-MM"),
-        price: +price.toFixed(2),
-        forecast: +(price * (1 + (Math.random() - 0.5) * 0.02)).toFixed(2),
-        new_listings: Math.floor(50 + Math.random() * 50),
-        sales_volume: Math.floor(30 + Math.random() * 40),
-        market_inventory: Math.floor(200 + Math.random() * 100),
-      };
+  const controllerRef = useRef<AbortController | null>(null);
 
-      if (range === "custom" && begin && end) {
-        if (isWithinInterval(current, { start: begin, end })) {
-          monthlyPoints.push(point);
-        }
+  const load = useCallback(async () => {
+    if (!city) return;
+    controllerRef.current?.abort();
+    const controller = new AbortController();
+    controllerRef.current = controller;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      let rows: GusHousingListingData[] = [];
+
+      const yb = rangeToYearsBack(range);
+      if (yb != null) {
+        rows = await GusListingsService.getRecentYears(
+          city,
+          yb,
+          controller.signal
+        );
+      } else if (range === "all") {
+        rows = await GusListingsService.getByCity(city, controller.signal);
+      } else if (range === "custom" && customRange[0] && customRange[1]) {
+        const [from, to] = customRange;
+        const yFrom = from!.getFullYear();
+        const yTo = to!.getFullYear();
+        const mFrom = from!.getMonth() + 1; // 1..12
+        const mTo = to!.getMonth() + 1; // 1..12
+        rows = await GusListingsService.getByDateRange(
+          city,
+          yFrom,
+          yTo,
+          mFrom,
+          mTo,
+          controller.signal
+        );
       } else {
-        monthlyPoints.push(point);
+        rows = await GusListingsService.getRecentYears(
+          city,
+          1,
+          controller.signal
+        );
       }
-    }
 
-    const extraPoints: HistoricalDataPoint[] = [];
-    // Reduced from 1000 to 200 to prevent large string serialization warnings
-    const maxExtraPoints = 200;
-    for (let i = 0; i < maxExtraPoints; i++) {
-      const ts =
-        startDate.getTime() +
-        Math.random() * (today.getTime() - startDate.getTime());
-      const d = new Date(ts);
-      const month = d.getMonth();
-      const year = d.getFullYear();
-      const yearsDiff =
-        today.getFullYear() - year + (today.getMonth() - month) / 12;
-      const trend = 1 + (5 - yearsDiff) * 0.02;
-      let season = 1;
-      if (month >= 4 && month <= 8) {
-        season = 1 + Math.sin(((month - 4) / 4) * Math.PI) * 0.05;
+      const points = toHistoricalPoints(rows || []);
+      if (!controller.signal.aborted) setData(points);
+    } catch (e: any) {
+      if (!controller.signal.aborted) {
+        setError(
+          e?.response?.data || e?.message || "Błąd pobierania danych GUS."
+        );
       }
-      const rand = 1 + (Math.random() - 0.5) * 0.03;
-      const price = base * trend * season * rand;
-
-      extraPoints.push({
-        date: format(d, "yyyy-MM-dd"),
-        month: format(d, "yyyy-MM"),
-        price: +price.toFixed(2),
-        forecast: +(price * (1 + (Math.random() - 0.5) * 0.02)).toFixed(2),
-        new_listings: Math.floor(50 + Math.random() * 50),
-        sales_volume: Math.floor(30 + Math.random() * 40),
-        market_inventory: Math.floor(200 + Math.random() * 100),
-      });
+    } finally {
+      if (!controller.signal.aborted) setLoading(false);
     }
+  }, [city, range, customRange]);
 
-    const all = [...monthlyPoints, ...extraPoints].sort(
-      (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-    );
+  useEffect(() => {
+    load();
+    return () => controllerRef.current?.abort();
+  }, [load]);
 
-    return all;
-  }, [city, range, custom]);
+  const refetch = useCallback(() => {
+    load();
+  }, [load]);
+
+  const filtered = useMemo(() => {
+    if (range === "3m" || range === "6m") {
+      const months = range === "3m" ? 3 : 6;
+      const tail = data.slice(-Math.ceil(months / 3));
+      return tail;
+    }
+    return data;
+  }, [data, range]);
+
+  return { data: filtered, loading, error, refetch };
+};
+

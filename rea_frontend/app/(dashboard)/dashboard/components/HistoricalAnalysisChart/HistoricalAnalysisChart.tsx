@@ -1,15 +1,26 @@
+"use client";
+
 import React from "react";
-import { Card, Group, Text, Grid } from "@mantine/core";
+import {
+  Card,
+  Group,
+  Grid,
+  Alert,
+  Button,
+  Loader,
+  Center,
+} from "@mantine/core";
+import { IconReload } from "@tabler/icons-react";
 import { CitySelect } from "@/components/CitySelect";
 import { TimeRangeSelector } from "@/components/TimeRangeSelector";
 import { CustomDateRangePicker } from "@/components/CustomDateRangePicker";
 import { Chart } from "@/components/Chart";
 import { useHistoricalAnalysisChartState } from "./hooks";
-import * as classes from "./styles";
 import { MetricsSelector } from "@/components/MetricsMultiSelect";
-import { cities, metrics, timeRanges } from "./models";
+import { metrics, timeRanges } from "./models";
 import { useTranslate } from "@/hooks";
 import { TitleSection, TextDescription } from "@/components/UI";
+import * as classes from "./styles";
 
 export const HistoricalAnalysisChart = () => {
   const {
@@ -28,6 +39,10 @@ export const HistoricalAnalysisChart = () => {
     secondaryColor,
     showDetailedTooltip,
     height,
+    cityOptions,
+    loading,
+    error,
+    refetch,
   } = useHistoricalAnalysisChartState();
 
   const { t } = useTranslate();
@@ -39,10 +54,11 @@ export const HistoricalAnalysisChart = () => {
         <TextDescription description={t("Dashboard.analizaHistorycznaOpis")} />
       </Group>
 
-      <Grid className={classes.grid}>
+      <Grid className={classes.grid} gutter="md">
         <Grid.Col span={{ base: 12, sm: 6, md: 4 }}>
-          <CitySelect value={city!} onChange={setCity} options={cities} />
+          <CitySelect value={city} onChange={setCity} options={cityOptions} />
         </Grid.Col>
+
         <Grid.Col span={{ base: 12, sm: 6, md: 8 }}>
           <TimeRangeSelector
             value={range}
@@ -50,6 +66,7 @@ export const HistoricalAnalysisChart = () => {
             timeRanges={timeRanges}
           />
         </Grid.Col>
+
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <CustomDateRangePicker
             value={customRange}
@@ -57,7 +74,8 @@ export const HistoricalAnalysisChart = () => {
             disabled={range !== "custom"}
           />
         </Grid.Col>
-        <Grid.Col span={{ base: 6, sm: 6 }}>
+
+        <Grid.Col span={{ base: 12, sm: 6 }}>
           <MetricsSelector
             value={selectedMetrics}
             onChange={setSelectedMetrics}
@@ -65,6 +83,23 @@ export const HistoricalAnalysisChart = () => {
           />
         </Grid.Col>
       </Grid>
+
+      {loading && (
+        <Center my="md">
+          <Loader />
+        </Center>
+      )}
+
+      {!loading && error && (
+        <Alert color="red" my="md">
+          {t("Dashboard.bladPobieraniaGus")}
+          <Group mt="xs">
+            <Button leftSection={<IconReload size={16} />} onClick={refetch}>
+              {t("Dashboard.odswiezDaneGus")}
+            </Button>
+          </Group>
+        </Alert>
+      )}
 
       <Chart
         data={data}
@@ -78,3 +113,4 @@ export const HistoricalAnalysisChart = () => {
     </Card>
   );
 };
+

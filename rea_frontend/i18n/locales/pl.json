@@ -24,7 +24,9 @@
         "analizaHistoryczna": "Analiza Historyczna",
         "zakresCzasu": "Zakres Czasu",
         "analizaHistorycznaOpis": "Analiza historyczna cen nieruchomości w Twoim mieście. Wybierz miasto, aby zobaczyć szczegółowe dane.",
-        "ostatnieTransakcjeOpis": "Ostatnie transakcje nieruchomości w Twoim mieście. Wybierz miasto, aby zobaczyć szczegółowe dane."
+        "ostatnieTransakcjeOpis": "Ostatnie transakcje nieruchomości w Twoim mieście. Wybierz miasto, aby zobaczyć szczegółowe dane.",
+        "odswiezTransakcje": "Odśwież Transakcje",
+        "bladPobieraniaTransakcje": "Błąd pobierania transakcji."
     },
     "CityMap": {
         "mapaNieruchomościDzielnice": "Mapa Nieruchomości - Dzielnice",

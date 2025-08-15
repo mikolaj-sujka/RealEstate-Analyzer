@@ -10,4 +10,6 @@ public interface IRedisCacheListingsService
 {
     Task<IDictionary<string,
         IReadOnlyList<GusHousingListingData>>> GetGusHousingListingsByCity(string cityName);
+
+    Task<IReadOnlyList<string>> GetGusHousingListingsAllCities();
 }

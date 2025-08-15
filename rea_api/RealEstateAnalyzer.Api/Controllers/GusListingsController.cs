@@ -43,4 +43,11 @@ public class GusListingsController(IRedisCacheListingsService redis, IMediator m
             new GetGusHousingListingsCustomRangeQuery(cityName, yearsFrom, yearsTo, monthFrom, monthTo));
         return StatusCode(200, listings);
     }
+
+    [HttpGet("all-cities")]
+    public async Task<IActionResult> GetGusHousingListingsAllCities()
+    {
+        var listings = await redis.GetGusHousingListingsAllCities();
+        return StatusCode(200, listings);
+    }
 }

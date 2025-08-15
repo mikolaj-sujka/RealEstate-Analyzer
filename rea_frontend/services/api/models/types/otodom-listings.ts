@@ -42,3 +42,14 @@ export type OtodomCityResponse = {
     id?: string;
     name: string;
 };
+
+export type OtodomLatestTransaction = {
+    id: string;
+    price: number;
+    city: string;
+    voivodeship: string;
+    transactionDate: string;
+    propertyType: string;
+    marketType: string;
+    [key: string]: any;
+}

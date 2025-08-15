@@ -4,6 +4,7 @@ using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomAll
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomAllVoivodeships;
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityData;
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityDistricts;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomLatestTransactions;
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomVoivodeshipData;
 
 namespace RealEstateAnalyzer.Api.Controllers;
@@ -52,6 +53,14 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
     {
         var listings = await mediator.Send(
             new GetOtodomAllVoivodeshipsQuery());
+        return StatusCode(200, listings);
+    }
+
+    [HttpGet("latest-transactions")]
+    public async Task<IActionResult> GetOtodomLatestTransactionsListings()
+    {
+        var listings = await mediator.Send(
+            new GetOtodomLatestTransactionsQuery());
         return StatusCode(200, listings);
     }
 }

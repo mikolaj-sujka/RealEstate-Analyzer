@@ -45,7 +45,7 @@ public class GetGusHousingListingsRecentYearsQueryHandler(DatabaseContext contex
     {
         var allListingsForCity = await context.GusHousingListings
             .AsNoTracking()
-            .Where(l => l.CityName == request.CityName)
+            .Where(l => l.CityName.Contains(request.CityName.ToLower()))
             .Select(l => new GusHousingListingDto(
                 l.CityName,
                 l.CityCode,

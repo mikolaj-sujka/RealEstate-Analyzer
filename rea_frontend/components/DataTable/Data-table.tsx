@@ -41,17 +41,6 @@ export const DataTable = <Row,>({
 
   return (
     <Paper className={classes.dataTablePaper}>
-      <Group className={classes.dataTableGroup}>
-        {onExport && (
-          <Button
-            size="xs"
-            onClick={() => onExport([...selected].map((i) => fullData[i]))}
-          >
-            {t("DataTable.eksportuj")}
-          </Button>
-        )}
-      </Group>
-
       <div className={classes.wrapper}>
         <ScrollArea>
           <MantineTable className={classes.table} verticalSpacing="sm">

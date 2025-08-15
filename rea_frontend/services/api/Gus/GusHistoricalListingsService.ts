@@ -1,84 +1,86 @@
-import { ApiUrlService, GusRange } from "../ApiUrl";
+import { ApiUrlService } from "../ApiUrl";
 import { createAxiosInstance } from "../axiosClient";
+import { GusHousingListingData } from "../models/types/gus-listings";
 import { SettingsService } from "../Settings";
 
-export interface GusHistoricalResponse {
-  data: any;
-  meta?: any;
-}
-
-/**
- * Helper: oblicza listę lat dla ostatnich N lat (włącznie z bieżącym rokiem).
- * np. 1 => [2025], 2 => [2024,2025], etc.
- */
-function buildLastNYears(n: number): number[] {
-  const currentYear = new Date().getFullYear();
-  const years: number[] = [];
-  for (let i = n - 1; i >= 0; i--) {
-    years.push(currentYear - i);
-  }
-  return years;
-}
-
-// Instancja do twojego .NET backendu (nie GUS BDL bezpośrednio)
 const backendAxios = createAxiosInstance(
   new SettingsService().settings.backendApiUrl,
-  true // ustaw na true jeżeli potrzebujesz cookies / uwierzytelnienia
+  false
 );
 
-/**
- * Bazowa funkcja: prosi backend o dane z GUS z uwzględnieniem zakresu.
- * Zakłada, że backend umi interpretuje parametry ?variableId=...&range=... lub ?years=...
- */
-async function fetchGusHistorical(
-  variableId: string,
-  range: GusRange
-): Promise<GusHistoricalResponse> {
-  try {
-    const url = ApiUrlService.getGusHistoricalUrl(variableId, range);
-    const resp = await backendAxios.get(url);
-    return resp.data;
-  } catch (err: any) {
-    throw new Error(
-      `Błąd pobierania historycznych danych GUS (range=${range}): ${err.response?.data || err.message
-      }`
-    );
-  }
+export function mapGusListings(payload: any): GusHousingListingData[] {
+  let arr: any[] = [];
+  if (Array.isArray(payload)) arr = payload;
+  else if (payload?.listings && Array.isArray(payload.listings))
+    arr = payload.listings;
+  else if (payload?.data?.listings && Array.isArray(payload.data.listings))
+    arr = payload.data.listings;
+  else if (payload?.data && Array.isArray(payload.data)) arr = payload.data;
+  else arr = [];
+
+  return arr.map((x) => ({
+    cityCode: String(x.cityCode ?? x.CityCode ?? ""),
+    quarter: Number(x.quarter ?? x.Quarter ?? 0),
+    year: Number(x.year ?? x.Year ?? 0),
+    medianPricePerSqm: Number(x.medianPricePerSqm ?? x.MedianPricePerSqm ?? 0),
+    averagePricePerSqm: Number(
+      x.averagePricePerSqm ?? x.AveragePricePerSqm ?? 0
+    ),
+    flatsCompleted: Number(x.flatsCompleted ?? x.FlatsCompleted ?? 0),
+    flatsSold: Number(x.flatsSold ?? x.FlatsSold ?? 0),
+    totalValueSold: Number(x.totalValueSold ?? x.TotalValueSold ?? 0),
+    averageTotalPrice: Number(x.averageTotalPrice ?? x.AverageTotalPrice ?? 0),
+  })) as GusHousingListingData[];
 }
 
-/**
- * Wersje pomocnicze
- */
-export const GusService = {
-  getLast1Year: (variableId: string) =>
-    fetchGusHistorical(variableId, '1y'),
-  getLast2Years: (variableId: string) =>
-    fetchGusHistorical(variableId, '2y'),
-  getLast3Years: (variableId: string) =>
-    fetchGusHistorical(variableId, '3y'),
-  getLast5Years: (variableId: string) =>
-    fetchGusHistorical(variableId, '5y'),
-  getLast10Years: (variableId: string) =>
-    fetchGusHistorical(variableId, '10y'),
-  getAllYears: (variableId: string) =>
-    fetchGusHistorical(variableId, 'all'),
+export const GusListingsService = {
+  async getByCity(
+    cityName: string,
+    signal?: AbortSignal
+  ): Promise<GusHousingListingData[]> {
+    const url = ApiUrlService.getGusListingsByCityUrl(cityName);
+    const resp = await backendAxios.get(url, { signal });
+    return mapGusListings(resp.data);
+  },
 
-  /**
-   * Jeśli twój .NET backend oczekuje konkretnej listy lat zamiast "range", możesz
-   * użyć tej metody jako przykładowej: buildLastNYears(5) => ostatnie 5 lat, i przekazać
-   * do endpointu z parametrem years=...
-   */
-  getLastNYears: async (variableId: string, n: number) => {
-    const years = buildLastNYears(n);
-    const url = ApiUrlService.getGusHistoricalByYearsUrl(variableId, years);
-    try {
-      const resp = await backendAxios.get(url);
-      return resp.data;
-    } catch (err: any) {
-      throw new Error(
-        `Błąd pobierania historycznych danych GUS (ostatnie ${n} lat): ${err.response?.data || err.message
-        }`
-      );
-    }
+  async getRecentYears(
+    cityName: string,
+    yearsBack: number,
+    signal?: AbortSignal
+  ): Promise<GusHousingListingData[]> {
+    const url = ApiUrlService.getGusListingsRecentYearsUrl(cityName, yearsBack);
+    const resp = await backendAxios.get(url, { signal });
+    return mapGusListings(resp.data);
+  },
+
+  async getByDateRange(
+    cityName: string,
+    yearsFrom: number,
+    yearsTo: number,
+    monthFrom: number,
+    monthTo: number,
+    signal?: AbortSignal
+  ): Promise<GusHousingListingData[]> {
+    const url = ApiUrlService.getGusListingsDateRangeUrl(
+      cityName,
+      yearsFrom,
+      yearsTo,
+      monthFrom,
+      monthTo
+    );
+    const resp = await backendAxios.get(url, { signal });
+    return mapGusListings(resp.data);
+  },
+
+  async getCities(signal?: AbortSignal): Promise<string[]> {
+    const url = ApiUrlService.getGusCitiesUrl();
+    const resp = await backendAxios.get(url, { signal });
+    const payload = resp.data;
+    if (Array.isArray(payload)) return payload.map(String);
+    if (Array.isArray(payload?.cities)) return payload.cities.map(String);
+    if (Array.isArray(payload?.data?.cities))
+      return payload.data.cities.map(String);
+    return [];
   },
 };
+

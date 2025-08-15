@@ -25,7 +25,7 @@ public class ListingCacheService(DatabaseContext databaseContext, IDatabase cach
             }
 
             var listingsFromDb = databaseContext.GusHousingListings
-                .Where(l => l.CityName == cityName)
+                .Where(l => l.CityName.Contains(cityName.ToLower()))
                 .Select(l => new GusHousingListingData(
                     l.Period,
                     l.MedianPricePerSqm,
@@ -55,7 +55,7 @@ public class ListingCacheService(DatabaseContext databaseContext, IDatabase cach
 
             // Fallback to database if cache retrieval fails
             var listingsFromDb = databaseContext.GusHousingListings
-                .Where(l => l.CityName == cityName)
+                .Where(l => l.CityName.Contains(cityName.ToLower()))
                 .Select(l => new GusHousingListingData(
                     l.Period,
                     l.MedianPricePerSqm,
@@ -77,6 +77,39 @@ public class ListingCacheService(DatabaseContext databaseContext, IDatabase cach
             cacheDatabase.StringSet(cityName, serializedListings, TimeSpan.FromDays(1));
 
             return listingsDict;
+        }
+    }
+
+    public Task<IReadOnlyList<string>> GetGusHousingListingsAllCities()
+    {
+        try
+        {
+            var cachedListings = cacheDatabase.StringGet("all_cities_gus_v2");
+            if (cachedListings.HasValue)
+            {
+                var listings = JsonSerializer.Deserialize<IReadOnlyList<string>>(cachedListings!);
+                return Task.FromResult(listings!);
+            }
+            var listingsFromDb = databaseContext.GusHousingListings
+                .Select(l => l.CityName)
+                .Distinct()
+                .AsNoTracking()
+                .ToList();
+
+            var serializedListings = JsonSerializer.Serialize(listingsFromDb);
+            cacheDatabase.StringSet("all_cities_gus_v2", serializedListings, TimeSpan.FromDays(1));
+            return Task.FromResult((IReadOnlyList<string>)listingsFromDb);
+        }
+        catch (RedisException e)
+        {
+            logger.LogError(e, "Error retrieving all cities listings from Redis cache.");
+            var listingsFromDb = databaseContext.GusHousingListings
+                .Select(l => l.CityName)
+                .AsNoTracking()
+                .ToList();
+            var serializedListings = JsonSerializer.Serialize(listingsFromDb);
+            cacheDatabase.StringSet("all_cities_gus_v2", serializedListings, TimeSpan.FromDays(1));
+            return Task.FromResult((IReadOnlyList<string>)listingsFromDb);
         }
     }
 }

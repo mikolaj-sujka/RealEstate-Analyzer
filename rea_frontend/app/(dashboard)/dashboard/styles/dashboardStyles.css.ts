@@ -1,19 +1,16 @@
-import { rem } from "@mantine/core";
 import { style } from "@vanilla-extract/css";
 
 export const card = style({
   padding: "var(--mantine-spacing-md) var(--mantine-spacing-lg)",
-  marginBottom: "var(--mantine-spacing-lg)",
 });
 
 export const group = style({
   marginBottom: "var(--mantine-spacing-md)",
   display: "flex",
-  gap: rem(2),
+  gap: "var(--mantine-spacing-sm)",
   alignItems: "flex-start",
   justifyContent: "space-between",
   flexWrap: "wrap",
-  flexDirection: "column",
 });
 
 export const grid = style({
