@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, Group, Grid } from "@mantine/core";
+import { Card, Group, Grid, Alert, Button } from "@mantine/core";
 import { CitySelect } from "@/components/CitySelect";
 import { TimeRangeSelector } from "@/components/TimeRangeSelector";
 import { CustomDateRangePicker } from "@/components/CustomDateRangePicker";
@@ -12,6 +12,7 @@ import { metrics, timeRanges } from "./models";
 import { useTranslate } from "@/hooks";
 import { TitleSection, TextDescription } from "@/components/UI";
 import * as classes from "./styles";
+import { IconReload } from "@tabler/icons-react";
 
 export const HistoricalAnalysisChart = () => {
   const {
@@ -33,6 +34,7 @@ export const HistoricalAnalysisChart = () => {
     cityOptions,
     loading,
     error,
+    refetch,
   } = useHistoricalAnalysisChartState();
 
   const { t } = useTranslate();
@@ -93,7 +95,21 @@ export const HistoricalAnalysisChart = () => {
           />
         </>
       )}
+      {showOnlyHeader && (
+        <>
+          <Alert color="red" my="md">
+            {t("Dashboard.bladPobieraniaGus")}
+            <Group mt="xs">
+              <Button
+                leftSection={<IconReload size={16} />}
+                onClick={() => refetch()}
+              >
+                {t("Dashboard.odswiezDaneGus")}
+              </Button>
+            </Group>
+          </Alert>
+        </>
+      )}
     </Card>
   );
 };
-
