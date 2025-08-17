@@ -7,7 +7,6 @@ import {
 import { VoivodeshipMarketData } from "@/services/api/models";
 
 export const getCitiesAnalyticsCards = (data: VoivodeshipMarketData) => {
-    console.log(data);
     return [
         {
             label: "Średnia Cena",

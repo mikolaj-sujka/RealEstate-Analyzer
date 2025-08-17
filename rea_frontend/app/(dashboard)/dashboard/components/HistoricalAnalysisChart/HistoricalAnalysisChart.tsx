@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Card, Group, Grid, Alert, Button } from "@mantine/core";
+import { Card, Group, Grid, Alert, Button, Center, Loader } from "@mantine/core";
 import { CitySelect } from "@/components/CitySelect";
 import { TimeRangeSelector } from "@/components/TimeRangeSelector";
 import { CustomDateRangePicker } from "@/components/CustomDateRangePicker";
@@ -39,7 +39,7 @@ export const HistoricalAnalysisChart = () => {
 
   const { t } = useTranslate();
 
-  const showOnlyHeader = loading || Boolean(error);
+  const showOnlyHeader = Boolean(error);
 
   return (
     <Card className={classes.card}>
@@ -47,6 +47,12 @@ export const HistoricalAnalysisChart = () => {
         <TitleSection title={t("Dashboard.analizaHistoryczna")} />
         <TextDescription description={t("Dashboard.analizaHistorycznaOpis")} />
       </Group>
+
+      {loading && (
+        <Center my="md">
+          <Loader />
+        </Center>
+      )}
 
       {!showOnlyHeader && (
         <>
@@ -95,7 +101,7 @@ export const HistoricalAnalysisChart = () => {
           />
         </>
       )}
-      {showOnlyHeader && (
+      {showOnlyHeader && !loading && (
         <>
           <Alert color="red" my="md">
             {t("Dashboard.bladPobieraniaGus")}

@@ -9,11 +9,13 @@ using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomVoi
 
 namespace RealEstateAnalyzer.Api.Controllers;
 
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 public class OtodomListingsController(IMediator mediator) : ControllerBase
 {
     [HttpGet("districts")]
+    [MapToApiVersion("1")]
     public async Task<IActionResult> GetOtodomCityDistrictsListings(
         [FromQuery] string cityName)
     {
@@ -23,6 +25,7 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("voivodeship/{voivodeship}")]
+    [MapToApiVersion("1")]
     public async Task<IActionResult> GetOtodomVoivodeshipDataListings(
         [FromRoute] string voivodeship)
     {
@@ -32,6 +35,7 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("city/{cityName}")]
+    [MapToApiVersion("1")]
     public async Task<IActionResult> GetOtodomCityDataListings(
         [FromRoute] string cityName)
     {
@@ -41,6 +45,7 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("all-cities")]
+    [MapToApiVersion("1")]
     public async Task<IActionResult> GetOtodomAllCitiesListings()
     {
         var listings = await mediator.Send(
@@ -49,6 +54,7 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("all-voivodeships")]
+    [MapToApiVersion("1")]
     public async Task<IActionResult> GetOtodomAllVoivodeshipsListings()
     {
         var listings = await mediator.Send(
@@ -57,6 +63,7 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
     }
 
     [HttpGet("latest-transactions")]
+    [MapToApiVersion("1")]
     public async Task<IActionResult> GetOtodomLatestTransactionsListings()
     {
         var listings = await mediator.Send(

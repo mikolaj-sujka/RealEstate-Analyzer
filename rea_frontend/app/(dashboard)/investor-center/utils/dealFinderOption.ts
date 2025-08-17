@@ -1,7 +1,8 @@
+import { OtodomDistrictStat } from "@/services/api/models/types/otodom-listings";
 import { fmt } from "@/utils";
-import { computeRisk, Row } from "@/utils/investorMath";
+import { computeRisk } from "@/utils/investorMath";
 
-export const dealFinderProOption = (rows: Row[]) => {
+export const dealFinderProOption = (rows: OtodomDistrictStat[]) => {
     const risk = computeRisk(rows);
     const data = rows.map(r => ([
         r.averagePricePerSqm,

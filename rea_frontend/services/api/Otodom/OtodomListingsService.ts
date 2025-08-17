@@ -54,8 +54,13 @@ export const OtodomListingsService = {
     const resp = await backendAxios.get(url, { signal });
     const latestTransactions = mapLatestTransactions(resp.data);
 
-    console.log("Latest transactions:", latestTransactions);
-
     return latestTransactions;
   },
+
+  async getDataByCity(city: string, signal?: AbortSignal) {
+    const url = ApiUrlService.getListingsByCityUrl(city);
+    const resp = await backendAxios.get(url, { signal });
+
+    return resp.data;
+  }
 };

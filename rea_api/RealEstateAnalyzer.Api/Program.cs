@@ -30,6 +30,8 @@ builder.Services.AddWebScrapingServices(builder.Configuration);
 
 builder.Services.AddHttpScrapingServices(builder.Configuration);
 
+builder.Services.ConfigureApiVersioning();
+
 var policyCors = builder.Services.ConfigureCors(builder.Configuration);
 
 var app = builder.Build();

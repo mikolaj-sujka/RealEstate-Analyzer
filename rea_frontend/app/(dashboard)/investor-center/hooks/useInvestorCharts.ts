@@ -1,8 +1,7 @@
-import { investorCityDistricts } from "../models/consts/investorCenterMock";
 import { getDealFinderOption, getNewnessPremiumOption, getRiskBoxplotOption } from "../utils";
+import { Row } from "./useInvestorCenter";
 
-export function useInvestorCharts(city: string, type: "basic" | "advanced") {
-    const rows = investorCityDistricts[city] ?? [];
+export function useInvestorCharts(city: string, rows: Row[], type: "basic" | "advanced") {
 
     const mainOption = type === "basic"
         ? getDealFinderOption(rows)

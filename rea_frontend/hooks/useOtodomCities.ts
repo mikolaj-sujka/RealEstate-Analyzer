@@ -1,9 +1,7 @@
-"use client";
+import { OtodomListingsService } from "@/services/api/Otodom";
+import { useState, useCallback, useEffect, useMemo } from "react";
 
-import { GusListingsService } from "@/services/api/Gus";
-import { useCallback, useEffect, useMemo, useState } from "react";
-
-export function useGusCities() {
+export const useOtodomCities = () => {
   const [cities, setCities] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -12,8 +10,8 @@ export function useGusCities() {
     setLoading(true);
     setError(null);
     try {
-      const list = await GusListingsService.getCities(signal);
-      setCities(list);
+      const list = await OtodomListingsService.getAllCities(signal);
+      setCities(list.map(city => city.name));
     } catch (e: any) {
       if (!signal?.aborted)
         setError(e?.response?.data || e?.message || "Błąd pobierania miast.");
@@ -34,5 +32,4 @@ export function useGusCities() {
   );
 
   return { cities, options, loading, error, refetch: fetchAll };
-}
-
+};

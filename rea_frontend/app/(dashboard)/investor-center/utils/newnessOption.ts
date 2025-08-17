@@ -1,12 +1,8 @@
-type Row = {
-    district: string;
-    averagePricePerSqm: number;
-    averageBuildingBuiltYear: number;
-};
+import { OtodomDistrictStat } from "@/services/api/models";
 
 const fmt = (v: number) => (v ?? 0).toLocaleString("pl-PL");
 
-function linReg(xs: number[], ys: number[]) {
+const linReg = (xs: number[], ys: number[]) => {
     const n = xs.length;
     if (n < 2) {
         const meanY = ys.reduce((s, y) => s + y, 0) / (n || 1);
@@ -28,7 +24,7 @@ function linReg(xs: number[], ys: number[]) {
 }
 
 export const newnessOption = (
-    rows: Row[],
+    rows: OtodomDistrictStat[],
     opts?: { residRange?: [number, number] }
 ) => {
     const xs = rows.map(r => r.averageBuildingBuiltYear);

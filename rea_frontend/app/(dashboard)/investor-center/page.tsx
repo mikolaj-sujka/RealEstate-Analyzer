@@ -9,7 +9,6 @@ import * as classes from "./styles/investorCenterStyles.css";
 
 import { useInvestorCenter } from "./hooks/useInvestorCenter";
 import {
-  ChartMethodHelp,
   InvestorCenterHeader,
   MainAnalysisChart,
   RiskAnalysisChart,
@@ -25,14 +24,17 @@ export default function InvestorCenter({}: InvestorCenterProps) {
   const { t } = useTranslate();
 
   const {
-    selectedCity,
-    setSelectedCity,
-    analysisType,
-    isSwitching,
-    handleAnalysisTypeChange,
-    cityOptions,
-    handleChartInit,
-  } = useInvestorCenter();
+  selectedCity,
+  cityOptions,
+  rows,
+  rowsLoading,
+  rowsError,
+  analysisType,
+  isSwitching,
+  handleAnalysisTypeChange,
+  handleChartInit,
+  setSelectedCity
+} = useInvestorCenter();
 
   return (
     <ContainerSection>
@@ -55,6 +57,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
           <MainAnalysisChart
             type={analysisType as "basic" | "advanced"}
             city={selectedCity}
+            rows={rows}
             onChartInit={handleChartInit}
           />
         </Box>
@@ -80,7 +83,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
               className={classes.mb}
             />
 
-            <RiskAnalysisChart city={selectedCity} />
+            <RiskAnalysisChart city={selectedCity} rows={rows} />
           </Paper>
         </Grid.Col>
       </Grid>

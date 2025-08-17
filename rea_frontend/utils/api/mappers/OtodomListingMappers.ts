@@ -2,27 +2,8 @@ import { OtodomDistrictStat, OtodomCityResponse, OtodomLatestTransaction } from 
 import { formatDate, parseDate } from "@/utils/date";
 
 export const extractDistricts = (payload: any): OtodomDistrictStat[] => {
-  if (Array.isArray(payload)) return payload as OtodomDistrictStat[];
-
-  if (payload?.cityDisctricts && Array.isArray(payload.cityDisctricts)) {
-    return payload.cityDisctricts as OtodomDistrictStat[];
-  }
-
-  if (payload?.cityDistricts && Array.isArray(payload.cityDistricts)) {
-    return payload.cityDistricts as OtodomDistrictStat[];
-  }
-
-  if (
-    payload?.data?.cityDisctricts &&
-    Array.isArray(payload.data.cityDisctricts)
-  ) {
-    return payload.data.cityDisctricts as OtodomDistrictStat[];
-  }
-  if (
-    payload?.data?.cityDistricts &&
-    Array.isArray(payload.data.cityDistricts)
-  ) {
-    return payload.data.cityDistricts as OtodomDistrictStat[];
+  if (payload[0] || Array.isArray(payload[0].cityDistricts)) {
+    return payload[0] as OtodomDistrictStat[];
   }
 
   return [];
@@ -75,8 +56,6 @@ export const mapLatestTransactions = (
   }
 
   const monthToken = /^[A-Za-zĄąĆćĘęŁłŃńÓóŚśŹźŻż]{3}\s*'?\d{2,4}$/;
-
-  console.log(arr);
 
   return arr.map((tx) => {
     const raw = tx.webScrapedDate;

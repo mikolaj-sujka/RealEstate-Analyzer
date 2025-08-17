@@ -23,7 +23,7 @@ export default function AnalyticsPage() {
     selected: voivodeship,
     setSelected: setVoivodeship,
     loading: loadingVoivodeships,
-  } = useVoivodeshipOptions("Cała Polska");
+  } = useVoivodeshipOptions("Mazowieckie");
   const { marketData } = useVoivodeshipAnalytics(voivodeship);
 
   const { t } = useTranslation();

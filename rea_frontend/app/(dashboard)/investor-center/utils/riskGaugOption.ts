@@ -1,15 +1,7 @@
+import { OtodomDistrictStat } from "@/services/api/models";
 import * as echarts from "echarts/core";
 
-type Row = {
-    district: string;
-    averagePricePerSqm: number;
-    averageFlatSize: number;
-    totalBuildingOffers: number;
-    averageBuildingBuiltYear: number;
-};
-
-function avgRisk01(rows: Row[]): number {
-    if (!rows.length) return 0.5;
+const avgRisk01 = (rows: OtodomDistrictStat[]): number => {
     const prices = rows.map(r => r.averagePricePerSqm);
     const offers = rows.map(r => r.totalBuildingOffers);
     const years = rows.map(r => r.averageBuildingBuiltYear);
@@ -26,7 +18,7 @@ function avgRisk01(rows: Row[]): number {
     return Math.max(0, Math.min(1, scores.reduce((s, x) => s + x, 0) / rows.length));
 }
 
-export const riskGaugeOption = (rows: Row[], cityName: string) => {
+export const riskGaugeOption = (rows: OtodomDistrictStat[], cityName: string) => {
     const value = Math.round(avgRisk01(rows) * 100); // 0..100
 
     const grad = new echarts.graphic.LinearGradient(0, 1, 1, 0, [

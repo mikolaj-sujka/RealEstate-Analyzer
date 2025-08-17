@@ -96,8 +96,6 @@ export const useGusHistoricalAnalysis = (
           yb,
           controller.signal
         );
-      } else if (range === "all") {
-        rows = await GusListingsService.getByCity(city, controller.signal);
       } else if (range === "custom" && customRange[0] && customRange[1]) {
         const [from, to] = customRange;
         const yFrom = from!.getFullYear();

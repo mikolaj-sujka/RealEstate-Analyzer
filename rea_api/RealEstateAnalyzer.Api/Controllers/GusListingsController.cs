@@ -6,12 +6,14 @@ using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingLi
 
 namespace RealEstateAnalyzer.Api.Controllers;
 
-[Route("api/[controller]")]
+[ApiVersion("1.0")]
+[Route("api/v{version:apiVersion}/[controller]")]
 [ApiController]
 public class GusListingsController(IRedisCacheListingsService redis, IMediator mediator) : ControllerBase
 {
 
     [HttpGet]
+    [MapToApiVersion("1")]
     public async Task<IActionResult> GetGusHousingListingsByCity(
         [FromQuery] string cityName)
     {
@@ -21,6 +23,8 @@ public class GusListingsController(IRedisCacheListingsService redis, IMediator m
     }
 
     [HttpGet("{yearsBack}")]
+    [MapToApiVersion("1")]
+
     public async Task<IActionResult> GetGusHousingListingsRecentYears(
         [FromQuery] string cityName, 
         [FromRoute] uint yearsBack)
@@ -32,6 +36,8 @@ public class GusListingsController(IRedisCacheListingsService redis, IMediator m
     }
 
     [HttpGet("date-range")]
+    [MapToApiVersion("1")]
+
     public async Task<IActionResult> GetGusHousingListingsCustomRange(
         [FromQuery] string cityName,
         [FromQuery] uint yearsFrom,
@@ -45,6 +51,8 @@ public class GusListingsController(IRedisCacheListingsService redis, IMediator m
     }
 
     [HttpGet("all-cities")]
+    [MapToApiVersion("1")]
+
     public async Task<IActionResult> GetGusHousingListingsAllCities()
     {
         var listings = await redis.GetGusHousingListingsAllCities();

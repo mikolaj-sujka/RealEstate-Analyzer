@@ -1,17 +1,18 @@
 import { ChartContainer } from "@/components/ChartContainer";
-import { investorCityDistricts } from "../../models";
 import { dealFinderProOption, newnessOption } from "../../utils";
+import { OtodomDistrictStat } from "@/services/api/models";
 
 export const MainAnalysisChart = ({
   type,
   city,
+  rows,
   onChartInit,
 }: {
   type: "basic" | "advanced";
   city: string;
+  rows: OtodomDistrictStat[];  
   onChartInit?: any;
 }) => {
-  const rows = investorCityDistricts[city] ?? [];
   const option =
     type === "basic"
       ? dealFinderProOption(rows)

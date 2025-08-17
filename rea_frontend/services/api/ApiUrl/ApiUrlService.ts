@@ -7,10 +7,10 @@ export type GusRange = "1y" | "2y" | "3y" | "5y" | "10y" | "all";
 
 export const ApiUrlService = {
   getGusListingsByCityUrl: (cityName: string) =>
-    `${backendApiUrl}/api/GusListings?cityName=${encode(cityName)}`,
+    `${backendApiUrl}/api/v1/GusListings?cityName=${encode(cityName)}`,
 
   getGusListingsRecentYearsUrl: (cityName: string, yearsBack: number) =>
-    `${backendApiUrl}/api/GusListings/${encode(
+    `${backendApiUrl}/api/v1/GusListings/${encode(
       String(yearsBack)
     )}?cityName=${encode(cityName)}`,
 
@@ -21,29 +21,29 @@ export const ApiUrlService = {
     monthFrom: number, // 1..12
     monthTo: number // 1..12
   ) =>
-    `${backendApiUrl}/api/GusListings/date-range` +
+    `${backendApiUrl}/api/v1/GusListings/date-range` +
     `?cityName=${encode(cityName)}&yearsFrom=${yearsFrom}&yearsTo=${yearsTo}` +
     `&monthFrom=${monthFrom}&monthTo=${monthTo}`,
 
-  getGusCitiesUrl: () => `${backendApiUrl}/api/GusListings/all-cities`,
+  getGusCitiesUrl: () => `${backendApiUrl}/api/v1/GusListings/all-cities`,
 
 
   getListingsByVoivodeshipUrl: (wojewodztwo: string) =>
-    `${backendApiUrl}/api/OtodomListings/voivodeship/${encode(wojewodztwo)}`,
+    `${backendApiUrl}/api/v1/OtodomListings/voivodeship/${encode(wojewodztwo)}`,
 
   getOtodomDistrictsUrl: (cityName: string) =>
-    `${backendApiUrl}/api/OtodomListings/districts?cityName=${encode(
+    `${backendApiUrl}/api/v1/OtodomListings/districts?cityName=${encode(
       cityName
     )}`,
 
   getListingsByCityUrl: (city: string) =>
-    `${backendApiUrl}/api/OtodomListings/city/${encode(city)}`,
+    `${backendApiUrl}/api/v1/OtodomListings/city/${encode(city)}`,
 
   getOtodomAllVoivodeshipsUrl: () =>
-    `${backendApiUrl}/api/OtodomListings/all-voivodeships`,
+    `${backendApiUrl}/api/v1/OtodomListings/all-voivodeships`,
 
-  getOtodomAllCitiesUrl: () => `${backendApiUrl}/api/OtodomListings/all-cities`,
+  getOtodomAllCitiesUrl: () => `${backendApiUrl}/api/v1/OtodomListings/all-cities`,
 
   getOtodomLatestTransaction: () =>
-    `${backendApiUrl}/api/OtodomListings/latest-transactions`,
+    `${backendApiUrl}/api/v1/OtodomListings/latest-transactions`,
 };

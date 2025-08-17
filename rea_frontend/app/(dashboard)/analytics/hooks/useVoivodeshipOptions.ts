@@ -20,10 +20,6 @@ export function useVoivodeshipOptions(initial = "Cała Polska") {
           (list ?? []).map(v => ({ value: v.name, label: v.name })) 
             .sort((a, b) => a.label.localeCompare(b.label));
 
-        if (!opts.find(o => o.value === "Cała Polska")) {
-          opts.unshift({ value: "Cała Polska", label: "Cała Polska" });
-        }
-
         setOptions(opts);
         if (!opts.find(o => o.value === selected) && opts.length) {
           setSelected(opts[0].value);

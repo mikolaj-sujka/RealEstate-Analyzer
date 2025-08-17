@@ -4,9 +4,9 @@ import { useEffect, useMemo, useState } from "react";
 import { rem } from "@mantine/core";
 import type { SeriesOption } from "echarts";
 import type { ChartProps } from "@/components/Chart/hooks";
-import { useGusCities } from "./useGusCities";
 import { metrics, Range } from "../models";
 import { useGusHistoricalAnalysis } from "./useHistoricalAnalysis";
+import { useGusCities } from "@/hooks";
 
 export const useHistoricalAnalysisChartState = (): {
   city: string;
@@ -44,10 +44,10 @@ export const useHistoricalAnalysisChartState = (): {
     if (!hasCurrent) {
       const warszawa =
         cityOptions.find(
-          (o) => o.value.toLocaleLowerCase("pl-PL") === "warszawa"
+          (o) => o.value.toLocaleLowerCase("pl-PL") === "powiat m. st. warszawa"
         )?.value ?? null;
 
-      setCity(warszawa ?? cityOptions[0].value);
+      setCity(warszawa);
     }
   }, [cityOptions, city]);
 

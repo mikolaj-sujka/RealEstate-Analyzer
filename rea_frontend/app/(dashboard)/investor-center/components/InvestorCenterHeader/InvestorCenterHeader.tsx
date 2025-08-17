@@ -5,7 +5,7 @@ import { useTranslate } from "@/hooks/useTranslate";
 import { Flex, SegmentedControl } from "@mantine/core";
 import * as classes from "./styles";
 import { CitySelect } from "@/components/CitySelect";
-import { ChartMethodHelp } from "../ChartMethodHelp";
+import { ChartMethodHelp } from "../AnalysisChart/components/ChartMethodHelp";
 
 type InvestorCenterHeaderProps = {
   title: string;
