@@ -49,12 +49,12 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
         var addedRecords = 0;
 
         var incomingUrls = listings
-            .Select(l => l.Url.Url)
+            .Select(l => l.Url)
             .Distinct()
             .ToList();
 
         var existingListings = await context.OtodomHousingListings
-            .Where(x => incomingUrls.Contains(x.Url.Url))
+            .Where(x => incomingUrls.Contains(x.Url))
             .ToListAsync(cancellationToken);
 
         var byUrl = existingListings
