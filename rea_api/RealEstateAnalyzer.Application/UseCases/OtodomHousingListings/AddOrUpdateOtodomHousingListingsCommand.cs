@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using RealEstateAnalyzer.Domain.Entities;
 using RealEstateAnalyzer.Domain.Enums;
 using RealEstateAnalyzer.Domain.ValueObjects;
@@ -11,7 +12,7 @@ namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings;
 public record AddOrUpdateOtodomHousingListingsCommand(IReadOnlyList<OtodomOfferRecord> Listings) : IRequest;
 
 public class AddOrUpdateOtodomHousingListingsCommandHandler(
-    DatabaseContext context) : IRequestHandler<AddOrUpdateOtodomHousingListingsCommand>
+    DatabaseContext context, ILogger<AddOrUpdateOtodomHousingListingsCommandHandler> logger) : IRequestHandler<AddOrUpdateOtodomHousingListingsCommand>
 {
     public async Task Handle(AddOrUpdateOtodomHousingListingsCommand request, CancellationToken cancellationToken)
     {
@@ -44,24 +45,43 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
 
     private async Task AddOrUpdateOtodomListingsAsync(IReadOnlyList<OtodomHousingListing> listings, CancellationToken cancellationToken)
     {
+        var updatedRecords = 0;
+        var addedRecords = 0;
+
+        var incomingUrls = listings
+            .Select(l => l.Url.Url)
+            .Distinct()
+            .ToList();
+
         var existingListings = await context.OtodomHousingListings
-            .Where(x => listings.Select(l => l.OfferId).Contains(x.OfferId))
+            .Where(x => incomingUrls.Contains(x.Url.Url))
             .ToListAsync(cancellationToken);
+
+        var byUrl = existingListings
+            .ToDictionary(x => x.Url.Url, StringComparer.OrdinalIgnoreCase);
 
         foreach (var listing in listings)
         {
-            var existing = existingListings.FirstOrDefault(x => x.OfferId == listing.OfferId);
 
-            if (existing is not null)
+            if (byUrl.TryGetValue(listing.Url.Url, out var ex))
             {
+                bool same =
+                    ex.Url == listing.Url &&
+                    ex.Location == listing.Location &&
+                    ex.DatePublished == listing.DatePublished &&
+                    ex.TotalPrice == listing.TotalPrice &&
+                    ex.FlatSize == listing.FlatSize &&
+                    ex.PricePerSqm == listing.PricePerSqm &&
+                    ex.Title == listing.Title &&
+                    ex.BuildingBuiltYear == listing.BuildingBuiltYear &&
+                    ex.PropertyType == listing.PropertyType &&
+                    ex.MarketType == listing.MarketType &&
+                    ex.Status == listing.Status &&
+                    ex.IsDeveloperOffer == listing.IsDeveloperOffer;
 
-                if (existing.GetHashCode() == listing.GetHashCode())
-                {
-                    continue;
-                }
+                if (same) continue;
 
-                // Update existing listing
-                existing.Update(
+                ex.Update(
                     listing.Url,
                     listing.Location,
                     listing.DatePublished,
@@ -74,25 +94,29 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
                     listing.PropertyType,
                     listing.MarketType,
                     listing.Status,
-                    listing.IsDeveloperOffer);
-
+                    listing.IsDeveloperOffer
+                );
+                updatedRecords++;
             }
             else
             {
                 context.OtodomHousingListings.Add(listing);
+                addedRecords++;
             }
         }
+
+        logger.LogInformation("Records added: {addedRecordsCount}, record updated {updatedRecordsCount}", addedRecords, updatedRecords);
     }
 
     private async Task RemoveOtodomListingsAsync(IReadOnlyList<OtodomHousingListing> listings, CancellationToken cancellationToken)
     {
-        var incomingIds = listings.Select(l => l.OfferId).ToHashSet(StringComparer.Ordinal);
+        var incomingUrls = listings.Select(l => l.Url.Url).ToHashSet(StringComparer.Ordinal);
 
-        var idsInDb = await context.OtodomHousingListings
-            .Select(x => x.OfferId)
+        var urlsInDb = await context.OtodomHousingListings
+            .Select(x => x.Url.Url)
             .ToListAsync(cancellationToken);
 
-        var toDelete = idsInDb.Where(id => !incomingIds.Contains(id)).ToList();
+        var toDelete = urlsInDb.Where(url => !incomingUrls.Contains(url)).ToList();
 
         foreach (var batch in toDelete.Chunk(1000))
         {
