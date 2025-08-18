@@ -38,7 +38,7 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
         }
 
         await AddOrUpdateOtodomListingsAsync(otodomListings, cancellationToken);
-        await RemoveOtodomListingsAsync(otodomListings, cancellationToken);
+        // await RemoveOtodomListingsAsync(otodomListings, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
     }

@@ -16,6 +16,5 @@ public class AuditableAggregateRoot : AggregateRoot, IAuditable
     {
         CreatedBy = createdBy;
         CreatedAt = createdAt;
-        Updated(createdBy, createdAt);
     }
 }

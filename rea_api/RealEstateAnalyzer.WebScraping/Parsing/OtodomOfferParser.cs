@@ -54,9 +54,8 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
                 continue;
 
             var year = buildingBuiltYear; 
-            var currentYear = DateTime.UtcNow.Year;
 
-            if (year != 0 && year> currentYear)
+            if (year == 0)
             {
                 continue;
             }
