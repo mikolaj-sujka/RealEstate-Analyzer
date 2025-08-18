@@ -9,6 +9,7 @@ import {
   Button,
   Center,
   Loader,
+  Flex,
 } from "@mantine/core";
 import { CitySelect } from "@/components/CitySelect";
 import { TimeRangeSelector } from "@/components/TimeRangeSelector";
@@ -20,6 +21,7 @@ import { TitleSection, TextDescription } from "@/components/UI";
 import * as classes from "./styles";
 import { IconReload } from "@tabler/icons-react";
 import { t, TFunction } from "i18next";
+import { HistoricalChartHelp } from "./components/HistoricalAnalysisChart";
 
 type HistoricalAnalysisChartProps = {
   city: string;
@@ -69,10 +71,11 @@ export const HistoricalAnalysisChart = ({
 
   return (
     <Card className={classes.card}>
-      <Group className={classes.group}>
-        <TitleSection title={t("Dashboard.analizaHistoryczna")} />
-        <TextDescription description={t("Dashboard.analizaHistorycznaOpis")} />
-      </Group>
+      <Flex className={classes.flex}>
+          <TitleSection title={t("Dashboard.analizaHistoryczna")} />
+          <HistoricalChartHelp />
+          <TextDescription description={t("Dashboard.analizaHistorycznaOpis")} />
+      </Flex>
 
       {loading && (
         <Center my="md">

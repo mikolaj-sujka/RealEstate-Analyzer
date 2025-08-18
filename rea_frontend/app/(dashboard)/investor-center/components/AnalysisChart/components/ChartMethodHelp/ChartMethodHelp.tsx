@@ -7,7 +7,7 @@ type Method = "basic" | "advanced";
 
 type ChartMethodHelpProps = {
   analysisType: Method; // "basic" (Deal Finder) | "advanced" (Premia za nowość)
-  absolute?: boolean; // renderować absolutnie w rogu? domyślnie true
+  relative?: boolean; // renderować absolutnie w rogu? domyślnie true
   position?: { top?: number; right?: number; bottom?: number; left?: number }; // odsunięcia
   width?: number; // szerokość dropdownu
   zIndex?: number;
@@ -61,14 +61,14 @@ function NewnessHelp() {
 
 export const ChartMethodHelp =({
   analysisType,
-  absolute = true,
-  position = { top: 0, right: 0 },
+  relative = true,
+  position = { top: 3, right: 0 },
   width = 420,
   zIndex = 1001,
   ariaLabel = "Wyjaśnienie metody",
 }: ChartMethodHelpProps) => {
-  const posStyle = absolute
-    ? { position: "absolute" as const, zIndex, ...position }
+  const posStyle = relative
+    ? { position: "relative" as const, zIndex, ...position }
     : undefined;
 
   return (

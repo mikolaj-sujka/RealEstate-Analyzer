@@ -10,9 +10,10 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import { IconInfoCircle, IconCircleCheck } from "@tabler/icons-react";
+import React from "react";
 
-export type RiskGaugeHelpProps = {
-  relative?: boolean;
+export type HistoricalChartHelpProps = {
+  absolute?: boolean;
   position?: { top?: number; right?: number; bottom?: number; left?: number };
   width?: number;
   zIndex?: number;
@@ -24,35 +25,40 @@ export type RiskGaugeHelpProps = {
 
 const defaultBullets: React.ReactNode[] = [
   <>
-    Wskaźnik przedstawia <b>ryzyko rynkowe</b> w skali <b>0–100</b>, gdzie{" "}
-    <b>niżej = bezpieczniej</b>.
+    Dane pochodzą z <b>GUS/BDL</b> i obejmują lata <b>2010–2025</b> (w miarę
+    dostępności dla poszczególnych wskaźników).
   </>,
   <>
-    Miernik jest <b>znormalizowany</b> — składniki są przeskalowane do wspólnego
-    zakresu i złożone w jeden wynik.
+    Na przełomie <b>2024–2025</b> występują częstsze <b>braki/poślizgi</b> w
+    publikacji — część serii jest uzupełniana stopniowo po publikacji przez GUS
+    (nie wszystkie miesiące/kwartały są dostępne od razu).
   </>,
   <>
-    W praktyce im wyższa zmienność oraz mniej sprzyjające trendy/płynność, tym{" "}
-    <b>wyższy</b> odczyt.
+    Niektóre wskaźniki są <b>roczne lub kwartalne</b>, więc na wykresie mogą
+    pojawiać się luki w danych miesięcznych.
   </>,
   <>
-    Odczyt to wartość chwilowa (snapshot) — interpretuj łącznie z trendem w
-    czasie.
+    GUS stosuje <b>rewizje</b> — opublikowane wartości mogą być korygowane
+    wstecznie. Interpretuj trend z uwzględnieniem możliwych aktualizacji.
+  </>,
+  <>
+    Odczyty są prezentowane tak, jak zostały opublikowane przez źródło; różnice
+    metodologiczne między latami mogą wpływać na porównywalność.
   </>,
 ];
 
-export const RiskGaugeHelp = ({
-  relative = true,
-  position = { top: 3, right: 0 },
+export const HistoricalChartHelp = ({
+  absolute = true,
+  position = { top: 19, left: 230 },
   width = 420,
   zIndex = 1001,
-  title = "Risk Gauge — jak czytać?",
+  title = "Dane historyczne — co warto wiedzieć?",
   bullets,
   footer,
-  ariaLabel = "Wyjaśnienie wskaźnika ryzyka",
-}: RiskGaugeHelpProps) => {
-  const posStyle = relative
-    ? { position: "relative" as const, zIndex, ...position }
+  ariaLabel = "Wyjaśnienie danych historycznych",
+}: HistoricalChartHelpProps) => {
+  const posStyle = absolute
+    ? { position: "absolute" as const, zIndex, ...position }
     : undefined;
   const items = bullets ?? defaultBullets;
 
@@ -66,7 +72,7 @@ export const RiskGaugeHelp = ({
         closeDelay={100}
       >
         <HoverCard.Target>
-          <ActionIcon variant="light" aria-label="Jak to liczymy?">
+          <ActionIcon variant="light" aria-label="Skąd pochodzą dane?">
             <IconInfoCircle size={18} />
           </ActionIcon>
         </HoverCard.Target>
@@ -92,4 +98,5 @@ export const RiskGaugeHelp = ({
       </HoverCard>
     </Box>
   );
-}
+};
+

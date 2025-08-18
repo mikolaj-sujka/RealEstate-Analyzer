@@ -250,11 +250,12 @@ public static class WebScrapingParserHelpers
         "wałbrzych","włocławek","tarnów","chorzów","koszalin","dąbrowa górnicza","zielona góra"
     };
 
-    private static readonly Regex VoivRegex = new Regex(
-        @"(?<!\p{L})(?:" + string.Join("|", Voivodeships
-            .OrderByDescending(v => v.Length)
-            .Select(Regex.Escape)) + @")(?!\p{L})",
-        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+    private static readonly Regex VoivRegexExtended = new Regex(
+        @"(?<!\p{L})(?:woj(?:ewództwo)?\.?\s*)?(" +
+        string.Join("|", Voivodeships.OrderByDescending(v => v.Length).Select(Regex.Escape)) +
+        @")(?=$|\P{L}|\p{Lu})",
+        RegexOptions.IgnoreCase | RegexOptions.Compiled);
+
 
     private static readonly Regex CityRegex = new Regex(
         @"(?<!\p{L})(?:" + string.Join("|", MajorCities
@@ -264,68 +265,232 @@ public static class WebScrapingParserHelpers
 
     private static readonly CultureInfo Pl = CultureInfo.GetCultureInfo("pl-PL");
 
+    private static readonly Regex StreetOrPrefixRegex = new(
+    @"^\s*(ul\.?|al\.?|aleja|aleje|pl\.?|plac|os\.?|osiedle|rondo|bulwar|bulw\.?|skwer)\b",
+    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+    private static readonly HashSet<string> NoiseWords = new(new[]
+    {
+        "zł","pln","m2","m²","sprzedam","wynajmę","mieszkanie","apartament","dom","działka",
+        "lokal","magazyn","hala","garaż","oferta","cena","ostatnie","pok.","pokojowe","na","żywo",
+        "zobacz","rezerwuj","ostatniego","ostatnia","ostatni", "szukasz", "szukasz mieszkania",
+        "Dodane Dzisiaj", "atrakcyjne", "umeblowane", "do wynajęcia", "do sprzedaży",
+    }, StringComparer.OrdinalIgnoreCase);
+
+    private static readonly HashSet<string> Adjectives = new(StringComparer.OrdinalIgnoreCase)
+    {
+        "północny","północna","północne",
+        "południowy","południowa","południowe",
+        "wschodni","wschodnia","wschodnie",
+        "zachodni","zachodnia","zachodnie",
+        "górny","górna","górne",
+        "dolny","dolna","dolne",
+        "środkowy","środkowa","środkowe",
+        "nowy","nowa","nowe",
+        "stary","stara","stare",
+        "centrum","śródmieście"
+    };
+
+    private static bool LooksAdjOnly(string s)
+    {
+        var w = Condense(s).ToLower(Pl).Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return w.Length == 1 && Adjectives.Contains(w[0]);
+    }
+
+    private static string CleanTokenForLocation(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return "";
+        var t = s;
+
+        t = t.Replace("–", "-").Replace("—", "-").Replace("/", " ").Replace("|", " ");
+        t = Regex.Replace(t, @"(?i)\b\d+([.,]\d+)?\b", " ");
+        t = Regex.Replace(t, @"(?i)\b(zł|pln|m2|m²|%|pok\.?|pokojowe?)\b", " ");
+        t = Regex.Replace(t, @"[^\p{L}\s\-]", " ");
+
+        t = StreetOrPrefixRegex.Replace(t, "");
+
+        var words = t.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                     .Where(w => !NoiseWords.Contains(w))
+                     .ToArray();
+
+        return Condense(string.Join(' ', words));
+    }
+
+    private static bool IsMeaningfulLocationToken(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return false;
+        if (Regex.IsMatch(s, @"\d")) return false;
+        if (NoiseWords.Contains(s)) return false;
+        return s.Length >= 2 && s.Length <= 120;
+    }
+
+    private static bool TryExtractFromMapAnchor(HtmlNode offer, out string city, out string district, out string voiv)
+    {
+        city = district = voiv = "";
+        var mapLink = offer.SelectSingleNode(".//a[@href='#map']");
+        if (mapLink == null) return false;
+
+        var text = Condense(mapLink.InnerText);
+        return TryParseAddressLine(text, out city, out district, out voiv);
+    }
+
+    private static bool TryParseAddressLine(string text, out string city, out string district, out string voiv)
+    {
+        city = district = voiv = "";
+
+        if (string.IsNullOrWhiteSpace(text)) return false;
+
+        var parts = text.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                        .Where(p => !StreetOrPrefixRegex.IsMatch(p)) // odrzuć "ul./al./pl./os." itp.
+                        .ToArray();
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            var mv = VoivRegexExtended.Match(parts[i]);
+            if (mv.Success)
+            {
+                voiv = ToTitle(mv.Groups[1].Value);
+                // nie przerywamy – jeszcze szukamy miasta
+            }
+        }
+
+        for (int i = 0; i < parts.Length; i++)
+        {
+            var mc = CityRegex.Match(parts[i]);
+            if (mc.Success)
+            {
+                city = ToTitle(mc.Value);
+
+                var prev = i > 0 ? CleanTokenForLocation(parts[i - 1]) : "";
+                if (IsDistrictCandidate(prev))
+                    district = LimitToTwoWords(prev);
+
+                if (string.IsNullOrEmpty(district) && i + 1 < parts.Length)
+                {
+                    var next = CleanTokenForLocation(parts[i + 1]);
+                    if (IsDistrictCandidate(next))
+                        district = LimitToTwoWords(next);
+                }
+
+                break;
+            }
+        }
+
+        return !string.IsNullOrEmpty(city) || !string.IsNullOrEmpty(voiv);
+    }
+    private static bool IsDistrictCandidate(string s)
+    {
+        if (!IsMeaningfulLocationToken(s)) return false;
+        if (LooksAdjOnly(s)) return false;
+
+        var lo = s.ToLower(Pl);
+
+        if (Regex.IsMatch(lo, @"\b(dwupoziom\w*|bezczynszow\w*|nowoczesn\w*|now\w*|przestronn\w*|cich\w*|kameraln\w*|komfortow\w*|do\s*wynaj|sprzeda|okazj\w*|atrakcyj\w*)\b"))
+            return false;
+
+        if (Regex.IsMatch(lo, @"\b(pok|pi[eę]tr|m²|m2|zł|umeblowan\w*)\b"))
+            return false;
+
+        if (lo.Length < 3) return false;
+
+        return true;
+    }
+
+    private static string LimitToTwoWords(string s)
+    {
+        var words = Condense(s).Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (words.Length <= 2) return ToTitle(string.Join(' ', words));
+        return ToTitle($"{words[0]} {words[1]}");
+    }
+
     public static (string City, string District, string Voivodeship)
-        ExtractLocation(HtmlNode offer, string offerText)
+    ExtractLocation(HtmlNode offer, string offerText)
     {
         string city = "", district = "", voiv = "";
+
+        var mapLink = offer.SelectSingleNode(".//a[@href='#map']");
+
+        var candidateTexts = new List<string>();
+        if (mapLink != null) candidateTexts.Add(Condense(mapLink.InnerText));
 
         var addrNodes = offer.SelectNodes(
             ".//*[" +
             "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'location') or " +
             "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'address') or " +
             "contains(@data-cy,'location')]");
-
         if (addrNodes != null)
+            candidateTexts.AddRange(addrNodes.Select(n => Condense(n.InnerText)));
+
+        if (!string.IsNullOrWhiteSpace(offerText))
+            candidateTexts.Add(Condense(offerText));
+
+        foreach (var raw in candidateTexts)
         {
-            foreach (var n in addrNodes)
+            if (string.IsNullOrEmpty(voiv))
             {
-                var t = Condense(n.InnerText);
+                var mv = VoivRegexExtended.Match(raw);
+                if (mv.Success) 
+                    voiv = ToTitle(mv.Groups[1].Value);
+            }
 
-                if (string.IsNullOrEmpty(voiv))
-                {
-                    var m = VoivRegex.Match(t);
-                    if (m.Success) voiv = ToTitle(m.Value);
-                }
+            var parts = raw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-                if (string.IsNullOrEmpty(city))
+            if (string.IsNullOrEmpty(city))
+            {
+                for (int i = 0; i < parts.Length; i++)
                 {
-                    var cm = CityRegex.Match(t);
-                    if (cm.Success) city = ToTitle(cm.Value);
-                }
-
-                if (string.IsNullOrEmpty(city))
-                {
-                    var parts = t.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-                    for (int i = 0; i < parts.Length; i++)
+                    var p = parts[i];
+                    var mc = CityRegex.Match(p);
+                    if (mc.Success)
                     {
-                        var pm = CityRegex.Match(parts[i]);
-                        if (pm.Success)
+                        city = ToTitle(mc.Value);
+
+                        string cand = "";
+                        string prev1Raw = i > 0 ? parts[i - 1] : "";
+                        string prev2Raw = i > 1 ? parts[i - 2] : "";
+
+                        string prev1 = CleanTokenForLocation(prev1Raw);
+                        string prev2 = CleanTokenForLocation(prev2Raw);
+
+                        if (StreetOrPrefixRegex.IsMatch(prev1Raw)) prev1 = "";
+                        if (StreetOrPrefixRegex.IsMatch(prev2Raw)) prev2 = "";
+
+                        if (IsMeaningfulLocationToken(prev1))
                         {
-                            city = ToTitle(pm.Value);
-                            if (i > 0) district = ToTitle(parts[i - 1]);
-                            break;
+                            cand = prev1;
+
+                            if (LooksAdjOnly(cand) && IsMeaningfulLocationToken(prev2))
+                                cand = $"{prev2} {cand}";
                         }
+                        else if (IsMeaningfulLocationToken(prev2))
+                        {
+                            cand = prev2;
+                        }
+                        else
+                        {
+                            var next1 = i + 1 < parts.Length ? CleanTokenForLocation(parts[i + 1]) : "";
+                            if (IsMeaningfulLocationToken(next1)) cand = next1;
+                        }
+
+                        district = LimitToTwoWords(cand);
+                        break;
                     }
                 }
-
-                if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(voiv))
-                    break;
             }
+
+            if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(voiv))
+                break;
         }
 
-        if (string.IsNullOrEmpty(voiv))
+        if (string.IsNullOrEmpty(voiv) && !string.IsNullOrWhiteSpace(offerText))
         {
-            var m = VoivRegex.Match(offerText ?? "");
-            if (m.Success) voiv = ToTitle(m.Value);
-        }
-        if (string.IsNullOrEmpty(city))
-        {
-            var m = CityRegex.Match(offerText ?? "");
-            if (m.Success) city = ToTitle(m.Value);
+            var mv = VoivRegexExtended.Match(offerText);
+            if (mv.Success) voiv = ToTitle(mv.Groups[1].Value);
         }
 
         return (city, district, voiv);
     }
+
     public static DateTime? ExtractPublishedUtc(HtmlNode offer, string offerText)
     {
         var t = offer.SelectSingleNode(".//time[@datetime]");
@@ -342,14 +507,6 @@ public static class WebScrapingParserHelpers
         if (m.Success && TryParseDate(m.Groups[1].Value, out var pl)) return pl;
 
         return null;
-    }
-
-    public static decimal ExtractPricePln(string text)
-    {
-        var m = Regex.Match(text, @"(\d{1,3}(?:[\s\.]\d{3})*(?:,\d{2})?)\s*zł", RegexOptions.IgnoreCase);
-        if (!m.Success) return 0m;
-        var raw = m.Groups[1].Value.Replace(" ", "").Replace(".", "").Replace(",", ".");
-        return decimal.TryParse(raw, NumberStyles.Any, CultureInfo.InvariantCulture, out var v) ? v : 0m;
     }
 
     public static decimal ExtractAreaSqm(string text)
@@ -370,8 +527,18 @@ public static class WebScrapingParserHelpers
         return "Other";
     }
 
-    public static string Condense(string s) =>
-        Regex.Replace(WebUtility.HtmlDecode(s ?? string.Empty), @"\s+", " ").Trim();
+    public static string Condense(string s)
+    {
+        var t = WebUtility.HtmlDecode(s ?? string.Empty).Replace("\u00A0", " ");
+
+        t = Regex.Replace(t, @"(?<=\p{Ll})(?=\p{Lu})", " ");
+
+        t = Regex.Replace(t, @"(?<=\p{L})(?=\d)|(?<=\d)(?=\p{L})", " ");
+
+        t = Regex.Replace(t, @"\s+", " ").Trim();
+        return t;
+    }
+
 
     public static string CleanTitle(string s)
     {

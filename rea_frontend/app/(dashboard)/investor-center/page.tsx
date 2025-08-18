@@ -69,7 +69,7 @@ export default function InvestorCenter({}: InvestorCenterProps) {
               <TitleSection
                 title={t("InvestorCenter.analizaRyzykaInwestycyjnego")}
               />
-              <RiskGaugeHelp absolute={false} />
+              <RiskGaugeHelp relative={true} />
             </Flex>
 
             <TextDescription

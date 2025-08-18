@@ -6,7 +6,7 @@ export const card = style({
   marginBottom: "var(--mantine-spacing-lg)",
 });
 
-export const group = style({
+export const flex = style({
   marginBottom: "var(--mantine-spacing-md)",
   display: "flex",
   gap: rem(2),

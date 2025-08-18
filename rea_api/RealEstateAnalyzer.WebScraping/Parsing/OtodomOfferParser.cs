@@ -60,6 +60,11 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
                 continue;
             }
 
+            if (string.IsNullOrEmpty(voivodeship))
+            {
+                continue;
+            }
+
             list.Add(new OtodomOfferRecord(
                 url, city, district,
                 publishedUtc, scrapedUtc,

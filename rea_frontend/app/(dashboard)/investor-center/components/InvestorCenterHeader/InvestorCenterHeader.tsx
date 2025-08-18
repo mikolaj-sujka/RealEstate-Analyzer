@@ -30,7 +30,7 @@ export const InvestorCenterHeader = ({
     <>
       <Flex className={classes.headerTop}>
         <TitleSection title={title} />
-        <ChartMethodHelp absolute={false} analysisType={analysisType as "basic" | "advanced"} />
+        <ChartMethodHelp relative={true} analysisType={analysisType as "basic" | "advanced"} />
       </Flex>
         <TextDescription
           description={t("InvestorCenter.centrumInwestoraOpis")}

@@ -13,5 +13,4 @@ export const tableColumns: Column[] = [
   },
   { key: "date", label: "Data", sortable: true },
   { key: "price", label: "Cena", sortable: true },
-
 ];
