@@ -18,9 +18,9 @@ export const useHistoricalAnalysisChartState = (): {
   customRange: [Date | null, Date | null];
   setCustomRange: (r: [Date | null, Date | null]) => void;
   cityOptions: { value: string; label: string }[];
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
+  loadingHistorical: boolean;
+  errorHistorical: string | null;
+  refetchHistorical: () => void;
 } & ChartProps => {
   const [city, setCity] = useState<string | null>("Warszawa");
   const [range, setRange] = useState<Range>("3y");
@@ -53,7 +53,7 @@ export const useHistoricalAnalysisChartState = (): {
 
   const safeCity = city ?? "Warszawa";
 
-  const { data, loading, error, refetch } = useGusHistoricalAnalysis(
+  const { data, loadingHistorical, errorHistorical, refetchHistorical } = useGusHistoricalAnalysis(
     safeCity,
     range,
     customRange
@@ -118,9 +118,9 @@ export const useHistoricalAnalysisChartState = (): {
     customRange,
     setCustomRange,
     cityOptions,
-    loading,
-    error,
-    refetch,
+    loadingHistorical,
+    errorHistorical,
+    refetchHistorical,
   };
 };
 

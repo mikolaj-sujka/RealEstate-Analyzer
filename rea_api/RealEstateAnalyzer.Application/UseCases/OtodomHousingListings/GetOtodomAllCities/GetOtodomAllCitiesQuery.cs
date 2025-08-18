@@ -15,6 +15,7 @@ public class GetOtodomAllCitiesQueryHandler(DatabaseContext context) : IRequestH
             .AsNoTracking()
             .Select(x => x.Location.City)
             .Distinct()
+            .OrderBy(x => x)
             .ToListAsync(cancellationToken);
         return new List<GetOtodomAllCitiesQueryResponse> { new(cities) };
     }

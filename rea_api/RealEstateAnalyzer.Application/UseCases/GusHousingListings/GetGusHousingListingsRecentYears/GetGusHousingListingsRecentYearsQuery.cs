@@ -56,7 +56,8 @@ public class GetGusHousingListingsRecentYearsQueryHandler(DatabaseContext contex
                 l.AverageTotalPrice,
                 l.FlatsCompleted,
                 l.FlatsSold
-            )).ToListAsync(cancellationToken: cancellationToken);
+            ))
+            .ToListAsync(cancellationToken: cancellationToken);
 
         if (!allListingsForCity.Any())
         {
@@ -84,7 +85,8 @@ public class GetGusHousingListingsRecentYearsQueryHandler(DatabaseContext contex
                 l.FlatsSold.Count,
                 l.TotalValueSold.Amount,
                 l.AverageTotalPrice.Amount
-            )).ToList();
+            ))
+            .ToList();
 
         logger.LogInformation("Retrieved {Count} listings for city {CityName} in years back {YearsBack}", 
             latest.Count, request.CityName, request.YearsBack);

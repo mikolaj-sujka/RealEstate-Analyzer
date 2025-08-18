@@ -37,6 +37,7 @@ public class GetOtodomCityDistrictsQueryHandler(DatabaseContext context, ILogger
                 Size = (decimal?)x.FlatSize.SquareMeters                   
             })
             .GroupBy(x => x.District)
+
             .ToListAsync(cancellationToken);
 
         if (listingCityData.Count == 0)
@@ -52,7 +53,9 @@ public class GetOtodomCityDistrictsQueryHandler(DatabaseContext context, ILogger
                 TotalBuildingOffers: (uint)g.Count(),
                 District: g.Key,
                 AverageFlatSize: g.Average(x => x.Size) ?? 0
-            )).ToList();
+            ))
+            .DistinctBy(x => x.District)
+            .ToList();
 
 
         return new List<GetOtodomCityDistrictsQueryResponse> { new(districtData) };

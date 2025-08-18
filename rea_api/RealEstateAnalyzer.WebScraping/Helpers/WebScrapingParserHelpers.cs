@@ -213,11 +213,6 @@ public static class WebScrapingParserHelpers
         return href;
     }
 
-    public static string NormalizeUrl(string? href) =>
-        string.IsNullOrWhiteSpace(href)
-            ? ""
-            : (href.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? href : $"https://www.otodom.pl{href}");
-
     public static string? ExtractTitle(HtmlNode offer)
     {
         var links = offer.SelectNodes(".//a[@href]");
@@ -239,54 +234,78 @@ public static class WebScrapingParserHelpers
         return t.Length > 80 ? t[..80] : t;
     }
 
-    public static (string City, string District, string Voivodeship) ExtractLocation(HtmlNode offer, string offerText)
+    private static readonly string[] Voivodeships = new[]
+     {
+        "zachodniopomorskie","kujawsko-pomorskie","warmińsko-mazurskie",
+        "wielkopolskie","podkarpackie","świętokrzyskie","dolnośląskie",
+        "małopolskie","mazowieckie","opolskie","pomorskie","podlaskie",
+        "lubelskie","lubuskie","łódzkie","śląskie"
+    };
+
+    private static readonly string[] MajorCities = new[]
     {
-        var major = new[]
-        {
         "warszawa","kraków","łódź","wrocław","poznań","gdańsk","szczecin","bydgoszcz","lublin",
         "katowice","białystok","gdynia","częstochowa","radom","sosnowiec","toruń","kielce","gliwice","zabrze",
         "olsztyn","rzeszów","bielsko-biała","bytom","ruda śląska","rybnik","opole","tychy","gorzów wielkopolski","płock","elbląg",
         "wałbrzych","włocławek","tarnów","chorzów","koszalin","dąbrowa górnicza","zielona góra"
     };
 
-        var voivodeships = new[]
-        {
-        "dolnośląskie","kujawsko-pomorskie","lubelskie","lubuskie","łódzkie","małopolskie","mazowieckie","opolskie",
-        "podkarpackie","podlaskie","pomorskie","śląskie","świętokrzyskie","warmińsko-mazurskie","wielkopolskie","zachodniopomorskie"
-    };
+    private static readonly Regex VoivRegex = new Regex(
+        @"(?<!\p{L})(?:" + string.Join("|", Voivodeships
+            .OrderByDescending(v => v.Length)
+            .Select(Regex.Escape)) + @")(?!\p{L})",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
+    private static readonly Regex CityRegex = new Regex(
+        @"(?<!\p{L})(?:" + string.Join("|", MajorCities
+            .OrderByDescending(c => c.Length)
+            .Select(Regex.Escape)) + @")(?!\p{L})",
+        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
+
+    private static readonly CultureInfo Pl = CultureInfo.GetCultureInfo("pl-PL");
+
+    public static (string City, string District, string Voivodeship)
+        ExtractLocation(HtmlNode offer, string offerText)
+    {
         string city = "", district = "", voiv = "";
 
-        var addr = offer.SelectNodes(
+        var addrNodes = offer.SelectNodes(
             ".//*[" +
             "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'location') or " +
             "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'address') or " +
             "contains(@data-cy,'location')]");
-        if (addr != null)
+
+        if (addrNodes != null)
         {
-            foreach (var n in addr)
+            foreach (var n in addrNodes)
             {
                 var t = Condense(n.InnerText);
 
-                if (string.IsNullOrEmpty(city) && major.Any(m => t.Contains(m, StringComparison.OrdinalIgnoreCase)))
+                if (string.IsNullOrEmpty(voiv))
+                {
+                    var m = VoivRegex.Match(t);
+                    if (m.Success) voiv = ToTitle(m.Value);
+                }
+
+                if (string.IsNullOrEmpty(city))
+                {
+                    var cm = CityRegex.Match(t);
+                    if (cm.Success) city = ToTitle(cm.Value);
+                }
+
+                if (string.IsNullOrEmpty(city))
                 {
                     var parts = t.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
                     for (int i = 0; i < parts.Length; i++)
                     {
-                        var hit = major.FirstOrDefault(m => parts[i].Contains(m, StringComparison.OrdinalIgnoreCase));
-                        if (hit != null)
+                        var pm = CityRegex.Match(parts[i]);
+                        if (pm.Success)
                         {
-                            city = ToTitle(parts[i]);
-                            district = i > 0 ? ToTitle(parts[i - 1]) : district;
+                            city = ToTitle(pm.Value);
+                            if (i > 0) district = ToTitle(parts[i - 1]);
                             break;
                         }
                     }
-                }
-
-                if (string.IsNullOrEmpty(voiv))
-                {
-                    var vh = voivodeships.FirstOrDefault(v => t.Contains(v, StringComparison.OrdinalIgnoreCase));
-                    if (vh != null) voiv = ToTitle(vh);
                 }
 
                 if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(voiv))
@@ -294,40 +313,19 @@ public static class WebScrapingParserHelpers
             }
         }
 
-        var lower = offerText.ToLowerInvariant();
-
-        if (string.IsNullOrEmpty(city))
-        {
-            foreach (var m in major)
-            {
-                var idx = lower.IndexOf(m, StringComparison.Ordinal);
-                if (idx >= 0)
-                {
-                    city = ToTitle(m);
-                    var before = offerText.Substring(Math.Max(0, idx - 50), Math.Min(50, idx));
-                    var mm = Regex.Match(before, @"([A-ZĄĆĘŁŃÓŚŹŻ][a-ząćęłńóśźż\s-]+),\s*$");
-                    if (mm.Success) district = ToTitle(mm.Groups[1].Value);
-                    break;
-                }
-            }
-        }
-
         if (string.IsNullOrEmpty(voiv))
         {
-            foreach (var v in voivodeships)
-            {
-                if (lower.Contains(v, StringComparison.Ordinal))
-                {
-                    voiv = ToTitle(v);
-                    break;
-                }
-            }
+            var m = VoivRegex.Match(offerText ?? "");
+            if (m.Success) voiv = ToTitle(m.Value);
+        }
+        if (string.IsNullOrEmpty(city))
+        {
+            var m = CityRegex.Match(offerText ?? "");
+            if (m.Success) city = ToTitle(m.Value);
         }
 
         return (city, district, voiv);
     }
-
-
     public static DateTime? ExtractPublishedUtc(HtmlNode offer, string offerText)
     {
         var t = offer.SelectSingleNode(".//time[@datetime]");

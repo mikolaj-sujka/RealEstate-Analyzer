@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { useCityComparison } from "./hooks";
-import { BarChart, FiltersWrapper, LineChart } from "./components";
+import { useCityComparison } from "./hooks/useCityComparison";
+import { BarChart, FiltersWrapper } from "./components";
 import { useTranslate } from "@/hooks";
 import { ContainerSection } from "@/components/ContainerSection/ContainerSection";
 import { TitleSection } from "@/components/UI/TitleSection";
@@ -13,6 +13,9 @@ export default function CityComparison() {
     selectedCities,
     filterConfig,
     handleFilterChange,
+    loading,
+    error,
+    filtersKey,
   } = useCityComparison();
 
   const { t } = useTranslate();
@@ -21,8 +24,15 @@ export default function CityComparison() {
     <ContainerSection>
       <TitleSection title={t("CityComparison.porównanieMiast")} />
       <TextDescription description={t("CityComparison.opisPorównania")} />
-      <FiltersWrapper config={filterConfig} onChange={handleFilterChange} />
 
+      <FiltersWrapper
+        key={filtersKey}
+        config={filterConfig}
+        onChange={handleFilterChange}
+      />
+
+      {error && <div style={{ color: "red", marginTop: 8 }}>{error}</div>}
+      {/* spinner itp. */}
       <BarChart data={filteredData} selectedCities={selectedCities} />
     </ContainerSection>
   );

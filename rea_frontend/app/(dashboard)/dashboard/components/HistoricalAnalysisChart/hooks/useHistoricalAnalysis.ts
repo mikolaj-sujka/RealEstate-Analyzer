@@ -72,8 +72,8 @@ export const useGusHistoricalAnalysis = (
   customRange: [Date | null, Date | null]
 ) => {
   const [data, setData] = useState<HistoricalPoint[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingHistorical, setLoading] = useState(true);
+  const [errorHistorical, setError] = useState<string | null>(null);
 
   const controllerRef = useRef<AbortController | null>(null);
 
@@ -136,7 +136,7 @@ export const useGusHistoricalAnalysis = (
     return () => controllerRef.current?.abort();
   }, [load]);
 
-  const refetch = useCallback(() => {
+  const refetchHistorical = useCallback(() => {
     load();
   }, [load]);
 
@@ -149,6 +149,6 @@ export const useGusHistoricalAnalysis = (
     return data;
   }, [data, range]);
 
-  return { data: filtered, loading, error, refetch };
+  return { data: filtered, loadingHistorical, errorHistorical, refetchHistorical };
 };
 

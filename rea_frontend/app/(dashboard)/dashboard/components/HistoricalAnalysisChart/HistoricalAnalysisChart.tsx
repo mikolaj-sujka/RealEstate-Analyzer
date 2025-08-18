@@ -1,44 +1,70 @@
 "use client";
 
 import React from "react";
-import { Card, Group, Grid, Alert, Button, Center, Loader } from "@mantine/core";
+import {
+  Card,
+  Group,
+  Grid,
+  Alert,
+  Button,
+  Center,
+  Loader,
+} from "@mantine/core";
 import { CitySelect } from "@/components/CitySelect";
 import { TimeRangeSelector } from "@/components/TimeRangeSelector";
 import { CustomDateRangePicker } from "@/components/CustomDateRangePicker";
 import { Chart } from "@/components/Chart";
-import { useHistoricalAnalysisChartState } from "./hooks";
 import { MetricsSelector } from "@/components/MetricsMultiSelect";
-import { metrics, timeRanges } from "./models";
-import { useTranslate } from "@/hooks";
+import { metrics, Range, timeRanges } from "./models";
 import { TitleSection, TextDescription } from "@/components/UI";
 import * as classes from "./styles";
 import { IconReload } from "@tabler/icons-react";
+import { t, TFunction } from "i18next";
 
-export const HistoricalAnalysisChart = () => {
-  const {
-    city,
-    setCity,
-    range,
-    setRange,
-    selectedMetrics,
-    setSelectedMetrics,
-    customRange,
-    setCustomRange,
-    data,
-    series,
-    showPrediction,
-    accentColor,
-    secondaryColor,
-    showDetailedTooltip,
-    height,
-    cityOptions,
-    loading,
-    error,
-    refetch,
-  } = useHistoricalAnalysisChartState();
+type HistoricalAnalysisChartProps = {
+  city: string;
+  setCity: (city: string) => void;
+  range: string;
+  setRange: (range: Range) => void;
+  selectedMetrics: string[];
+  setSelectedMetrics: (metrics: string[]) => void;
+  customRange: [Date | null, Date | null];
+  setCustomRange: (range: [Date | null, Date | null]) => void;
+  data: any;
+  series: any;
+  showPrediction: boolean;
+  accentColor: string;
+  secondaryColor: string;
+  showDetailedTooltip: boolean;
+  height: number;
+  cityOptions: any[];
+  loading: boolean;
+  error: boolean;
+  refetch: () => void;
+  t: TFunction<"translation", undefined>;
+};
 
-  const { t } = useTranslate();
-
+export const HistoricalAnalysisChart = ({
+  city,
+  setCity,
+  range,
+  setRange,
+  selectedMetrics,
+  setSelectedMetrics,
+  customRange,
+  setCustomRange,
+  data,
+  series,
+  showPrediction,
+  accentColor,
+  secondaryColor,
+  showDetailedTooltip,
+  height,
+  cityOptions,
+  loading,
+  error,
+  refetch,
+}: HistoricalAnalysisChartProps) => {
   const showOnlyHeader = Boolean(error);
 
   return (

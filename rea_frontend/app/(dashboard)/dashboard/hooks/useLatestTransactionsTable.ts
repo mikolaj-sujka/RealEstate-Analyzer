@@ -71,6 +71,6 @@ export function useLatestTransactionsTable() {
     []
   );
 
-  return { data: rows, columns, loading, error, refetch };
+  return { dataTable: rows, columns, loading, error, refetch };
 }
 

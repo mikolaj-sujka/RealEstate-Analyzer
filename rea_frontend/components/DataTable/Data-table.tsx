@@ -21,7 +21,6 @@ export const DataTable = <Row,>({
   pageSize = 10,
   selectable = false,
   onRowAction,
-  onExport,
 }: TableProps<Row>) => {
   const {
     sortKey,

@@ -53,3 +53,18 @@ export type OtodomLatestTransaction = {
     marketType: string;
     [key: string]: any;
 }
+
+export type GetOtodomCityDataListingsResponse = {
+  TotalOffers: number;
+  AveragePricePerSqm: number;
+  AverageBuildingsBuiltYear: number;
+  DeveloperMarketShaers: number; // <-- zostawiam pisownię jak w API
+};
+
+export type CityComparisonData = {
+  city: string;
+  averagePrice: number;           // = AveragePricePerSqm
+  primaryMarketShare: number;     // = DeveloperMarketShaers (0..1 lub 0..100 -> patrz transform)
+  averageBuildingYear: number;    // = AverageBuildingsBuiltYear
+  totalOffers: number;            // = TotalOffers
+};

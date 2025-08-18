@@ -16,6 +16,7 @@ public class GetOtodomAllVoivodeshipsQueryHandler(DatabaseContext context)
             .AsNoTracking()
             .Select(x => x.Location.Voivodeship)
             .Distinct()
+            .OrderBy(x => x)
             .ToListAsync(cancellationToken);
         return new List<GetOtodomAllVoivodeshipsQueryResponse> { new(voivodeships) };
     }

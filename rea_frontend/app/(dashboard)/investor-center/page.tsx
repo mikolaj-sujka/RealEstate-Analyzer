@@ -27,8 +27,6 @@ export default function InvestorCenter({}: InvestorCenterProps) {
   selectedCity,
   cityOptions,
   rows,
-  rowsLoading,
-  rowsError,
   analysisType,
   isSwitching,
   handleAnalysisTypeChange,

@@ -29,7 +29,6 @@ export const useReportGenerator = () => {
 
       builder.save(fileName);
     } catch (e) {
-      console.error('Error generating report', e);
       setError('Wystapil blad podczas generowania raportu.');
     } finally {
       setIsGenerating(false);

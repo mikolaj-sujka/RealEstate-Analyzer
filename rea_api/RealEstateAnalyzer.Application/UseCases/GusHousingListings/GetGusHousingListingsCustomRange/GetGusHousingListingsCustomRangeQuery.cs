@@ -46,6 +46,7 @@ public class GetGusHousingListingsCustomRangeQueryHandler(
                 l.FlatsCompleted,
                 l.FlatsSold
             ))
+            .OrderBy(x => x.CityName)
             .ToListAsync(cancellationToken);
 
         if (!allListingsForCity.Any())

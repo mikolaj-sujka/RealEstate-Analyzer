@@ -94,6 +94,7 @@ public class ListingCacheService(DatabaseContext databaseContext, IDatabase cach
                 .Select(l => l.CityName)
                 .Distinct()
                 .AsNoTracking()
+                .OrderBy(x => x)
                 .ToList();
 
             var serializedListings = JsonSerializer.Serialize(listingsFromDb);
@@ -106,6 +107,8 @@ public class ListingCacheService(DatabaseContext databaseContext, IDatabase cach
             var listingsFromDb = databaseContext.GusHousingListings
                 .Select(l => l.CityName)
                 .AsNoTracking()
+                .Distinct()
+                .OrderBy(x => x)
                 .ToList();
             var serializedListings = JsonSerializer.Serialize(listingsFromDb);
             cacheDatabase.StringSet("all_cities_gus_v2", serializedListings, TimeSpan.FromDays(1));

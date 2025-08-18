@@ -1,4 +1,2 @@
 export * from './BarChart';
-export * from './LineChart';
-export * from './ComparisonCard';
 export * from './FilterWrapper';
