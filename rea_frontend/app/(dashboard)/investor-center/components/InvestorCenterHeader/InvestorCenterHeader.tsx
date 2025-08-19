@@ -14,6 +14,7 @@ type InvestorCenterHeaderProps = {
   selectedCity: string;
   onCityChange: (value: string | null) => void;
   cityOptions: { value: string; label: string }[];
+  disabled?: boolean;
 };
 
 export const InvestorCenterHeader = ({
@@ -23,6 +24,7 @@ export const InvestorCenterHeader = ({
   selectedCity,
   onCityChange,
   cityOptions,
+  disabled
 }: InvestorCenterHeaderProps) => {
   const { t } = useTranslate();
 
@@ -51,6 +53,7 @@ export const InvestorCenterHeader = ({
           options={cityOptions}
           value={selectedCity}
           onChange={onCityChange}
+          disabled={disabled}
         />
       </Flex>
     </>
