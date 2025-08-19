@@ -19,7 +19,6 @@ RealEstate Analyzer to zaawansowana platforma webowa umożliwiająca kompleksow�
 Główne funkcjonalności obejmują:
 
 - Szczegółową analizę geograficzną oraz czasową danych rynkowych.
-- Zaawansowane modele predykcyjne oparte na uczeniu maszynowym.
 - Monitoring rynku, który posiada najnowsze jak i dane historyczne z interaktywnymi wizualizacjami.
 - Kalkulatory rentowności i potencjału inwestycyjnego.
 
@@ -135,8 +134,6 @@ RealEstate-Analyzer/
 │   ├── RealEstateAnalyzer.Infrastructure.Http/     
 │   ├── RealEstateAnalyzer.Infrastructure.Hangfire/ 
 │   ├── RealEstateAnalyzer.Infrastructure.Redis/    
-│   ├── RealEstateAnalyzer.ML.Forecasting/
-│   ├── RealEstateAnalyzer.ML.Contracts/ 
 │   ├── RealEstateAnalyzer.WebScraping/             
 │   ├── RealEstateAnalyzer.WebScraping.Domain/      
 │   ├── RealEstateAnalyzer.WebScraping.Abstractions/ 
