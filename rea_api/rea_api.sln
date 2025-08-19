@@ -27,10 +27,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.WebScrap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Http", "RealEstateAnalyzer.Infrastructure.Http\RealEstateAnalyzer.Infrastructure.Http.csproj", "{23859139-FA27-401E-3158-B42795681178}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.ML.Contracts", "RealEstateAnalyzer.ML.Contracts\RealEstateAnalyzer.ML.Contracts.csproj", "{7F26994A-59E3-48EF-B7EE-919E75650D34}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.ML.Forecasting", "RealEstateAnalyzer.ML.Forecasting\RealEstateAnalyzer.ML.Forecasting.csproj", "{30B98974-DBBC-8453-4370-245189F4B979}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -181,30 +177,6 @@ Global
 		{23859139-FA27-401E-3158-B42795681178}.Release|x64.Build.0 = Release|Any CPU
 		{23859139-FA27-401E-3158-B42795681178}.Release|x86.ActiveCfg = Release|Any CPU
 		{23859139-FA27-401E-3158-B42795681178}.Release|x86.Build.0 = Release|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Debug|x64.Build.0 = Debug|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Debug|x86.Build.0 = Debug|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Release|x64.ActiveCfg = Release|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Release|x64.Build.0 = Release|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Release|x86.ActiveCfg = Release|Any CPU
-		{7F26994A-59E3-48EF-B7EE-919E75650D34}.Release|x86.Build.0 = Release|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Debug|x64.Build.0 = Debug|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Debug|x86.Build.0 = Debug|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Release|x64.ActiveCfg = Release|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Release|x64.Build.0 = Release|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Release|x86.ActiveCfg = Release|Any CPU
-		{30B98974-DBBC-8453-4370-245189F4B979}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
