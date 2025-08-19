@@ -67,7 +67,9 @@
     "InvestmentScore": {
         "kalkulatorPotencjałuInwestycyjnego": "Kalkulator Potencjału Inwestycyjnego",
         "narzędzieAHP": "Narzędzie AHP do oceny atrakcyjności inwestycyjnej nieruchomości na podstawie różnych kryteriów.",
-        "wynikiCzastkowe": "Wyniki Cząstkowe"
+        "wynikiCzastkowe": "Wyniki Cząstkowe",
+        "obliczScore": "Oblicz Score",
+        "wagiKryteriowAhp": "Wagi Kryteriów AHP"
     },
     "InvestmentCalculator": {
         "symulatorOpłacalnościInwestycji": "Symulator Opłacalności Inwestycji",

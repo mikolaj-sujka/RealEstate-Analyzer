@@ -2,13 +2,13 @@
 
 import React from "react";
 import { Box, LoadingOverlay, Grid } from "@mantine/core";
-import { SimulationResult } from "../../models";
 import { ResultsChart } from "../ResultChart";
 import { KeyMetrics } from "../KeyMetrics";
+import { InvestmentCalculatorSimulationResult } from "../../models";
 
 type SimulationResultsProps = {
   isLoading: boolean;
-  result: SimulationResult | null;
+  result: InvestmentCalculatorSimulationResult | null;
 }
 
 export const SimulationResults: React.FC<SimulationResultsProps> = ({

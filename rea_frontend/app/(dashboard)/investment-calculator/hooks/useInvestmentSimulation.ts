@@ -1,89 +1,116 @@
 "use client";
 
 import { useState } from "react";
-import { SimulationResult } from "../models";
 import { runMonteCarloSimulation } from "../utils";
 
+export type InvestmentCalculatorSimulationResult = {
+  roi: number; // średni ROI (%)
+  npv: number; // średnie NPV
+  irr: number; // mediana IRR (%)
+  cagr: number; // mediana CAGR (%)
+  distribution: number[]; // ROI (%) – do histogramu
+  percentiles: {
+    roi: { p5: number; p50: number; p95: number };
+    npv: { p5: number; p50: number; p95: number };
+    irr: { p5: number; p50: number; p95: number };
+    finalValue: { p5: number; p50: number; p95: number };
+  };
+};
+
 export const useInvestmentSimulation = () => {
-    const [initialInvestment, setInitialInvestment] = useState(500_000);
-    const [years, setYears] = useState(10);
-    const [priceGrowth, setPriceGrowth] = useState(5);
-    const [rentYield, setRentYield] = useState(4);
-    const [inflation, setInflation] = useState(3);
-    const [interestRate, setInterestRate] = useState(6);
-    const [isLoading, setIsLoading] = useState(false);
-    const [result, setResult] = useState<SimulationResult | null>(null);
+  const [initialInvestment, setInitialInvestment] = useState(500_000);
+  const [years, setYears] = useState(10);
+  const [priceGrowth, setPriceGrowth] = useState(5); // % średnio
+  const [rentYield, setRentYield] = useState(4); // % w 1. roku (yield)
+  const [inflation, setInflation] = useState(3);
+  const [interestRate, setInterestRate] = useState(6);
+  const [isLoading, setIsLoading] = useState(false);
+  const [result, setResult] =
+    useState<InvestmentCalculatorSimulationResult | null>(null);
 
-    const handleSimulation = () => {
-        setIsLoading(true);
-        setResult(null);
+  const handleSimulation = () => {
+    setIsLoading(true);
+    try {
+      const out = runMonteCarloSimulation({
+        initialInvestment,
+        years,
+        simulations: 2000,
 
-        setTimeout(() => {
-            const finalValues = runMonteCarloSimulation({
-                initialInvestment,
-                years,
-                annualContribution: 0, // Wartość zahardkodowana w oryginale
-                meanPriceGrowth: priceGrowth,
-                stdDevPriceGrowth: 2, // Wartość zahardkodowana w oryginale
-                meanRentYield: rentYield,
-                stdDevRentYield: 1, // Wartość zahardkodowana w oryginale
-                simulations: 1000, // Wartość zahardkodowana w oryginale
-            });
+        meanPriceGrowth: priceGrowth,
+        stdDevPriceGrowth: 2,
 
-            // Obliczenia ROI
-            const rois = finalValues.map(
-                (v) => ((v - initialInvestment) / initialInvestment) * 100
-            );
-            const avgFinalValue =
-                finalValues.reduce((a, b) => a + b, 0) / finalValues.length;
-            const avgRoi = ((avgFinalValue - initialInvestment) / initialInvestment) * 100;
+        startingRentYield: rentYield,
+        meanRentGrowth: 2, // rozsądny domyślny wzrost czynszów (%)
+        stdDevRentGrowth: 1,
 
-            // Obliczenia NPV
-            const realDiscountRate = (interestRate - inflation) / 100;
-            const annualRentIncome = initialInvestment * (rentYield / 100);
+        vacancyRate: 5, // % pustostanu
+        opexRatio: 30, // % kosztów operacyjnych
+        sellingCostsPct: 2, // koszty wyjścia
 
-            const cashFlows = [-initialInvestment];
-            for (let i = 0; i < years - 1; i++) {
-                cashFlows.push(annualRentIncome);
-            }
-            cashFlows.push(annualRentIncome + avgFinalValue);
+        correlation: 0.3, // korelacja: czynsze–ceny
 
-            const npv = cashFlows.reduce(
-                (acc, val, i) => acc + val / Math.pow(1 + realDiscountRate, i),
-                0
-            );
+        nominalDiscountRate: interestRate,
+        inflation,
 
-            const irr = avgRoi / years;
+        useExitCap: false, // jeśli chcesz – ustaw true i exitCapRate
+        exitCapRate: 6,
+      });
 
-            setResult({
-                roi: avgRoi,
-                npv,
-                irr,
-                distribution: rois,
-            });
-            setIsLoading(false);
-        }, 1000);
-    };
-
-    return {
-        params: {
-            initialInvestment,
-            years,
-            priceGrowth,
-            rentYield,
-            inflation,
-            interestRate,
+      const r = {
+        roi: out.summary.roi.mean,
+        npv: out.summary.npv.mean,
+        irr: out.summary.irr.median * 100, // na %
+        cagr: out.summary.cagr.median, // już w %
+        distribution: out.rois,
+        percentiles: {
+          roi: {
+            p5: out.summary.roi.p5,
+            p50: out.summary.roi.median,
+            p95: out.summary.roi.p95,
+          },
+          npv: {
+            p5: out.summary.npv.p5,
+            p50: out.summary.npv.median,
+            p95: out.summary.npv.p95,
+          },
+          irr: {
+            p5: out.summary.irr.p5 * 100,
+            p50: out.summary.irr.median * 100,
+            p95: out.summary.irr.p95 * 100,
+          },
+          finalValue: {
+            p5: out.summary.finalValue.p5,
+            p50: out.summary.finalValue.median,
+            p95: out.summary.finalValue.p95,
+          },
         },
-        setters: {
-            setInitialInvestment,
-            setYears,
-            setPriceGrowth,
-            setRentYield,
-            setInflation,
-            setInterestRate,
-        },
-        result,
-        isLoading,
-        handleSimulation,
-    };
+      } satisfies InvestmentCalculatorSimulationResult;
+
+      setResult(r);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return {
+    params: {
+      initialInvestment,
+      years,
+      priceGrowth,
+      rentYield,
+      inflation,
+      interestRate,
+    },
+    setters: {
+      setInitialInvestment,
+      setYears,
+      setPriceGrowth,
+      setRentYield,
+      setInflation,
+      setInterestRate,
+    },
+    result,
+    isLoading,
+    handleSimulation,
+  } as const;
 };

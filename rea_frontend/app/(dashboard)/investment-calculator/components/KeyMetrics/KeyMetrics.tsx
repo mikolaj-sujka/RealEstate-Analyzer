@@ -8,10 +8,10 @@ import {
   IconPercentage,
 } from "@tabler/icons-react";
 import { useTranslate } from "@/hooks/useTranslate";
-import { SimulationResult } from "../../models";
+import { InvestmentCalculatorSimulationResult } from "../../models";
 
 type KeyMetricsProps = {
-  result: SimulationResult;
+  result: InvestmentCalculatorSimulationResult;
 }
 
 export const KeyMetrics: React.FC<KeyMetricsProps> = ({ result }) => {

@@ -1,9 +1,9 @@
 import { HistogramBin } from "../models";
 
-export function buildHistogram(
+export const buildHistogram = (
     data: number[],
     binCount = 20
-): HistogramBin[] {
+): HistogramBin[] => {
     if (!data.length) return [];
     const min = Math.min(...data);
     const max = Math.max(...data);
