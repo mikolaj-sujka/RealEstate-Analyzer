@@ -1,22 +1,45 @@
 ﻿using System.Text;
 using Hangfire.Dashboard;
+using Microsoft.AspNetCore.Http;
 
 namespace RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
-public class HangfireBasicAuthorizationFilter(string user, string pass, bool requiresSsl = true)
-    : IDashboardAuthorizationFilter
+
+public sealed class HangfireBasicAuthorizationFilter : IDashboardAuthorizationFilter
 {
+    private readonly string _user;
+    private readonly string _pass;
+    private readonly bool _requiresSsl;
+    private readonly bool _honorForwardedProto;
+
+    public HangfireBasicAuthorizationFilter(
+        string user,
+        string pass,
+        bool requiresSsl = true,
+        bool honorForwardedProto = true)
+    {
+        _user = user ?? throw new ArgumentNullException(nameof(user));
+        _pass = pass ?? throw new ArgumentNullException(nameof(pass));
+        _requiresSsl = requiresSsl;
+        _honorForwardedProto = honorForwardedProto;
+    }
+
     public bool Authorize(DashboardContext context)
     {
         var http = context.GetHttpContext();
 
-        if (requiresSsl && !http.Request.IsHttps)
-            return false;
-
-        string authHeader = http.Request.Headers["Authorization"]!;
-        if (string.IsNullOrWhiteSpace(authHeader) || !authHeader.StartsWith("Basic "))
+        if (_requiresSsl && !IsHttps(http))
             return Challenge(http);
 
-        var encoded = authHeader["Basic ".Length..].Trim();
+        if (!http.Request.Headers.TryGetValue("Authorization", out var headerValues))
+            return Challenge(http);
+
+        var authHeader = headerValues.ToString();
+        if (string.IsNullOrWhiteSpace(authHeader) ||
+            !authHeader.StartsWith("Basic ", StringComparison.OrdinalIgnoreCase))
+            return Challenge(http);
+
+        var encoded = authHeader.Substring("Basic ".Length).Trim();
+
         string decoded;
         try
         {
@@ -27,19 +50,36 @@ public class HangfireBasicAuthorizationFilter(string user, string pass, bool req
             return Challenge(http);
         }
 
-        var parts = decoded.Split(':', 2);
-        if (parts.Length != 2) return Challenge(http);
+        var sep = decoded.IndexOf(':');
+        if (sep <= 0)
+            return Challenge(http);
 
-        var (user1, pass1) = (parts[0], parts[1]);
-        if (user1 == user && pass1 == pass) return true;
+        var user = decoded.Substring(0, sep);
+        var pass = decoded[(sep + 1)..];
+
+        if (string.Equals(user, _user, StringComparison.Ordinal) &&
+            string.Equals(pass, _pass, StringComparison.Ordinal))
+        {
+            return true;
+        }
 
         return Challenge(http);
     }
 
-    private bool Challenge(Microsoft.AspNetCore.Http.HttpContext http)
+    private bool IsHttps(HttpContext http)
     {
+        if (http.Request.IsHttps) return true;
+        if (_honorForwardedProto &&
+            string.Equals(http.Request.Headers["X-Forwarded-Proto"], "https", StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        return false;
+    }
+
+    private static bool Challenge(HttpContext http)
+    {
+        http.Response.StatusCode = StatusCodes.Status401Unauthorized;
         http.Response.Headers["WWW-Authenticate"] = "Basic realm=\"Hangfire Dashboard\"";
-        http.Response.StatusCode = 401;
         return false;
     }
 }

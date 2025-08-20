@@ -17,7 +17,7 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 
-builder.Services.AddDataLayer(builder.Configuration);
+builder.Services.AddDataLayer(builder.Configuration, builder.Environment);
 
 builder.Services.AddRedis(builder.Configuration);
 
@@ -46,10 +46,7 @@ var app = builder.Build();
 
 app.MapScalarApiReference();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+app.MapOpenApi();
 
 app.MapHealthChecks("/api/health", new HealthCheckOptions()
 {
@@ -66,7 +63,7 @@ app.UseCors(policyCors);
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboardWithAuth(builder.Configuration);
+app.UseHangfireDashboardWithAuth(builder.Configuration, app.Environment);
 
 app.MapControllers();
 

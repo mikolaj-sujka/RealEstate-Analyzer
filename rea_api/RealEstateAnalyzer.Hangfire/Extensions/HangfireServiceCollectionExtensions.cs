@@ -3,8 +3,10 @@ using Hangfire.Console.Extensions;
 using Hangfire.MissionControl;
 using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using RealEstateAnalyzer.Application.BackgroundJobs.Missions.CsvParsing;
 
 namespace RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
@@ -75,7 +77,7 @@ public static class HangfireServiceCollectionExtensions
     }
 
     public static IApplicationBuilder UseHangfireDashboardWithAuth(this IApplicationBuilder app, IConfiguration configuration,
-        string configurationKey = "Hangfire")
+       IWebHostEnvironment environment, string configurationKey = "Hangfire")
     {
         var mappedConfiguration = configuration.GetSection(configurationKey).Get<HangfireConfiguration>();
 
@@ -89,7 +91,8 @@ public static class HangfireServiceCollectionExtensions
                     new HangfireBasicAuthorizationFilter(
                         user: mappedConfiguration.User ?? "admin",
                         pass: mappedConfiguration.Password ?? "admin",
-                        requiresSsl: false)
+                        requiresSsl: environment.IsProduction(),
+                        honorForwardedProto: true)
                 } 
             });
         }
