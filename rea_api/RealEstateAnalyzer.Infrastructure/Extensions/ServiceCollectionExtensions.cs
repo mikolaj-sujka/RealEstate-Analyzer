@@ -1,9 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
 namespace RealEstateAnalyzer.Infrastructure.Extensions;
 
@@ -28,5 +29,23 @@ public static class ServiceCollectionExtensions
             if (environment.IsDevelopment())
                 options.EnableSensitiveDataLogging();
         });
+
+        services.AddTransient<IStartupFilter, DatabaseMigrationStartupFilter>();
+    }
+}
+
+file sealed class DatabaseMigrationStartupFilter : IStartupFilter
+{
+    public Action<IApplicationBuilder> Configure(Action<IApplicationBuilder> next)
+    {
+        return app =>
+        {
+            using (var scope = app.ApplicationServices.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>(); dbContext.Database.Migrate();
+            } 
+            
+            next(app);
+        };
     }
 }

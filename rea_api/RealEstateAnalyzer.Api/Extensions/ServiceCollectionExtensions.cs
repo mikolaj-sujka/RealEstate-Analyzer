@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
-using SqlAlias;
 
 namespace RealEstateAnalyzer.Api.Extensions;
 
@@ -9,11 +8,12 @@ public static class ServiceCollectionExtensions
 {
     public static void ConfigureHealthChecks(this IServiceCollection services, IConfiguration configuration)
     {
-        var connectionString = Aliases.Map(configuration.GetSection("Database")["ConnectionString"]);
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+                               ?? configuration["Database:ConnectionString"];
 
         var healthCheckBuilder = services.AddHealthChecks()
             .AddSqlServer(
-                connectionString,
+                connectionString!,
                 name: "sqlserver",
                 failureStatus: HealthStatus.Unhealthy,
                 tags: new[] { "ready", "live" });
