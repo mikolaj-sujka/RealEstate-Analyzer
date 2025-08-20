@@ -5,6 +5,8 @@ public sealed class HangfireConfiguration
     public bool Enabled { get; set; }
     public int LongRunningQueueWorkersCount { get; set; }
     public string? SyncOtodom { get; set; } = "0 1 * * *";
+    public string? Password { get; set; }
+    public string? User { get; set; }
 }
 
 public sealed class HangfireJobOption

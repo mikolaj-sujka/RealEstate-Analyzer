@@ -13,6 +13,8 @@ namespace RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
 
 public static class HangfireServiceCollectionExtensions
 {
+    public const string Path = "/hangfire";
+
     public static void AddHangfire(this IServiceCollection services, IConfiguration configuration,
         string configurationKey = "Hangfire")
     {
@@ -69,31 +71,36 @@ public static class HangfireServiceCollectionExtensions
         services.AddHangfireServer();
 
         services.Configure<HangfireJobsOptions>(configuration.GetSection("Hangfire"));
+
+        services.AddMvc();
     }
 
-    public static IApplicationBuilder UseHangfireDashboardWithAuth(this IApplicationBuilder app, IConfiguration configuration)
+    public static IApplicationBuilder UseHangfireDashboardWithAuth(this IApplicationBuilder app, IConfiguration configuration,
+        string configurationKey = "Hangfire")
     {
-        bool hangfireEnabled = configuration.GetValue<bool>("Hangfire:Enabled");
+        var mappedConfiguration = configuration.GetSection(configurationKey).Get<HangfireConfiguration>();
 
 
-        if (hangfireEnabled)
+        if (mappedConfiguration is { Enabled: true })
         {
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            app.UseHangfireDashboard(Path, new DashboardOptions
             {
                 Authorization = new[]
                 {
                     new HangfireBasicAuthorizationFilter(
-                        user: configuration["HangfireDashboard:User"] ?? "admin",
-                        pass: configuration["HangfireDashboard:Password"] ?? "admin",
+                        user: mappedConfiguration.User ?? "admin",
+                        pass: mappedConfiguration.Password ?? "admin",
                         requiresSsl: false)
-                } // w prodzie wymuś SSL i silniejsze zabezpieczenie. 
+                } 
             });
         }
+
+        AddHangfireJobs(mappedConfiguration!, configuration);
 
         return app;
     }
 
-    public static void AddHangfireJobs(this WebApplication app, HangfireConfiguration mappedConfiguration, IConfiguration configuration)
+    public static void AddHangfireJobs(HangfireConfiguration mappedConfiguration, IConfiguration configuration)
     {
 
         if (mappedConfiguration == null || !mappedConfiguration!.Enabled)

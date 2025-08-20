@@ -67,10 +67,6 @@ app.UseAuthorization();
 
 app.UseHangfireDashboardWithAuth(builder.Configuration);
 
-var hangfireConfiguration = builder.Configuration.GetSection("Hangfire").Get<HangfireConfiguration>();
-
-app.AddHangfireJobs(hangfireConfiguration!, builder.Configuration);
-
 app.MapControllers();
 
 app.UseHttpsRedirection();
