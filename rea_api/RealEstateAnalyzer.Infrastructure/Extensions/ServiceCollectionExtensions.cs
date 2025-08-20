@@ -11,7 +11,8 @@ public static class ServiceCollectionExtensions
     public static void AddDataLayer(this IServiceCollection services, IConfiguration configuration)
     {
         var migrationAssemblyName = typeof(DatabaseContext).GetTypeInfo().Assembly.GetName().Name;
-        var connectionString = Aliases.Map(configuration.GetSection("Database")["ConnectionString"]);
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+                               ?? configuration["Database:ConnectionString"];
         services.AddDbContext<DatabaseContext>(
             options => options.UseSqlServer(connectionString,
                 sqlOptions =>

@@ -27,7 +27,8 @@ public static class HangfireServiceCollectionExtensions
         }
 
         services.AddSingleton(mappedConfiguration);
-        var connectionString = Aliases.Map(configuration.GetSection("Database")["ConnectionString"]);
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+                               ?? configuration["Database:ConnectionString"]; 
 
         services.AddHangfire(hangfireConfig =>
         {

@@ -9,7 +9,6 @@ using RealEstateAnalyzer.Infrastructure.Http.Extensions;
 using RealEstateAnalyzer.Infrastructure.Redis.Extensions;
 using RealEstateAnalyzer.WebScraping.Extensions;
 using Scalar.AspNetCore;
-using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +43,6 @@ var app = builder.Build();
 
 app.MapScalarApiReference();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
