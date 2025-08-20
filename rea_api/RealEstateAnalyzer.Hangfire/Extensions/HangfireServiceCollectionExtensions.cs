@@ -5,9 +5,7 @@ using Hangfire.SqlServer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.BackgroundJobs.Missions.CsvParsing;
-using SqlAlias;
 
 namespace RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
 
@@ -96,23 +94,6 @@ public static class HangfireServiceCollectionExtensions
             });
         }
 
-        AddHangfireJobs(mappedConfiguration!, configuration);
-
         return app;
-    }
-
-    public static void AddHangfireJobs(HangfireConfiguration mappedConfiguration, IConfiguration configuration)
-    {
-
-        if (mappedConfiguration == null || !mappedConfiguration!.Enabled)
-            return;
-
-        GlobalJobFilters.Filters.Add(new AutomaticRetryAttribute { Attempts = 0 });
-
-        RecurringJob.AddOrUpdate<ISynchronizationJob>(
-            "OtodomSync",
-            job => job.Run(),
-            mappedConfiguration.SyncOtodom
-        );
     }
 }

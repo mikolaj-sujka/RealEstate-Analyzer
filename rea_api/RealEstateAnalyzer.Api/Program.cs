@@ -5,6 +5,7 @@ using RealEstateAnalyzer.Api.Extensions;
 using RealEstateAnalyzer.Application.Extensions;
 using RealEstateAnalyzer.Infrastructure.Extensions;
 using RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
+using RealEstateAnalyzer.Infrastructure.Hangfire.Services;
 using RealEstateAnalyzer.Infrastructure.Http.Extensions;
 using RealEstateAnalyzer.Infrastructure.Redis.Extensions;
 using RealEstateAnalyzer.WebScraping.Extensions;
@@ -31,6 +32,8 @@ builder.Services.AddWebScrapingServices(builder.Configuration);
 builder.Services.AddHttpScrapingServices(builder.Configuration);
 
 builder.Services.ConfigureApiVersioning();
+
+builder.Services.AddHostedService<RecurringJobsHostedService>();
 
 var policyCors = builder.Services.ConfigureCors(builder.Configuration);
 
