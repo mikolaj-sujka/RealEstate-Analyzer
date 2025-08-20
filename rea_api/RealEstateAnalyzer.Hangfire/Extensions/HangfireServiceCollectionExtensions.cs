@@ -84,17 +84,22 @@ public static class HangfireServiceCollectionExtensions
 
         if (mappedConfiguration is { Enabled: true })
         {
-            app.UseHangfireDashboard(Path, new DashboardOptions
+            var storage = app.ApplicationServices.GetService<JobStorage>();
+
+            if (storage != null)
             {
-                Authorization = new[]
+                app.UseHangfireDashboard(Path, new DashboardOptions
                 {
-                    new HangfireBasicAuthorizationFilter(
-                        user: mappedConfiguration.User ?? "admin",
-                        pass: mappedConfiguration.Password ?? "admin",
-                        requiresSsl: environment.IsProduction(),
-                        honorForwardedProto: true)
-                } 
-            });
+                    Authorization = new[]
+                    {
+                        new HangfireBasicAuthorizationFilter(
+                            user: mappedConfiguration.User ?? "admin",
+                            pass: mappedConfiguration.Password ?? "admin",
+                            requiresSsl: environment.IsProduction(),
+                            honorForwardedProto: true)
+                    }
+                });
+            }
         }
 
         return app;

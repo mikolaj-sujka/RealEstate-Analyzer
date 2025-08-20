@@ -4,30 +4,21 @@ using Microsoft.AspNetCore.Http;
 
 namespace RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
 
-public sealed class HangfireBasicAuthorizationFilter : IDashboardAuthorizationFilter
+public sealed class HangfireBasicAuthorizationFilter(
+    string user,
+    string pass,
+    bool requiresSsl = true,
+    bool honorForwardedProto = true)
+    : IDashboardAuthorizationFilter
 {
-    private readonly string _user;
-    private readonly string _pass;
-    private readonly bool _requiresSsl;
-    private readonly bool _honorForwardedProto;
-
-    public HangfireBasicAuthorizationFilter(
-        string user,
-        string pass,
-        bool requiresSsl = true,
-        bool honorForwardedProto = true)
-    {
-        _user = user ?? throw new ArgumentNullException(nameof(user));
-        _pass = pass ?? throw new ArgumentNullException(nameof(pass));
-        _requiresSsl = requiresSsl;
-        _honorForwardedProto = honorForwardedProto;
-    }
+    private readonly string _user = user ?? throw new ArgumentNullException(nameof(user));
+    private readonly string _pass = pass ?? throw new ArgumentNullException(nameof(pass));
 
     public bool Authorize(DashboardContext context)
     {
         var http = context.GetHttpContext();
 
-        if (_requiresSsl && !IsHttps(http))
+        if (requiresSsl && !IsHttps(http))
             return Challenge(http);
 
         if (!http.Request.Headers.TryGetValue("Authorization", out var headerValues))
@@ -69,7 +60,7 @@ public sealed class HangfireBasicAuthorizationFilter : IDashboardAuthorizationFi
     private bool IsHttps(HttpContext http)
     {
         if (http.Request.IsHttps) return true;
-        if (_honorForwardedProto &&
+        if (honorForwardedProto &&
             string.Equals(http.Request.Headers["X-Forwarded-Proto"], "https", StringComparison.OrdinalIgnoreCase))
             return true;
 
