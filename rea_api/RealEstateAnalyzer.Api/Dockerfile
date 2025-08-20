@@ -14,14 +14,15 @@ ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["RealEstateAnalyzer.Api/RealEstateAnalyzer.Api.csproj", "RealEstateAnalyzer.Api/"]
 COPY ["RealEstateAnalyzer.Application/RealEstateAnalyzer.Application.csproj", "RealEstateAnalyzer.Application/"]
-COPY ["RealEstateAnalyzer.Infrastructure.Redis/RealEstateAnalyzer.Infrastructure.Redis.csproj", "RealEstateAnalyzer.Infrastructure.Redis/"]
-COPY ["RealEstateAnalyzer.Infrastructure/RealEstateAnalyzer.Infrastructure.csproj", "RealEstateAnalyzer.Infrastructure/"]
+COPY ["RealEstateAnalyzer.Application.Abstractions/RealEstateAnalyzer.Application.Abstractions.csproj", "RealEstateAnalyzer.Application.Abstractions/"]
 COPY ["RealEstateAnalyzer.Domain/RealEstateAnalyzer.Domain.csproj", "RealEstateAnalyzer.Domain/"]
-COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.Infrastructure.Hangfire.csproj", "RealEstateAnalyzer.Infrastructure.Hangfire/"]
-COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.Infrastructure.Http.csproj", "RealEstateAnalyzer.Infrastructure.Http/"]
-COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.WebScraping.csproj", "RealEstateAnalyzer.WebScraping/"]
-COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.WebScraping.Domain.csproj", "RealEstateAnalyzer.WebScraping.Domain/"]
-COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.WebScraping.Abstractions.csproj", "RealEstateAnalyzer.WebScraping.Abstractions/"]
+COPY ["RealEstateAnalyzer.Infrastructure/RealEstateAnalyzer.Infrastructure.csproj", "RealEstateAnalyzer.Infrastructure/"]
+COPY ["RealEstateAnalyzer.WebScraping/RealEstateAnalyzer.WebScraping.csproj", "RealEstateAnalyzer.WebScraping/"]
+COPY ["RealEstateAnalyzer.Infrastructure.Http/RealEstateAnalyzer.Infrastructure.Http.csproj", "RealEstateAnalyzer.Infrastructure.Http/"]
+COPY ["RealEstateAnalyzer.WebScraping.Abstractions/RealEstateAnalyzer.WebScraping.Abstractions.csproj", "RealEstateAnalyzer.WebScraping.Abstractions/"]
+COPY ["RealEstateAnalyzer.WebScraping.Domain/RealEstateAnalyzer.WebScraping.Domain.csproj", "RealEstateAnalyzer.WebScraping.Domain/"]
+COPY ["RealEstateAnalyzer.Hangfire/RealEstateAnalyzer.Infrastructure.Hangfire.csproj", "RealEstateAnalyzer.Hangfire/"]
+COPY ["RealEstateAnalyzer.Infrastructure.Redis/RealEstateAnalyzer.Infrastructure.Redis.csproj", "RealEstateAnalyzer.Infrastructure.Redis/"]
 RUN dotnet restore "./RealEstateAnalyzer.Api/RealEstateAnalyzer.Api.csproj"
 COPY . .
 WORKDIR "/src/RealEstateAnalyzer.Api"

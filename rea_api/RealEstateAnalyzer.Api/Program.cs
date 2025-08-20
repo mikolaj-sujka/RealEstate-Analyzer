@@ -13,9 +13,6 @@ using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri")!);
-builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
-
 builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
@@ -37,6 +34,7 @@ builder.Services.AddHttpScrapingServices(builder.Configuration);
 builder.Services.ConfigureApiVersioning();
 
 var policyCors = builder.Services.ConfigureCors(builder.Configuration);
+
 builder.Services.AddApplicationInsightsTelemetry(new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions
 {
     ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]
