@@ -45,12 +45,12 @@ public static class HangfireServiceCollectionExtensions
                     DisableGlobalLocks = true,
                     EnableHeavyMigrations = true,
                     SchemaName = "hangfire",
-                    PrepareSchemaIfNecessary = true
+                    PrepareSchemaIfNecessary = true,
                 })
                 .UseMissionControl(new MissionControlOptions
                     {
                         RequireConfirmation = false,
-                        HideCodeSnippet = false
+                        HideCodeSnippet = false,
                     },
                     typeof(CsvParsingGusHousingListingBackgroundJobMission).Assembly);
         });
