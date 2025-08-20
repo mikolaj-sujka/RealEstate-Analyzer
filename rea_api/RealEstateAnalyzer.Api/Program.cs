@@ -63,7 +63,7 @@ app.UseCors(policyCors);
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseHangfireDashboardWithAuth(builder.Configuration, app.Environment);
+app.UseHangfireDashboardWithAuthorization(builder.Configuration, app.Environment);
 
 app.MapControllers();
 

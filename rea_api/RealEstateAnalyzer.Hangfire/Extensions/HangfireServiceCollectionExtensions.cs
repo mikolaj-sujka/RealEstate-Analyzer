@@ -69,14 +69,12 @@ public static class HangfireServiceCollectionExtensions
 
         services.AddHangfireConsoleExtensions();
 
-        services.AddHangfireServer();
-
         services.Configure<HangfireJobsOptions>(configuration.GetSection("Hangfire"));
 
         services.AddMvc();
     }
 
-    public static IApplicationBuilder UseHangfireDashboardWithAuth(this IApplicationBuilder app, IConfiguration configuration,
+    public static IApplicationBuilder UseHangfireDashboardWithAuthorization(this IApplicationBuilder app, IConfiguration configuration,
        IWebHostEnvironment environment, string configurationKey = "Hangfire")
     {
         var mappedConfiguration = configuration.GetSection(configurationKey).Get<HangfireConfiguration>();
