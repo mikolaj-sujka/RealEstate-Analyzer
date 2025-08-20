@@ -1,5 +1,5 @@
 # .github/workflows/deploy-webapp.yml
-name: Build and deploy ASP.NET Core to Azure Web App - app-rea-apps-api2-prod-plc
+name: Build & deploy .NET to Azure Web App (zip)
 
 on:
   push:
@@ -10,12 +10,12 @@ env:
   AZURE_WEBAPP_NAME: app-rea-apps-api2-prod-plc
   DOTNET_VERSION: '9.x'
   PUBLISH_DIR: ${{ github.workspace }}/publish
+  ZIP_PATH: ${{ github.workspace }}/publish.zip
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
+    permissions: { contents: read }
 
     steps:
       - uses: actions/checkout@v4
@@ -25,21 +25,19 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
-      # (opcjonalnie) szybka diagnostyka struktury repo
-      - name: List repo (debug)
-        run: |
-          echo "Root:"
-          ls -la
-          echo "All csproj files:"
-          git ls-files '*.csproj' || true
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+          restore-keys: nuget-${{ runner.os }}-
 
-      # AUTOMATYCZNE wykrycie ścieżki do projektu API (case-sensitive)
       - name: Detect API project path
         run: |
           set -euo pipefail
           FOUND=$(git ls-files '**/RealEstateAnalyzer.Api.csproj' | head -n 1 || true)
           if [ -z "$FOUND" ]; then
-            echo "::error::Nie znaleziono RealEstateAnalyzer.Api.csproj. Sprawdź układ katalogów i wielkość liter."
+            echo "::error::Nie znaleziono RealEstateAnalyzer.Api.csproj. Sprawdź układ katalogów/wielkość liter."
             exit 1
           fi
           echo "PROJECT_PATH=$FOUND" >> $GITHUB_ENV
@@ -51,28 +49,34 @@ jobs:
       - name: Build
         run: dotnet build "$PROJECT_PATH" -c Release --no-restore
 
-      - name: Publish
+      - name: Publish (self-contained off)
         run: dotnet publish "$PROJECT_PATH" -c Release -o "${{ env.PUBLISH_DIR }}" --no-build
+
+      - name: Create ZIP artifact
+        run: |
+          cd "${{ env.PUBLISH_DIR }}"
+          zip -r "${{ env.ZIP_PATH }}" .
+          echo "ZIP created at ${{ env.ZIP_PATH }}"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: webapp
-          path: ${{ env.PUBLISH_DIR }}
+          name: webapp-zip
+          path: ${{ env.ZIP_PATH }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write   # wymagane dla OIDC
+      id-token: write
       contents: read
 
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: webapp
-          path: ./webapp
+          name: webapp-zip
+          path: .
 
       - name: Azure login (OIDC)
         uses: azure/login@v2
@@ -81,9 +85,9 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FFFF88AB1C414DBFA58F16B3B5A581E4 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E4BBC8186B8344EE8B625CF80E7F8E17 }}
 
-      - name: Deploy to Azure Web App
+      - name: Deploy via WebApps Deploy (zip)
         uses: azure/webapps-deploy@v3
         with:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: 'Production'
-          package: ./webapp
+          slot-name: Production
+          package: ./publish.zip
