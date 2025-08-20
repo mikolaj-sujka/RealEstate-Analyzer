@@ -81,13 +81,13 @@ jobs:
       - name: Azure login (OIDC)
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_8DEEC09BEEEE41FDB621DE11FEE1FA96 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FFFF88AB1C414DBFA58F16B3B5A581E4 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E4BBC8186B8344EE8B625CF80E7F8E17 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_D863C9DE6ED1471DA33847E16B360C5B }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_ED1106073B804D62834FB17EBE3D7C72 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_CCCD652E3E2E413389EFE445DDDB735F }}
 
       - name: Deploy via WebApps Deploy (zip)
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          slot-name: Production
-          package: ./publish.zip
+          app-name: 'app-rea-apps-api-prod-plc'
+          slot-name: 'Production'
+          package: .
