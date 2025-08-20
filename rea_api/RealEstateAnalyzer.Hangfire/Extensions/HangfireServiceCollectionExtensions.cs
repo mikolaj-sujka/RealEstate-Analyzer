@@ -20,6 +20,7 @@ public static class HangfireServiceCollectionExtensions
 
         if (mappedConfiguration?.Enabled is false or null)
         {
+            Console.WriteLine("Hangfire cannot be configured. Enabled is false.");
             return;
         }
 
@@ -72,13 +73,22 @@ public static class HangfireServiceCollectionExtensions
 
     public static IApplicationBuilder UseHangfireDashboardWithAuth(this IApplicationBuilder app, IConfiguration configuration)
     {
-        app.UseHangfireDashboard("/hangfire", new DashboardOptions
+        bool hangfireEnabled = configuration.GetValue<bool>("Hangfire:Enabled");
+
+
+        if (hangfireEnabled)
         {
-            Authorization = new[] { new HangfireBasicAuthorizationFilter(
-                user: configuration["HangfireDashboard:User"] ?? "admin",
-                pass: configuration["HangfireDashboard:Password"] ?? "secret",
-                requiresSsl: false) } // w prodzie wymuś SSL i silniejsze zabezpieczenie. 
-        });
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[]
+                {
+                    new HangfireBasicAuthorizationFilter(
+                        user: configuration["HangfireDashboard:User"] ?? "admin",
+                        pass: configuration["HangfireDashboard:Password"] ?? "admin",
+                        requiresSsl: false)
+                } // w prodzie wymuś SSL i silniejsze zabezpieczenie. 
+            });
+        }
 
         return app;
     }
