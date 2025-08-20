@@ -21,7 +21,7 @@ COPY ["RealEstateAnalyzer.WebScraping/RealEstateAnalyzer.WebScraping.csproj", "R
 COPY ["RealEstateAnalyzer.Infrastructure.Http/RealEstateAnalyzer.Infrastructure.Http.csproj", "RealEstateAnalyzer.Infrastructure.Http/"]
 COPY ["RealEstateAnalyzer.WebScraping.Abstractions/RealEstateAnalyzer.WebScraping.Abstractions.csproj", "RealEstateAnalyzer.WebScraping.Abstractions/"]
 COPY ["RealEstateAnalyzer.WebScraping.Domain/RealEstateAnalyzer.WebScraping.Domain.csproj", "RealEstateAnalyzer.WebScraping.Domain/"]
-COPY ["RealEstateAnalyzer.Hangfire/RealEstateAnalyzer.Infrastructure.Hangfire.csproj", "RealEstateAnalyzer.Hangfire/"]
+COPY ["RealEstateAnalyzer.Infrastructure.Hangfire/RealEstateAnalyzer.Infrastructure.Hangfire.csproj", "RealEstateAnalyzer.Infrastructure.Hangfire/"]
 COPY ["RealEstateAnalyzer.Infrastructure.Redis/RealEstateAnalyzer.Infrastructure.Redis.csproj", "RealEstateAnalyzer.Infrastructure.Redis/"]
 RUN dotnet restore "./RealEstateAnalyzer.Api/RealEstateAnalyzer.Api.csproj"
 COPY . .
