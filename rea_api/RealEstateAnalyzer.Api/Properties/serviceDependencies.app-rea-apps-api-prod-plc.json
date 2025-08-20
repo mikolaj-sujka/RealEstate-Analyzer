@@ -6,22 +6,9 @@
       "type": "appInsights.azure",
       "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING"
     },
-    "mssql1": {
+    "mssql3": {
       "secretStore": "AzureAppSettings",
       "type": "mssql.onprem",
-      "connectionId": "Database:ConnectionString1",
-      "dynamicId": null
-    },
-    "mssql2": {
-      "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/sql-rea-prod-plc/databases/sqldb-rea-prod-plc",
-      "type": "mssql.azure",
-      "connectionId": "Database:ConnectionString2",
-      "dynamicId": null
-    },
-    "mssql3": {
-      "ignored": "true",
-      "type": "mssql",
       "connectionId": "Database:ConnectionString"
     }
   }

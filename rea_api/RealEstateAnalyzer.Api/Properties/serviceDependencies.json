@@ -4,15 +4,9 @@
       "type": "appInsights",
       "connectionId": "APPLICATIONINSIGHTS_CONNECTION_STRING"
     },
-    "mssql1": {
+    "mssql3": {
       "type": "mssql",
-      "connectionId": "Database:ConnectionString1",
-      "dynamicId": null
-    },
-    "mssql2": {
-      "type": "mssql",
-      "connectionId": "Database:ConnectionString2",
-      "dynamicId": null
+      "connectionId": "Database:ConnectionString"
     }
   }
 }
