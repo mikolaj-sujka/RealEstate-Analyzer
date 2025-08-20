@@ -9,8 +9,12 @@ using RealEstateAnalyzer.Infrastructure.Http.Extensions;
 using RealEstateAnalyzer.Infrastructure.Redis.Extensions;
 using RealEstateAnalyzer.WebScraping.Extensions;
 using Scalar.AspNetCore;
+using Azure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var keyVaultEndpoint = new Uri(Environment.GetEnvironmentVariable("VaultUri")!);
+builder.Configuration.AddAzureKeyVault(keyVaultEndpoint, new DefaultAzureCredential());
 
 builder.Services.AddOpenApi();
 
@@ -33,6 +37,10 @@ builder.Services.AddHttpScrapingServices(builder.Configuration);
 builder.Services.ConfigureApiVersioning();
 
 var policyCors = builder.Services.ConfigureCors(builder.Configuration);
+builder.Services.AddApplicationInsightsTelemetry(new Microsoft.ApplicationInsights.AspNetCore.Extensions.ApplicationInsightsServiceOptions
+{
+    ConnectionString = builder.Configuration["APPLICATIONINSIGHTS_CONNECTION_STRING"]
+});
 
 var app = builder.Build();
 

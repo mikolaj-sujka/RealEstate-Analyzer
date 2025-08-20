@@ -291,12 +291,6 @@ public static class WebScrapingParserHelpers
         "centrum","śródmieście"
     };
 
-    private static bool LooksAdjOnly(string s)
-    {
-        var w = Condense(s).ToLower(Pl).Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        return w.Length == 1 && Adjectives.Contains(w[0]);
-    }
-
     private static string CleanTokenForLocation(string s)
     {
         if (string.IsNullOrWhiteSpace(s)) return "";
@@ -316,20 +310,63 @@ public static class WebScrapingParserHelpers
         return Condense(string.Join(' ', words));
     }
 
-    private static bool IsMeaningfulLocationToken(string s)
-    {
-        if (string.IsNullOrWhiteSpace(s)) return false;
-        if (Regex.IsMatch(s, @"\d")) return false;
-        if (NoiseWords.Contains(s)) return false;
-        return s.Length >= 2 && s.Length <= 120;
-    }
-
     private static string LimitToTwoWords(string s)
     {
         var words = Condense(s).Split(' ', StringSplitOptions.RemoveEmptyEntries);
         if (words.Length <= 2) return ToTitle(string.Join(' ', words));
         return ToTitle($"{words[0]} {words[1]}");
     }
+
+    private static readonly HashSet<string> StopTokens =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+        "przy","na","w","we","do","od","i","oraz",
+        "ul","ul.","al","al.","pl","pl.","os","os.","rondo"
+        };
+
+    private static readonly Regex NonLocationNoiseRegex =
+        new(@"(?ix)
+        \b( \d+[.,]?\d* \s*(m2|m²)? |         # liczby, metry
+            pokoj\w* |                        # pokoje: pokojowy/pokojowe/pokoi
+            piętr\w* |                        # piętro/piętrze
+            kamienic\w* | blok\w* | apartament\w* | kawalerk\w* |
+            rynek | pierwotn\w* | wt[óo]rn\w* | nowe | inwestycj\w*
+          )\b");
+
+    private static readonly Regex ProperCasedPhraseRegex =
+        new(@"^(?:[A-ZĄĆĘŁŃÓŚŹŻ][\p{L}\-']+|I|II|III|IV|V|VI|VII|VIII|IX|X)
+          (?:\s+(?:[A-ZĄĆĘŁŃÓŚŹŻ][\p{L}\-']+|I|II|III|IV|V|VI|VII|VIII|IX|X))?$",
+            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
+
+    private static readonly HashSet<string> AdjectiveOnly =
+        new(StringComparer.OrdinalIgnoreCase)
+        { "Stary","Nowy","Stare","Nowe","Dolny","Górny","Środkowy","Mały","Wielki" };
+
+    private static bool IsNoiseToken(string token)
+    {
+        if (string.IsNullOrWhiteSpace(token)) return true;
+        var t = token.Trim();
+        return StopTokens.Contains(t) || NonLocationNoiseRegex.IsMatch(t);
+    }
+
+    private static bool IsLikelyDistrictPhrase(string phrase)
+    {
+        if (string.IsNullOrWhiteSpace(phrase)) return false;
+
+        var normalized = Regex.Replace(phrase.Trim(), @"\s+", " ");
+
+        var words = normalized.Split(' ');
+        if (words.Length > 2) return false;
+
+        if (words.Length == 1 && AdjectiveOnly.Contains(words[0])) return false;
+
+        if (!ProperCasedPhraseRegex.IsMatch(normalized)) return false;
+
+        if (IsNoiseToken(normalized)) return false;
+
+        return true;
+    }
+
 
     public static (string City, string District, string Voivodeship)
     ExtractLocation(HtmlNode offer, string offerText)
@@ -373,35 +410,19 @@ public static class WebScrapingParserHelpers
                     {
                         city = ToTitle(mc.Value);
 
-                        string cand = "";
-                        string prev1Raw = i > 0 ? parts[i - 1] : "";
-                        string prev2Raw = i > 1 ? parts[i - 2] : "";
+                        string prev1Raw = i > 0 ? parts[i - 1] : string.Empty;
 
                         string prev1 = CleanTokenForLocation(prev1Raw);
-                        string prev2 = CleanTokenForLocation(prev2Raw);
 
-                        if (StreetOrPrefixRegex.IsMatch(prev1Raw)) prev1 = "";
-                        if (StreetOrPrefixRegex.IsMatch(prev2Raw)) prev2 = "";
+                        if (StreetOrPrefixRegex.IsMatch(prev1Raw))
+                            prev1 = string.Empty;
 
-                        if (IsMeaningfulLocationToken(prev1))
-                        {
-                            cand = prev1;
+                        if (IsNoiseToken(prev1))
+                            prev1 = string.Empty;
 
-                            if (LooksAdjOnly(cand) && IsMeaningfulLocationToken(prev2))
-                                cand = $"{prev2} {cand}";
-                        }
-                        else if (IsMeaningfulLocationToken(prev2))
-                        {
-                            cand = prev2;
-                        }
-                        else
-                        {
-                            var next1 = i + 1 < parts.Length ? CleanTokenForLocation(parts[i + 1]) : "";
-                            if (IsMeaningfulLocationToken(next1)) cand = next1;
-                        }
+                        district = string.IsNullOrWhiteSpace(prev1) ? string.Empty : LimitToTwoWords(prev1);
 
-                        district = LimitToTwoWords(cand);
-                        break;
+                        break; // miasto znalezione — kończ dalsze skanowanie tego 'raw'
                     }
                 }
             }

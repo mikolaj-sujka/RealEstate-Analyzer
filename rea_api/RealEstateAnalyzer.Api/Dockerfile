@@ -17,6 +17,11 @@ COPY ["RealEstateAnalyzer.Application/RealEstateAnalyzer.Application.csproj", "R
 COPY ["RealEstateAnalyzer.Infrastructure.Redis/RealEstateAnalyzer.Infrastructure.Redis.csproj", "RealEstateAnalyzer.Infrastructure.Redis/"]
 COPY ["RealEstateAnalyzer.Infrastructure/RealEstateAnalyzer.Infrastructure.csproj", "RealEstateAnalyzer.Infrastructure/"]
 COPY ["RealEstateAnalyzer.Domain/RealEstateAnalyzer.Domain.csproj", "RealEstateAnalyzer.Domain/"]
+COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.Infrastructure.Hangfire.csproj", "RealEstateAnalyzer.Infrastructure.Hangfire/"]
+COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.Infrastructure.Http.csproj", "RealEstateAnalyzer.Infrastructure.Http/"]
+COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.WebScraping.csproj", "RealEstateAnalyzer.WebScraping/"]
+COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.WebScraping.Domain.csproj", "RealEstateAnalyzer.WebScraping.Domain/"]
+COPY ["RealEstateAnalyzer.Shared/RealEstateAnalyzer.WebScraping.Abstractions.csproj", "RealEstateAnalyzer.WebScraping.Abstractions/"]
 RUN dotnet restore "./RealEstateAnalyzer.Api/RealEstateAnalyzer.Api.csproj"
 COPY . .
 WORKDIR "/src/RealEstateAnalyzer.Api"
