@@ -8,7 +8,7 @@
 - [Struktura projektu](#file_folder-struktura-projektu)
 - [Funkcjonalności](#chart_with_upwards_trend-funkcjonalności)
 - [Research](#microscope-research)
-- [Templates](#newspaper-templates-aplikacji)
+- [Templates](#newspaper-moduły-aplikacji)
 - [Kontakt](#handshake-kontakt)
 - [Licencja](#page_facing_up-licencja)
 
@@ -214,15 +214,17 @@ Projekt zawiera zaawansowaną część badawczą w katalogu [`rea_research`](rea
 - **OLX**: ~3,640+ ofert z różną jakością danych
 - Pliki wynikowe: [`olx_offers_final.csv`](rea_research/olx_offers_final.csv), [`otodom_offers_final.csv`](rea_research/otodom_offers_final.csv)
 
-## :newspaper: Templates aplikacji
+## :newspaper: Moduły aplikacji
 <img width="1722" height="891" alt="Zrzut ekranu 2025-07-31 o 15 03 27" src="https://github.com/user-attachments/assets/334ada0d-8e21-4124-9050-9f1228eb070b" />
-<img width="1707" height="895" alt="Zrzut ekranu 2025-07-31 o 15 05 30" src="https://github.com/user-attachments/assets/94b6e9b5-5677-48f4-953a-097ec5fb9a65" />
-<img width="1728" height="998" alt="Zrzut ekranu 2025-07-31 o 15 05 50" src="https://github.com/user-attachments/assets/3fc90a34-af81-4ba5-a4fc-3d2d3155fa1d" />
-<img width="1722" height="991" alt="Zrzut ekranu 2025-07-31 o 15 06 11" src="https://github.com/user-attachments/assets/1ddaf547-455a-40e8-b1c5-e32a780e19c1" />
-<img width="1703" height="899" alt="Zrzut ekranu 2025-08-4 o 19 05 26" src="https://github.com/user-attachments/assets/c49b019b-00ca-4bb6-9c3a-bf0ef2d300cf" />
-<img width="1705" height="898" alt="Zrzut ekranu 2025-08-4 o 19 06 23" src="https://github.com/user-attachments/assets/e86fc517-5f48-42f3-9366-3d5dcd451f8d" />
-
-
+<img width="1447" height="739" alt="Zrzut ekranu 2025-08-18 112630" src="https://github.com/user-attachments/assets/410572e2-fb1b-40aa-9750-35b9c84e696d" />
+<img width="1443" height="717" alt="Zrzut ekranu 2025-08-18 113936" src="https://github.com/user-attachments/assets/d066c55a-6439-43eb-bb57-f8cffb5d726e" />
+<img width="806" height="828" alt="Zrzut ekranu 2025-08-18 120233" src="https://github.com/user-attachments/assets/a1f12c5e-1132-478b-ad1f-25f9fb05a67f" />
+<img width="1072" height="689" alt="Zrzut ekranu 2025-08-18 125613" src="https://github.com/user-attachments/assets/073e2663-9c53-48ca-ae28-f887b0067836" />
+<img width="1286" height="790" alt="Zrzut ekranu 2025-08-19 103406" src="https://github.com/user-attachments/assets/44a3dacf-0c6a-4b01-a647-e5c80b0c1640" />
+<img width="1445" height="662" alt="Zrzut ekranu 2025-08-19 175657" src="https://github.com/user-attachments/assets/d4cf39c5-ff25-413e-92e0-760b1b3d49d7" />
+<img width="1283" height="574" alt="Zrzut ekranu 2025-08-19 175909" src="https://github.com/user-attachments/assets/2ca813d9-46db-4daa-9f32-060763527aa3" />
+<img width="1395" height="377" alt="Zrzut ekranu 2025-08-19 175704" src="https://github.com/user-attachments/assets/bf410706-f254-4c70-b47d-0d00e31d0313" />
+<img width="1286" height="739" alt="Zrzut ekranu 2025-08-19 175739" src="https://github.com/user-attachments/assets/af8de74f-0b7e-4c70-b7ff-5482aa560c66" />
 
 ---
 
