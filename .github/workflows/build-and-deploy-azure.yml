@@ -9,7 +9,6 @@ on:
 env:
   AZURE_WEBAPP_NAME: app-rea-apps-api2-prod-plc
   DOTNET_VERSION: '9.x'
-  PROJECT_PATH: RealEstateAnalyzer.Api/RealEstateAnalyzer.Api.csproj
   PUBLISH_DIR: ${{ github.workspace }}/publish
 
 jobs:
@@ -26,14 +25,34 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
+      # (opcjonalnie) szybka diagnostyka struktury repo
+      - name: List repo (debug)
+        run: |
+          echo "Root:"
+          ls -la
+          echo "All csproj files:"
+          git ls-files '*.csproj' || true
+
+      # AUTOMATYCZNE wykrycie ścieżki do projektu API (case-sensitive)
+      - name: Detect API project path
+        run: |
+          set -euo pipefail
+          FOUND=$(git ls-files '**/RealEstateAnalyzer.Api.csproj' | head -n 1 || true)
+          if [ -z "$FOUND" ]; then
+            echo "::error::Nie znaleziono RealEstateAnalyzer.Api.csproj. Sprawdź układ katalogów i wielkość liter."
+            exit 1
+          fi
+          echo "PROJECT_PATH=$FOUND" >> $GITHUB_ENV
+          echo "Detected PROJECT_PATH=$FOUND"
+
       - name: Restore
-        run: dotnet restore ${{ env.PROJECT_PATH }}
+        run: dotnet restore "$PROJECT_PATH"
 
       - name: Build
-        run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore
+        run: dotnet build "$PROJECT_PATH" -c Release --no-restore
 
       - name: Publish
-        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o ${{ env.PUBLISH_DIR }} --no-build
+        run: dotnet publish "$PROJECT_PATH" -c Release -o "${{ env.PUBLISH_DIR }}" --no-build
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
