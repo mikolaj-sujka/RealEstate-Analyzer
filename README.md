@@ -99,8 +99,65 @@ pnpm lint       # Sprawdź kod pod kątem błędów
 pnpm type-check # Sprawdź typy TypeScript
 ```
 ### 3. Instalacja i uruchomienie Backend (wraz z Redis cache na dockerze)
+#### Przygotowanie środowiska
+```bash
+# Przejdź do katalogu backendu (solution rea_api)
+cd rea_api
 
+# Przywróć i zbuduj
+dotnet restore
+dotnet build
+```
 
+Skonfiguruj zmienne środowiskowe lub wykorzystaj `appsettings.Development.json`
+
+#### Redis w Dockerze
+Opcja A - szybki start (pojedynczy kontener):
+```bash
+docker run -d --name rea-redis -p 6379:6379 redis:latest
+```
+To uruchamia Redis i mapuje port 6379 na hosta.
+
+Opcja B – docker compose (jeśli używasz dołączonego pliku docker-compose.yml):
+```bash
+# start wszystkich usług zdefiniowanych w compose
+docker compose up -d
+
+# lub tylko usługi redis (jeśli jest tak nazwana)
+docker compose up -d redis
+```
+`docker compose up -d` tworzy i uruchamia usługi z pliku Compose.
+
+#### Baza danych (opcjonalnie: SQL Server w Dockerze)
+Jeśli nie masz lokalnego SQL Servera, możesz uruchomić kontener Developerski:
+```bash
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=<SilneHaslo123!>" \
+  -e "MSSQL_PID=Developer" -p 1433:1433 \
+  --name rea-sql -d mcr.microsoft.com/mssql/server:2022-latest
+```
+Następnie użyj connection stringa z hostem `localhost,1433`.
+
+#### Uruchomienie API
+```bash
+# z katalogu projektu API
+cd RealEstateAnalyzer.Api
+dotnet run
+```
+
+Dostępne „skrypty”/polecenia dla backendu
+```bash
+dotnet build                         # zbuduj backend
+dotnet run                           # uruchom backend (dev)
+dotnet test                          # uruchom testy (jeśli są)
+dotnet ef migrations add <Nazwa> \
+  -p RealEstateAnalyzer.Infrastructure \
+  -s RealEstateAnalyzer.Api          # dodaj migrację
+dotnet ef database update \
+  -p RealEstateAnalyzer.Infrastructure \
+  -s RealEstateAnalyzer.Api          # zastosuj migracje
+docker compose up -d                 # start usług pomocniczych (np. Redis)
+docker compose down                  # zatrzymanie usług
+```
 ### 4. Research Environment (opcjonalne)
 
 Jeśli chcesz uruchomić część badawczą projektu:
@@ -234,6 +291,9 @@ Jeśli masz pytania lub sugestie dotyczące projektu, skontaktuj się z nami prz
 
 ##  :rocket: Deployment linki
 https://real-estate-analyzer-bay.vercel.app
+- dokumentacja API: https://app-rea-apps-api-prod-plc-ggfjcfh3hzbcdfge.polandcentral-01.azurewebsites.net/scalar/
+<img width="1891" height="861" alt="Zrzut ekranu 2025-08-21 123754" src="https://github.com/user-attachments/assets/4330ee1e-32c7-403d-b48c-43a735f5cf1d" />
+
 
 ## :page_facing_up: Licencja
 
