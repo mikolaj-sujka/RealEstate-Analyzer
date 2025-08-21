@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_WEBAPP_NAME: app-rea-apps-api2-prod-plc
+  AZURE_WEBAPP_NAME: app-rea-apps-api-prod-plc
   DOTNET_VERSION: '9.x'
   PUBLISH_DIR: ${{ github.workspace }}/publish
 
