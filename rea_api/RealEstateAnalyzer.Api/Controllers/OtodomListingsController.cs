@@ -16,6 +16,8 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
 {
     [HttpGet("districts")]
     [MapToApiVersion("1")]
+    [EndpointSummary("Pobiera dane o dzielnicach.")]
+    [EndpointDescription("Zwraca szczegółowe dane dla dzielnic w wybranym miescie w Polsce.")]
     public async Task<IActionResult> GetOtodomCityDistrictsListings(
         [FromQuery] string cityName)
     {
@@ -26,6 +28,8 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
 
     [HttpGet("voivodeship/{voivodeship}")]
     [MapToApiVersion("1")]
+    [EndpointSummary("Pobiera dane o województwie.")]
+    [EndpointDescription("Zwraca szczegółowe dane dla województwa w Polsce.")]
     public async Task<IActionResult> GetOtodomVoivodeshipDataListings(
         [FromRoute] string voivodeship)
     {
@@ -36,6 +40,8 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
 
     [HttpGet("city/{cityName}")]
     [MapToApiVersion("1")]
+    [EndpointSummary("Pobiera dane o mieście.")]
+    [EndpointDescription("Zwraca szczegółowe dane wybranego miasta w Polsce.")]
     public async Task<IActionResult> GetOtodomCityDataListings(
         [FromRoute] string cityName)
     {
@@ -46,6 +52,8 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
 
     [HttpGet("all-cities")]
     [MapToApiVersion("1")]
+    [EndpointSummary("Zwraca listę miast.")]
+    [EndpointDescription("Zwraca listę wszystkich miast, które są zapisane w bazie danych.")]
     public async Task<IActionResult> GetOtodomAllCitiesListings()
     {
         var listings = await mediator.Send(
@@ -55,6 +63,8 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
 
     [HttpGet("all-voivodeships")]
     [MapToApiVersion("1")]
+    [EndpointSummary("Zwraca listę województw.")]
+    [EndpointDescription("Zwraca listę wszystkich województw, które są zapisane w bazie danych.")]
     public async Task<IActionResult> GetOtodomAllVoivodeshipsListings()
     {
         var listings = await mediator.Send(
@@ -64,6 +74,8 @@ public class OtodomListingsController(IMediator mediator) : ControllerBase
 
     [HttpGet("latest-transactions")]
     [MapToApiVersion("1")]
+    [EndpointSummary("Pobiera ostatnie transakcje.")]
+    [EndpointDescription("Zwraca listę najnowszych transakcji na rynku nieruchomości w Polsce wraz z szczegółowymi danymi odnośnie transakcji.")]
     public async Task<IActionResult> GetOtodomLatestTransactionsListings()
     {
         var listings = await mediator.Send(
