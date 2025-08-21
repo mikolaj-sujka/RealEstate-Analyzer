@@ -14,13 +14,13 @@
 
 ## :bookmark_tabs: Opis projektu 
 
-RealEstate Analyzer to zaawansowana platforma webowa umożliwiająca kompleksową analizę oraz prognozowanie trendów na polskim rynku nieruchomości. Aplikacja skierowana jest do inwestorów, analityków oraz osób prywatnych, które chcą podejmować świadome decyzje inwestycyjne oparte na precyzyjnych danych rynkowych oraz prognozach cenowych.
+RealEstate Analyzer to zaawansowana platforma webowa umożliwiająca kompleksową analizę polskiego rynku nieruchomości. Aplikacja skierowana jest do inwestorów, analityków oraz osób prywatnych, które chcą podejmować świadome decyzje inwestycyjne oparte na precyzyjnych danych rynkowych.
 
 Główne funkcjonalności obejmują:
 
 - Szczegółową analizę geograficzną oraz czasową danych rynkowych.
 - Monitoring rynku, który posiada najnowsze jak i dane historyczne z interaktywnymi wizualizacjami.
-- Kalkulatory rentowności i potencjału inwestycyjnego.
+- Kalkulator potencjału inwestycyjnego.
 
 ## :computer: Stack technologiczny
 
@@ -39,6 +39,7 @@ Główne funkcjonalności obejmują:
 - Mantine UI (responsywność i estetyka)
 - Vanilla Extract CSS
 - React hooks
+- axios
 
 #### Research & Data Analysis
 - Python (Jupyter Notebook)
@@ -56,7 +57,7 @@ Główne funkcjonalności obejmują:
 
 ## :dart: Cel Projektu
 
-Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzędzia do podejmowania trafnych decyzji inwestycyjnych poprzez efektywną analizę oraz prognozowanie cen na rynku nieruchomości w Polsce.
+Celem RealEstate Analyzer jest dostarczenie użytkownikom zaawansowanego narzędzia do podejmowania trafnych decyzji inwestycyjnych poprzez efektywną analizę rynku nieruchomości w Polsce.
 
 ## :rocket: Instalacja i uruchomienie
 
@@ -258,7 +259,7 @@ Projekt zawiera zaawansowaną część badawczą w katalogu [`rea_research`](rea
 - Automatyczne scraping portali Otodom i OLX
 - Pobieranie danych o cenach, lokalizacjach, metrażu
 - Wykrywanie liczby dostępnych stron
-- Ekstraktowanie szczegółowych informacji (pokoje, piętra, dzielnice)
+- Ekstraktowanie szczegółowych informacji (pokoje, rok budowy, dzielnice)
 
 ### Analiza danych
 - Przetwarzanie zebranych danych w formacie CSV
