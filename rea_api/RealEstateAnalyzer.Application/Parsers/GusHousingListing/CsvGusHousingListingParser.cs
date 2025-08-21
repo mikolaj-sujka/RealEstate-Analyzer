@@ -77,9 +77,9 @@ public class CsvGusHousingListingParser : IFileParser<Domain.Entities.GusHousing
         var listings = partials.Values
             .Select(p => Domain.Entities.GusHousingListing.Create(
                 p.CityCode, p.CityName, p.Period,
-                p.MedianPricePerSqm!, p.AveragePricePerSqm!,
-                p.FlatsCompleted!, p.FlatsSold!,
-                p.TotalValueSold!, p.AverageTotalPrice!))
+                p.MedianPricePerSqm ?? PricePerSquareMeter.Zero(), p.AveragePricePerSqm ?? PricePerSquareMeter.Zero(),
+                p.FlatsCompleted ?? Volume.Zero(), p.FlatsSold ?? Volume.Zero(),
+                p.TotalValueSold ?? Money.Zero(), p.AverageTotalPrice ?? Money.Zero()))
             .ToArray();
 
         return new ParseResult<Domain.Entities.GusHousingListing>(listings, Array.Empty<string>(), true);
@@ -154,7 +154,7 @@ public class CsvGusHousingListingParser : IFileParser<Domain.Entities.GusHousing
     }
 
     private static ParseResult<Domain.Entities.GusHousingListing> ParseFailure(IReadOnlyList<string> errors) =>
-        new ParseResult<Domain.Entities.GusHousingListing>(
+        new(
             Success: false,
             Errors: errors,
             Records: Array.Empty<Domain.Entities.GusHousingListing>()
