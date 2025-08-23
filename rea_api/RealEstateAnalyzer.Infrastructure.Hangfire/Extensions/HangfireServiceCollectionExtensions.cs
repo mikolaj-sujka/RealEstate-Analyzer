@@ -58,7 +58,7 @@ public static class HangfireServiceCollectionExtensions
         services.AddHangfireServer(x =>
         {
             x.ServerName = $"{Environment.MachineName}:long-running";
-            x.Queues = ["long-running", "import-files"];
+            x.Queues = ["long-running", "import-files", "default"];
             x.WorkerCount = mappedConfiguration.LongRunningQueueWorkersCount;
             x.HeartbeatInterval = TimeSpan.FromMinutes(5);
             x.ServerTimeout = TimeSpan.FromHours(6);

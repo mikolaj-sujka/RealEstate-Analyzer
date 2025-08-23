@@ -9,4 +9,6 @@ public sealed class ScraperOptions
     public int MaxParallelRequests { get; set; } = 0;
     public int MinJitterMs { get; set; } = 0;
     public int MaxJitterMs { get; set; } = 0;
+
+    public string ProxyUrl { get; set; } = null!;
 }

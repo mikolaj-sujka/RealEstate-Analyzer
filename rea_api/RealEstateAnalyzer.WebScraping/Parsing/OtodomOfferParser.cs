@@ -27,14 +27,6 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
 
             var title = WebScrapingParserHelpers.ExtractTitle(n) ?? WebScrapingParserHelpers.TryGuessTitle(text);
 
-            var (city, district, voivodeship) = WebScrapingParserHelpers.ExtractLocation(n, text);
-
-            if (string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(district))
-            {
-                // If city or district is not found, skip this offer
-                continue;
-            }
-
             var publishedUtc = WebScrapingParserHelpers.ExtractPublishedUtc(n, text) ?? DateTime.UtcNow;
             var scrapedUtc = DateTime.UtcNow;
 
@@ -42,8 +34,17 @@ public sealed class OtodomOfferParser : IOfferParser<OtodomOfferRecord>
 
             var propertyType = WebScrapingParserHelpers.GuessPropertyType(title, text);
 
-            var (marketType, isDeveloper, buildingBuiltYear,price, pricePerSqm) = await WebScrapingParserHelpers
-                .ExtractDetailsFromOfferUrlAsync(client, url, ct);
+            var (marketType, isDeveloper, buildingBuiltYear,price, pricePerSqm) 
+                = await WebScrapingParserHelpers.ExtractDetailsFromOfferUrlAsync(client, url, ct);
+
+            var (city, district, voivodeship) =
+                await WebScrapingParserHelpers.ExtractLocationFromOfferPageAsync(client, url, ct);
+
+            if (string.IsNullOrWhiteSpace(city) || string.IsNullOrWhiteSpace(district))
+            {
+                // If city or district is not found, skip this offer
+                continue;
+            }
 
             var status = "Active";
 

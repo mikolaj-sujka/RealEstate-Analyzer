@@ -1,9 +1,10 @@
 ﻿using HtmlAgilityPack;
+using RealEstateAnalyzer.Domain.Enums;
+using RealEstateAnalyzer.Infrastructure.Http.Extensions;
 using System.Globalization;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
-using RealEstateAnalyzer.Domain.Enums;
 
 namespace RealEstateAnalyzer.WebScraping.Helpers;
 
@@ -13,7 +14,7 @@ public static class WebScrapingParserHelpers
             decimal pricePerSqm)> 
         ExtractDetailsFromOfferUrlAsync(HttpClient http, string url, CancellationToken ct = default)
     {
-        var html = await http.GetStringAsync(url, ct);
+        var html = await http.GetStringWithRefererAsync(url, null, ct);
         var doc = new HtmlDocument();
         doc.LoadHtml(html);
 
@@ -166,6 +167,8 @@ public static class WebScrapingParserHelpers
         return RemoveDiacritics(lower);
     }
 
+
+
     private static string RemoveDiacritics(string text)
     {
         var normalized = text.Normalize(NormalizationForm.FormD);
@@ -233,213 +236,6 @@ public static class WebScrapingParserHelpers
         t = Condense(t);
         return t.Length > 80 ? t[..80] : t;
     }
-
-    private static readonly string[] Voivodeships = new[]
-     {
-        "zachodniopomorskie","kujawsko-pomorskie","warmińsko-mazurskie",
-        "wielkopolskie","podkarpackie","świętokrzyskie","dolnośląskie",
-        "małopolskie","mazowieckie","opolskie","pomorskie","podlaskie",
-        "lubelskie","lubuskie","łódzkie","śląskie"
-    };
-
-    private static readonly string[] MajorCities = new[]
-    {
-        "warszawa","kraków","łódź","wrocław","poznań","gdańsk","szczecin","bydgoszcz","lublin",
-        "katowice","białystok","gdynia","częstochowa","radom","sosnowiec","toruń","kielce","gliwice","zabrze",
-        "olsztyn","rzeszów","bielsko-biała","bytom","ruda śląska","rybnik","opole","tychy","gorzów wielkopolski","płock","elbląg",
-        "wałbrzych","włocławek","tarnów","chorzów","koszalin","dąbrowa górnicza","zielona góra"
-    };
-
-    private static readonly Regex VoivRegexExtended = new Regex(
-        @"(?<!\p{L})(?:woj(?:ewództwo)?\.?\s*)?(" +
-        string.Join("|", Voivodeships.OrderByDescending(v => v.Length).Select(Regex.Escape)) +
-        @")(?=$|\P{L}|\p{Lu})",
-        RegexOptions.IgnoreCase | RegexOptions.Compiled);
-
-
-    private static readonly Regex CityRegex = new Regex(
-        @"(?<!\p{L})(?:" + string.Join("|", MajorCities
-            .OrderByDescending(c => c.Length)
-            .Select(Regex.Escape)) + @")(?!\p{L})",
-        RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-
-    private static readonly CultureInfo Pl = CultureInfo.GetCultureInfo("pl-PL");
-
-    private static readonly Regex StreetOrPrefixRegex = new(
-    @"^\s*(ul\.?|al\.?|aleja|aleje|pl\.?|plac|os\.?|osiedle|rondo|bulwar|bulw\.?|skwer)\b",
-    RegexOptions.IgnoreCase | RegexOptions.CultureInvariant | RegexOptions.Compiled);
-
-    private static readonly HashSet<string> NoiseWords = new(new[]
-    {
-        "zł","pln","m2","m²","sprzedam","wynajmę","mieszkanie","apartament","dom","działka",
-        "lokal","magazyn","hala","garaż","oferta","cena","ostatnie","pok.","pokojowe","na","żywo",
-        "zobacz","rezerwuj","ostatniego","ostatnia","ostatni", "szukasz", "szukasz mieszkania",
-        "Dodane Dzisiaj", "atrakcyjne", "umeblowane", "do wynajęcia", "do sprzedaży",
-    }, StringComparer.OrdinalIgnoreCase);
-
-    private static readonly HashSet<string> Adjectives = new(StringComparer.OrdinalIgnoreCase)
-    {
-        "północny","północna","północne",
-        "południowy","południowa","południowe",
-        "wschodni","wschodnia","wschodnie",
-        "zachodni","zachodnia","zachodnie",
-        "górny","górna","górne",
-        "dolny","dolna","dolne",
-        "środkowy","środkowa","środkowe",
-        "nowy","nowa","nowe",
-        "stary","stara","stare",
-        "centrum","śródmieście"
-    };
-
-    private static string CleanTokenForLocation(string s)
-    {
-        if (string.IsNullOrWhiteSpace(s)) return "";
-        var t = s;
-
-        t = t.Replace("–", "-").Replace("—", "-").Replace("/", " ").Replace("|", " ");
-        t = Regex.Replace(t, @"(?i)\b\d+([.,]\d+)?\b", " ");
-        t = Regex.Replace(t, @"(?i)\b(zł|pln|m2|m²|%|pok\.?|pokojowe?)\b", " ");
-        t = Regex.Replace(t, @"[^\p{L}\s\-]", " ");
-
-        t = StreetOrPrefixRegex.Replace(t, "");
-
-        var words = t.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                     .Where(w => !NoiseWords.Contains(w))
-                     .ToArray();
-
-        return Condense(string.Join(' ', words));
-    }
-
-    private static string LimitToTwoWords(string s)
-    {
-        var words = Condense(s).Split(' ', StringSplitOptions.RemoveEmptyEntries);
-        if (words.Length <= 2) return ToTitle(string.Join(' ', words));
-        return ToTitle($"{words[0]} {words[1]}");
-    }
-
-    private static readonly HashSet<string> StopTokens =
-        new(StringComparer.OrdinalIgnoreCase)
-        {
-        "przy","na","w","we","do","od","i","oraz",
-        "ul","ul.","al","al.","pl","pl.","os","os.","rondo"
-        };
-
-    private static readonly Regex NonLocationNoiseRegex =
-        new(@"(?ix)
-        \b( \d+[.,]?\d* \s*(m2|m²)? |         # liczby, metry
-            pokoj\w* |                        # pokoje: pokojowy/pokojowe/pokoi
-            piętr\w* |                        # piętro/piętrze
-            kamienic\w* | blok\w* | apartament\w* | kawalerk\w* |
-            rynek | pierwotn\w* | wt[óo]rn\w* | nowe | inwestycj\w*
-          )\b");
-
-    private static readonly Regex ProperCasedPhraseRegex =
-        new(@"^(?:[A-ZĄĆĘŁŃÓŚŹŻ][\p{L}\-']+|I|II|III|IV|V|VI|VII|VIII|IX|X)
-          (?:\s+(?:[A-ZĄĆĘŁŃÓŚŹŻ][\p{L}\-']+|I|II|III|IV|V|VI|VII|VIII|IX|X))?$",
-            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture);
-
-    private static readonly HashSet<string> AdjectiveOnly =
-        new(StringComparer.OrdinalIgnoreCase)
-        { "Stary","Nowy","Stare","Nowe","Dolny","Górny","Środkowy","Mały","Wielki" };
-
-    private static bool IsNoiseToken(string token)
-    {
-        if (string.IsNullOrWhiteSpace(token)) return true;
-        var t = token.Trim();
-        return StopTokens.Contains(t) || NonLocationNoiseRegex.IsMatch(t);
-    }
-
-    private static bool IsLikelyDistrictPhrase(string phrase)
-    {
-        if (string.IsNullOrWhiteSpace(phrase)) return false;
-
-        var normalized = Regex.Replace(phrase.Trim(), @"\s+", " ");
-
-        var words = normalized.Split(' ');
-        if (words.Length > 2) return false;
-
-        if (words.Length == 1 && AdjectiveOnly.Contains(words[0])) return false;
-
-        if (!ProperCasedPhraseRegex.IsMatch(normalized)) return false;
-
-        if (IsNoiseToken(normalized)) return false;
-
-        return true;
-    }
-
-
-    public static (string City, string District, string Voivodeship)
-    ExtractLocation(HtmlNode offer, string offerText)
-    {
-        string city = "", district = "", voiv = "";
-
-        var mapLink = offer.SelectSingleNode(".//a[@href='#map']");
-
-        var candidateTexts = new List<string>();
-        if (mapLink != null) candidateTexts.Add(Condense(mapLink.InnerText));
-
-        var addrNodes = offer.SelectNodes(
-            ".//*[" +
-            "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'location') or " +
-            "contains(translate(@class,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'address') or " +
-            "contains(@data-cy,'location')]");
-        if (addrNodes != null)
-            candidateTexts.AddRange(addrNodes.Select(n => Condense(n.InnerText)));
-
-        if (!string.IsNullOrWhiteSpace(offerText))
-            candidateTexts.Add(Condense(offerText));
-
-        foreach (var raw in candidateTexts)
-        {
-            if (string.IsNullOrEmpty(voiv))
-            {
-                var mv = VoivRegexExtended.Match(raw);
-                if (mv.Success) 
-                    voiv = ToTitle(mv.Groups[1].Value);
-            }
-
-            var parts = raw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
-
-            if (string.IsNullOrEmpty(city))
-            {
-                for (int i = 0; i < parts.Length; i++)
-                {
-                    var p = parts[i];
-                    var mc = CityRegex.Match(p);
-                    if (mc.Success)
-                    {
-                        city = ToTitle(mc.Value);
-
-                        string prev1Raw = i > 0 ? parts[i - 1] : string.Empty;
-
-                        string prev1 = CleanTokenForLocation(prev1Raw);
-
-                        if (StreetOrPrefixRegex.IsMatch(prev1Raw))
-                            prev1 = string.Empty;
-
-                        if (IsNoiseToken(prev1))
-                            prev1 = string.Empty;
-
-                        district = string.IsNullOrWhiteSpace(prev1) ? string.Empty : LimitToTwoWords(prev1);
-
-                        break; // miasto znalezione — kończ dalsze skanowanie tego 'raw'
-                    }
-                }
-            }
-
-            if (!string.IsNullOrEmpty(city) && !string.IsNullOrEmpty(voiv))
-                break;
-        }
-
-        if (string.IsNullOrEmpty(voiv) && !string.IsNullOrWhiteSpace(offerText))
-        {
-            var mv = VoivRegexExtended.Match(offerText);
-            if (mv.Success) voiv = ToTitle(mv.Groups[1].Value);
-        }
-
-        return (city, district, voiv);
-    }
-
     public static DateTime? ExtractPublishedUtc(HtmlNode offer, string offerText)
     {
         var t = offer.SelectSingleNode(".//time[@datetime]");
@@ -476,19 +272,6 @@ public static class WebScrapingParserHelpers
         return "Other";
     }
 
-    public static string Condense(string s)
-    {
-        var t = WebUtility.HtmlDecode(s ?? string.Empty).Replace("\u00A0", " ");
-
-        t = Regex.Replace(t, @"(?<=\p{Ll})(?=\p{Lu})", " ");
-
-        t = Regex.Replace(t, @"(?<=\p{L})(?=\d)|(?<=\d)(?=\p{L})", " ");
-
-        t = Regex.Replace(t, @"\s+", " ").Trim();
-        return t;
-    }
-
-
     public static string CleanTitle(string s)
     {
         var t = WebUtility.HtmlDecode(s ?? string.Empty);
@@ -517,6 +300,104 @@ public static class WebScrapingParserHelpers
                    DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out dt);
     }
 
-    public static string ToTitle(string s) =>
-        CultureInfo.GetCultureInfo("pl-PL").TextInfo.ToTitleCase(s?.ToLowerInvariant() ?? "");
+    private static readonly string[] MajorCities = new[]
+    {
+        "warszawa","kraków","łódź","wrocław","poznań","gdańsk","szczecin","bydgoszcz","lublin",
+        "katowice","białystok","gdynia","częstochowa","radom","sosnowiec","toruń","kielce","gliwice","zabrze",
+        "olsztyn","rzeszów","bielsko-biała","bytom","ruda śląska","rybnik","opole","tychy","gorzów wielkopolski","płock","elbląg",
+        "wałbrzych","włocławek","tarnów","chorzów","koszalin","dąbrowa górnicza","zielona góra"
+    };
+
+    public static async Task<(string City, string District, string Voivodeship)> ExtractLocationFromOfferPageAsync(HttpClient http, string url, CancellationToken ct = default)
+    {
+        var html = await http.GetStringWithRefererAsync(url, null, ct);
+        var doc = new HtmlDocument();
+        doc.LoadHtml(html);
+
+        var root = doc.DocumentNode;
+
+        var addrNode = root.SelectSingleNode("//a[@href='#map']");
+        if (addrNode == null) return ("", "", "");
+
+        var raw = Condense(addrNode.InnerText);
+        if (string.IsNullOrWhiteSpace(raw)) return ("", "", "");
+
+        var parts = raw.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                       .Select(CleanTokenForLocation)
+                       .Where(p => !string.IsNullOrWhiteSpace(p))
+                       .ToList();
+        if (parts.Count == 0) return ("", "", "");
+
+        var voivIndex = parts.Count - 1;
+        var voiv = ToTitle(parts[voivIndex]);
+
+        string before1 = voivIndex > 0 ? parts[voivIndex - 1] : "";
+        string before2 = voivIndex > 1 ? parts[voivIndex - 2] : "";
+
+        string t1 = (!string.IsNullOrWhiteSpace(before1) && !IsStreetToken(before1)) ? before1 : "";
+        string t2 = (!string.IsNullOrWhiteSpace(before2) && !IsStreetToken(before2)) ? before2 : "";
+
+        static bool IsMajorCityToken(string s) =>
+            !string.IsNullOrWhiteSpace(s) && MajorCities.Contains(s.Trim().ToLowerInvariant());
+
+        string city = "", district = "";
+
+        if (!string.IsNullOrEmpty(t1) && IsMajorCityToken(t1))
+        {
+            city = ToTitle(t1);
+            if (!string.IsNullOrEmpty(t2)) district = LimitToTwoWords(ToTitle(t2));
+        }
+
+        if (!string.IsNullOrEmpty(t2) && IsMajorCityToken(t2))
+        {
+            city = ToTitle(t2);
+            if (!string.IsNullOrEmpty(t1)) district = LimitToTwoWords(ToTitle(t1));
+        }
+       
+
+        if (!string.IsNullOrEmpty(city) && string.Equals(city, district, StringComparison.OrdinalIgnoreCase))
+            district = "";
+
+        return (city, district, voiv);
+    }
+
+    public static string Condense(string s) =>
+        string.IsNullOrWhiteSpace(s) ? string.Empty :
+        Regex.Replace(s.Replace('\u00A0', ' '), @"\s+", " ").Trim();
+
+    private static string CleanTokenForLocation(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return string.Empty;
+        var t = Condense(s);
+
+        t = Regex.Replace(t, @"^(ul\.?|ulica|al\.?|aleja|os\.?|osiedle|pl\.?|plac|ulicy)\b\.?\s*", "", RegexOptions.IgnoreCase);
+
+        t = Regex.Replace(t, @"\b\d+[A-Za-z0-9\/\-]*\b", "", RegexOptions.IgnoreCase);
+
+        t = Regex.Replace(t, @"\s*-\s*", " ").Trim();
+        t = Condense(t);
+        return t;
+    }
+
+    private static bool IsStreetToken(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return false;
+        var t = s.ToLowerInvariant();
+        if (Regex.IsMatch(t, @"^(ul\.?|ulica|al\.?|aleja|os\.?|osiedle|pl\.?|plac)\b")) return true;
+        if (Regex.IsMatch(t, @"\d")) return true; // numer w nazwie -> zwykle ulica/adres
+        return false;
+    }
+
+    private static string LimitToTwoWords(string s)
+    {
+        var parts = Condense(s).Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length <= 2 ? s : string.Join(' ', parts.Take(2));
+    }
+
+    private static string ToTitle(string s)
+    {
+        if (string.IsNullOrWhiteSpace(s)) return s;
+        var t = s.Trim();
+        return char.ToUpper(t[0]) + (t.Length > 1 ? t.Substring(1) : "");
+    }
 }
