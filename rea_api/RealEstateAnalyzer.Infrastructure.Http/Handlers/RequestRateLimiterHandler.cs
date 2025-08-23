@@ -7,8 +7,8 @@ namespace RealEstateAnalyzer.Infrastructure.Http.Handlers
         private static readonly RateLimiter Limiter = new TokenBucketRateLimiter(
             new TokenBucketRateLimiterOptions
             {
-                TokenLimit = 3,
-                TokensPerPeriod = 3,
+                TokenLimit = 2,
+                TokensPerPeriod = 2,
                 ReplenishmentPeriod = TimeSpan.FromSeconds(2),
                 QueueLimit = 200,
                 QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
