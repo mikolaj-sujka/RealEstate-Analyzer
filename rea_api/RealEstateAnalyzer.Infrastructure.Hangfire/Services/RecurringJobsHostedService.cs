@@ -71,7 +71,11 @@ public sealed class RecurringJobsHostedService(
         jobs.AddOrUpdate<ISynchronizationJob>(
             recurringJobId: "OtodomSync",
             methodCall: j => j.Run(),
-            cronExpression: configuration.SyncOtodom
+            cronExpression: configuration.SyncOtodom,
+            options: new RecurringJobOptions
+            {
+                TimeZone = TimeZoneInfo.Local
+            }
         );
 
         logger.LogInformation("Recurring jobs configured.");

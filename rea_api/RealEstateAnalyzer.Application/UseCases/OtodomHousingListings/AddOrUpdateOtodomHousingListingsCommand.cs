@@ -38,7 +38,6 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
         }
 
         await AddOrUpdateOtodomListingsAsync(otodomListings, cancellationToken);
-        // await RemoveOtodomListingsAsync(otodomListings, cancellationToken);
 
         await context.SaveChangesAsync(cancellationToken);
     }
@@ -106,23 +105,5 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
         }
 
         logger.LogInformation("Records added: {addedRecordsCount}, record updated {updatedRecordsCount}", addedRecords, updatedRecords);
-    }
-
-    private async Task RemoveOtodomListingsAsync(IReadOnlyList<OtodomHousingListing> listings, CancellationToken cancellationToken)
-    {
-        var incomingUrls = listings.Select(l => l.Url.Url).ToHashSet(StringComparer.Ordinal);
-
-        var urlsInDb = await context.OtodomHousingListings
-            .Select(x => x.Url.Url)
-            .ToListAsync(cancellationToken);
-
-        var toDelete = urlsInDb.Where(url => !incomingUrls.Contains(url)).ToList();
-
-        foreach (var batch in toDelete.Chunk(1000))
-        {
-            await context.OtodomHousingListings
-                .Where(x => batch.Contains(x.OfferId))
-                .ExecuteDeleteAsync(cancellationToken);
-        }
     }
 }
