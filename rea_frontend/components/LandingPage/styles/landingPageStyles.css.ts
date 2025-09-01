@@ -32,13 +32,14 @@ export const imageLanding = style({
 });
 
 export const titleGroup = style({
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: rem(48),
-    marginTop: rem(32),
-    marginLeft: rem(50),
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'center',
+  alignItems: 'center',
+  gap: rem(32),
+  marginTop: rem(32)
 });
+
 
 export const iconLanding = style({
     width: rem(48),

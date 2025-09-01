@@ -12,7 +12,7 @@ export const LandingPagePreview: React.FC = () => {
   const { t } = useTranslate();
   const { loading, handleClick } = useLandingPage();
   return (
-    <BeamsBackground intensity={1}>
+    <BeamsBackground intensity={1} beams={90} quality="auto">
       <div className={classes.container}>
         <Image
           src="/images/logo.png"
