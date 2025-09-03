@@ -16,7 +16,7 @@ public class GetOtodomLatestTransactionsQueryHandler(DatabaseContext context, IL
     {
         var latestTransactions = await context.OtodomHousingListings
             .AsNoTracking()
-            .OrderBy(x => x.DateWebScraped)
+            .OrderByDescending(x => x.DateWebScraped)
             .Select(x => new OtodomLatestTransactionsModel(
                 x.Location.City,
                 x.Location.Voivodeship,
