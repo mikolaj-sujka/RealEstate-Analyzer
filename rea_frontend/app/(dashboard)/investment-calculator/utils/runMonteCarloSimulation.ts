@@ -9,9 +9,6 @@ export function runMonteCarloSimulation(
   const sellCost = (p.sellingCostsPct ?? 2) / 100;
   const rho = clamp(p.correlation ?? 0.3, -1, 1);
 
-  // realna stopa wg Fishera
-  const rReal = fisherReal(p.nominalDiscountRate / 100, p.inflation / 100);
-
   const finalValues: number[] = [];
   const rois: number[] = [];
   const npvs: number[] = [];
@@ -46,8 +43,8 @@ export function runMonteCarloSimulation(
         // terminal value
         const terminal =
           p.useExitCap && p.exitCapRate
-            ? noi / (p.exitCapRate / 100) // TV = NOI_{T+1}/cap
-            : V; // lub wartość rynkowa ścieżki
+            ? (noi * (1 + gRent / 100)) / (p.exitCapRate / 100) // NOI_{T+1}
+            : V;
         const netExit = terminal * (1 - sellCost);
         cashflows.push(noi + netExit);
       }
@@ -55,7 +52,8 @@ export function runMonteCarloSimulation(
 
     const totalIn = cashflows.slice(1).reduce((a, b) => a + b, 0);
     const roi = ((totalIn - p.initialInvestment) / p.initialInvestment) * 100;
-    const npv = npvOf(cashflows, rReal);
+    const iNom = p.nominalDiscountRate / 100;
+    const npv = npvOf(cashflows, iNom);
     const irr = irrOf(cashflows);
     const cagr =
       Math.pow(Math.max(1e-9, V) / p.initialInvestment, 1 / p.years) - 1;
