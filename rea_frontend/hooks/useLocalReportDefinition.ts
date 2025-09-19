@@ -60,11 +60,11 @@ export const useLocationReportDefinition = ({
                 },
                 {
                     metric: "Udzial deweloperow",
-                    value: `${(voivodeshipMarketData.developerMarketShare * 100).toFixed(1)}%`,
+                    value: `${(voivodeshipMarketData.developerMarketShare).toFixed(1)}%`,
                 },
                 {
                     metric: "Rynek pierwotny",
-                    value: `${(voivodeshipMarketData.primaryMarketShare * 100).toFixed(1)}%`,
+                    value: `${(voivodeshipMarketData.primaryMarketShare).toFixed(1)}%`,
                 },
             ],
         }
@@ -110,12 +110,12 @@ export const useLocationReportDefinition = ({
                 },
                 {
                     parameter: "Udzial deweloperow",
-                    value: `${(voivodeshipMarketData.developerMarketShare * 100).toFixed(1)}%`,
+                    value: `${(voivodeshipMarketData.developerMarketShare).toFixed(1)}%`,
                     description: "Procent ofert pochodzacych od deweloperow",
                 },
                 {
                     parameter: "Rynek pierwotny",
-                    value: `${(voivodeshipMarketData.primaryMarketShare * 100).toFixed(1)}%`,
+                    value: `${(voivodeshipMarketData.primaryMarketShare).toFixed(1)}%`,
                     description: "Udzial nowych mieszkan w calkowitej ofercie",
                 },
                 {
