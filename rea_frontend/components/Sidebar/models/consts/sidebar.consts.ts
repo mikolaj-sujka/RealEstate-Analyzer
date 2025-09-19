@@ -15,7 +15,7 @@ export const sidebarSections = [
     title: "Przegląd",
     items: [
       { href: "/dashboard", label: "Pulpit", icon: IconDashboard },
-      { href: "/map", label: "Mapa Nieruchomości", icon: IconMap },
+      { href: "/cities-district-map", label: "Mapa Nieruchomości", icon: IconMap },
     ],
   },
   {
@@ -27,7 +27,7 @@ export const sidebarSections = [
         label: "Centrum Inwestora",
         icon: IconEyeDollar,
       },
-      { href: "/cities", label: "Porównanie Miast", icon: IconBuildingStore },
+      { href: "/cities-comparison", label: "Porównanie Miast", icon: IconBuildingStore },
     ],
   },
   {

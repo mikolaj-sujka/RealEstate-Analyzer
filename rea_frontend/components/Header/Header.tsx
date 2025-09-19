@@ -17,7 +17,6 @@ import {
   IconHelp,
 } from "@tabler/icons-react";
 import { headerBreadcrumbNames } from "./models";
-import Link from "next/link";
 
 export const Header = () => {
   const { colorScheme, setColorScheme } = useMantineColorScheme();
