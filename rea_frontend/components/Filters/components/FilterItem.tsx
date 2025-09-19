@@ -38,7 +38,6 @@ export const FilterItem = ({ filter, value, onChange }: ItemProps) => {
           }))}
           value={value as string}
           onChange={onChange}
-          clearable
           searchable
         />
       );
@@ -54,7 +53,6 @@ export const FilterItem = ({ filter, value, onChange }: ItemProps) => {
           }))}
           value={Array.isArray(value) ? value.map((v) => String(v)) : []}
           onChange={onChange}
-          clearable
           searchable
         />
       );
