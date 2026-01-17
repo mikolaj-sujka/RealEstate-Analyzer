@@ -39,4 +39,11 @@
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.WebScraping\RealEstateAnalyzer.WebScraping.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Update="appsettings.tests.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>

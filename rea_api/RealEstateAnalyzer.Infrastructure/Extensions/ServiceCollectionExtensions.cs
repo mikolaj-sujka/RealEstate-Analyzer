@@ -14,10 +14,10 @@ public static class ServiceCollectionExtensions
     {
         var migrationAssemblyName = typeof(DatabaseContext).GetTypeInfo().Assembly.GetName().Name!;
         var connectionString = configuration.GetConnectionString("DefaultConnection")
-                               ?? configuration["Database:ConnectionString"];
+                               ?? configuration["Database:DefaultConnection"];
 
         if (string.IsNullOrWhiteSpace(connectionString))
-            throw new InvalidOperationException("Brak connection stringa: ustaw ConnectionStrings:DefaultConnection lub Database:ConnectionString.");
+            throw new InvalidOperationException("Missing connectionString.");
 
         services.AddDbContext<DatabaseContext>(options =>
         {

@@ -12,8 +12,11 @@ namespace RealEstateAnalyzer.Infrastructure.Tests.Configurators
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
 
+            builder.UseEnvironment("IntegrationTests");
+
             builder.ConfigureAppConfiguration((_, cfg) =>
             {
+                cfg.SetBasePath(AppContext.BaseDirectory);
                 cfg.AddJsonFile("appsettings.tests.json", optional: false, reloadOnChange: false);
             });
 

@@ -17,7 +17,10 @@ builder.Services.AddOpenApi();
 
 builder.Services.AddControllers();
 
-builder.Services.AddDataLayer(builder.Configuration, builder.Environment);
+if (!builder.Environment.IsIntegrationTests())
+{
+    builder.Services.AddDataLayer(builder.Configuration, builder.Environment);
+}
 
 builder.Services.AddRedis(builder.Configuration);
 
