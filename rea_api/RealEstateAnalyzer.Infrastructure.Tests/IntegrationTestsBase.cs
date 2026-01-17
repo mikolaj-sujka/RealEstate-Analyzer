@@ -7,17 +7,24 @@ namespace RealEstateAnalyzer.Infrastructure.Tests
 {
     public abstract class IntegrationTestsBase : IAsyncLifetime
     {
-        private readonly IntegrationTestWebApplicationFactory _factory = new();
+        private IntegrationTestWebApplicationFactory _factory = null!;
         private IServiceScope _arrangeScope = null!;
         private IServiceScope _assertScope = null!;
 
-        private IMediator Mediator { get; set; } = null!;
+        protected HttpClient Client { get; private set; } = null!;
+        protected IMediator Mediator { get; private set; } = null!;
 
         public Task InitializeAsync()
         {
+            _factory = new IntegrationTestWebApplicationFactory();
+
+            Client = _factory.CreateClient();
+
             _arrangeScope = _factory.Services.CreateScope();
             _assertScope = _factory.Services.CreateScope();
+
             Mediator = _factory.Services.GetRequiredService<IMediator>();
+
             return Task.CompletedTask;
         }
 
@@ -35,8 +42,5 @@ namespace RealEstateAnalyzer.Infrastructure.Tests
             arrange(db);
             db.SaveChanges();
         }
-
-        protected Task<TResponse> Act_Send<TResponse>(IRequest<TResponse> request, CancellationToken ct = default)
-            => Mediator.Send(request, ct);
     }
 }

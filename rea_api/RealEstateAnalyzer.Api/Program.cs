@@ -26,7 +26,6 @@ builder.Services.AddRedis(builder.Configuration);
 
 builder.Services.ConfigureHealthChecks(builder.Configuration);
 
-builder.Services.AddHangfire(builder.Configuration);
 
 builder.Services.AddApplicationServices(builder.Configuration);
 
@@ -36,7 +35,12 @@ builder.Services.AddHttpScrapingServices(builder.Configuration);
 
 builder.Services.ConfigureApiVersioning();
 
-builder.Services.AddHostedService<RecurringJobsHostedService>();
+
+if (!builder.Environment.IsIntegrationTests())
+{
+    builder.Services.AddHangfire(builder.Configuration);
+    builder.Services.AddHostedService<RecurringJobsHostedService>();
+}
 
 var policyCors = builder.Services.ConfigureCors(builder.Configuration);
 
@@ -74,4 +78,4 @@ app.UseHttpsRedirection();
 
 app.Run();
 
-
+public abstract partial class Program { }

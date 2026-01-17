@@ -79,7 +79,6 @@ public static class HangfireServiceCollectionExtensions
     {
         var mappedConfiguration = configuration.GetSection(configurationKey).Get<HangfireConfiguration>();
 
-
         if (mappedConfiguration is { Enabled: true })
         {
             var storage = app.ApplicationServices.GetService<JobStorage>();
