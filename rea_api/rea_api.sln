@@ -33,6 +33,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Tests.In
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Tests", "RealEstateAnalyzer.Infrastructure.Tests\RealEstateAnalyzer.Infrastructure.Tests.csproj", "{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipelines", "pipelines", "{4211581C-A1B2-4A8B-A421-4D76ED662337}"
+	ProjectSection(SolutionItems) = preProject
+		..\.github\workflows\build-and-deploy-azure.yml = ..\.github\workflows\build-and-deploy-azure.yml
+		..\.github\workflows\build-and-test-net.yml = ..\.github\workflows\build-and-test-net.yml
+		..\.github\workflows\build-and-test-next.yml = ..\.github\workflows\build-and-test-next.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
