@@ -3,6 +3,7 @@ using HealthChecks.UI.Configuration;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using RealEstateAnalyzer.Api.Extensions;
 using RealEstateAnalyzer.Application.Extensions;
+using RealEstateAnalyzer.Application.Validators.ValidationExtensions;
 using RealEstateAnalyzer.Infrastructure.Extensions;
 using RealEstateAnalyzer.Infrastructure.Hangfire.Extensions;
 using RealEstateAnalyzer.Infrastructure.Hangfire.Services;
@@ -50,6 +51,8 @@ builder.Services.AddApplicationInsightsTelemetry(new Microsoft.ApplicationInsigh
 });
 
 var app = builder.Build();
+
+app.UseMiddleware<ValidationExceptionMiddleware>();
 
 app.MapScalarApiReference();
 

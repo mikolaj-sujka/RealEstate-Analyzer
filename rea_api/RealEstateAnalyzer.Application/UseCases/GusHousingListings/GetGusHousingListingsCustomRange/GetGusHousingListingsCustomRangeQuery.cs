@@ -1,7 +1,10 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsRecentYears;
+using RealEstateAnalyzer.Application.Validators;
 using RealEstateAnalyzer.Infrastructure;
 
 namespace RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsCustomRange;
@@ -99,5 +102,34 @@ public class GetGusHousingListingsCustomRangeQueryHandler(
         );
 
         return new GetGusHousingListingsCustomRangeQueryResponse(latest);
+    }
+}
+
+public class GetGusHousingListingsCustomRangeQueryValidator : AbstractValidator<GetGusHousingListingsCustomRangeQuery>
+{
+    public GetGusHousingListingsCustomRangeQueryValidator(IDateTimeProvider dateTimeProvider)
+    {
+        RuleFor(x => x.CityName)
+            .CityNameCorrectConvention();
+
+        RuleFor(x => x.YearsFrom)
+            .LessThan(x => x.YearsTo)
+            .WithMessage(ValidationErrorMessages.YearsFromGreaterThanYearsTo);
+
+        RuleFor(x => (int)x.YearsFrom)
+            .YearsBackCorrectConvention(dateTimeProvider.CurrentYearUtc);
+
+        RuleFor(x => x.MonthFrom)
+            .LessThan(x => x.MonthTo)
+            .WithMessage(ValidationErrorMessages.MonthsToGreaterThanMonthsFrom);
+
+        RuleFor(x => x.MonthFrom)
+            .InclusiveBetween(1u, 12u)
+            .WithMessage(ValidationErrorMessages.MonthOutOfRange);
+
+
+        RuleFor(x => x.MonthTo)
+            .InclusiveBetween(1u, 12u)
+            .WithMessage(ValidationErrorMessages.MonthOutOfRange);
     }
 }

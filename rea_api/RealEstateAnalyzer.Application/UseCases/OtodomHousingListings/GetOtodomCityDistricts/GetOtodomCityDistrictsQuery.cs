@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RealEstateAnalyzer.Application.Validators;
 using RealEstateAnalyzer.Infrastructure;
 
 namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityDistricts;
@@ -59,5 +61,14 @@ public class GetOtodomCityDistrictsQueryHandler(DatabaseContext context, ILogger
 
 
         return new List<GetOtodomCityDistrictsQueryResponse> { new(districtData) };
+    }
+}
+
+public class GetOtodomCityDistrictsQueryValidator : AbstractValidator<GetOtodomCityDistrictsQuery>
+{
+    public GetOtodomCityDistrictsQueryValidator()
+    {
+        RuleFor(x => x.CityName)
+            .CityNameCorrectConvention();
     }
 }

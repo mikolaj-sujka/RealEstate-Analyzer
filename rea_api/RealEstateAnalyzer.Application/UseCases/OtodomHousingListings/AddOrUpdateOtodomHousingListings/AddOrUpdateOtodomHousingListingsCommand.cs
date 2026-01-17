@@ -107,3 +107,5 @@ public class AddOrUpdateOtodomHousingListingsCommandHandler(
         logger.LogInformation("Records added: {addedRecordsCount}, record updated {updatedRecordsCount}", addedRecords, updatedRecords);
     }
 }
+
+// TODO: Add validation for the command using FluentValidation if needed

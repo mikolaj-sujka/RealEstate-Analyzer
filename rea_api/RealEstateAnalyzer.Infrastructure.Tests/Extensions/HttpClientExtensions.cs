@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
-using RealEstateAnalyzer.Api.Extensions.ApiErrorExtensions;
+using RealEstateAnalyzer.Application.Extensions.ApiErrorExtensions;
 
 namespace RealEstateAnalyzer.Infrastructure.Tests.Extensions
 {

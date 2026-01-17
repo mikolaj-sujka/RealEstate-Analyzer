@@ -1,6 +1,9 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RealEstateAnalyzer.Application.Abstractions;
+using RealEstateAnalyzer.Application.Validators;
 using RealEstateAnalyzer.Domain.ValueObjects;
 using RealEstateAnalyzer.Infrastructure;
 
@@ -92,5 +95,17 @@ public class GetGusHousingListingsRecentYearsQueryHandler(DatabaseContext contex
             latest.Count, request.CityName, request.YearsBack);
 
         return new GetGusHousingListingsRecentYearsQueryResponse(latest);
+    }
+}
+
+public class GetGusHousingListingsRecentYearsQueryValidator : AbstractValidator<GetGusHousingListingsRecentYearsQuery>
+{
+    public GetGusHousingListingsRecentYearsQueryValidator(IDateTimeProvider dateTimeProvider)
+    {
+        RuleFor(x => x.CityName)
+            .CityNameCorrectConvention();
+
+        RuleFor(x => (int)x.YearsBack)
+            .YearsBackCorrectConvention(dateTimeProvider.CurrentYearUtc);
     }
 }

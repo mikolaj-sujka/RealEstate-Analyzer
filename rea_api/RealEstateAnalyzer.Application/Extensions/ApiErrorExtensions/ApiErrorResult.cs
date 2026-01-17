@@ -1,12 +1,12 @@
 ﻿using Newtonsoft.Json;
-using RealEstateAnalyzer.Api.Extensions.ValidationExtensions;
+using RealEstateAnalyzer.Application.Validators.ValidationExtensions;
 
-namespace RealEstateAnalyzer.Api.Extensions.ApiErrorExtensions
+namespace RealEstateAnalyzer.Application.Extensions.ApiErrorExtensions
 {
     public class ApiErrorResult
     {
-        public List<ApiErrorExtensions.ApiError> Errors { get; } = new();
-        public List<ApiErrorExtensions.ApiError> Warnings { get; } = new();
+        public List<ApiError> Errors { get; } = new();
+        public List<ApiError> Warnings { get; } = new();
 
         public string? Source { get; set; }
 
@@ -16,10 +16,10 @@ namespace RealEstateAnalyzer.Api.Extensions.ApiErrorExtensions
 
         public ApiErrorResult(string errorMessage, string errorCode)
         {
-            Errors.Add(new ApiErrorExtensions.ApiError(errorCode, errorMessage));
+            Errors.Add(new ApiError(errorCode, errorMessage));
         }
 
-        public ApiErrorResult(IEnumerable<ApiErrorExtensions.ApiError> errors, IEnumerable<ApiErrorExtensions.ApiError> warnings)
+        public ApiErrorResult(IEnumerable<ApiError> errors, IEnumerable<ApiError> warnings)
         {
             Errors.AddRange(errors);
             Warnings.AddRange(warnings);

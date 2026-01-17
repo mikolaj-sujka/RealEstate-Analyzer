@@ -1,4 +1,4 @@
-﻿namespace RealEstateAnalyzer.Api.Extensions.ApiErrorExtensions
+﻿namespace RealEstateAnalyzer.Application.Extensions.ApiErrorExtensions
 {
     public class ApiError
     {
