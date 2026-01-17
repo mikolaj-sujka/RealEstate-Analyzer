@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealEstateAnalyzer.Application.Extensions;
+using RealEstateAnalyzer.Application.Validators;
 using RealEstateAnalyzer.Infrastructure;
 
 namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomCityData;
@@ -48,5 +50,14 @@ public class GetOtodomCityDataListingsQueryHandler(DatabaseContext databaseConte
             new(totalOffers, averagePricePerSqm, 
                 averageBuildingsBuiltYear, developerMarketShare)
         };
+    }
+}
+
+public class GetOtodomCityDataListingsQueryValidator : AbstractValidator<GetOtodomCityDataListingsQuery>
+{
+    public GetOtodomCityDataListingsQueryValidator()
+    {
+        RuleFor(x => x.CityName)
+            .CityNameCorrectConvention();
     }
 }

@@ -21,3 +21,4 @@ public class GetOtodomAllVoivodeshipsQueryHandler(DatabaseContext context)
         return new List<GetOtodomAllVoivodeshipsQueryResponse> { new(voivodeships) };
     }
 }
+

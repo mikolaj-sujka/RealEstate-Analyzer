@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using FluentValidation;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using RealEstateAnalyzer.Application.Extensions;
+using RealEstateAnalyzer.Application.Validators;
 using RealEstateAnalyzer.Domain.Enums;
 using RealEstateAnalyzer.Infrastructure;
 
@@ -66,5 +68,15 @@ public class GetOtodomVoivodeshipDataQueryHandler(DatabaseContext databaseContex
                 AverageFlatSize: averageFlatSize
             )
         };
+    }
+}
+
+public class GetOtodomVoivodeshipDataQueryValidator : AbstractValidator<GetOtodomVoivodeshipDataQuery>
+{
+    public GetOtodomVoivodeshipDataQueryValidator(DatabaseContext databaseContext)
+    {
+        RuleFor(x => x.VoivodeshipName)
+            .VoivodeshipNameCorrectConvention()
+            .VoivodeshipMustBeKnown();
     }
 }

@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.BackgroundJobs.Job;
+using RealEstateAnalyzer.Application.Behaviors;
 using RealEstateAnalyzer.Application.Parsers.GusHousingListing;
 using RealEstateAnalyzer.Application.Services;
 using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsFromCsv;
@@ -20,8 +23,12 @@ public static class ServiceCollectionExtensions
     public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatRConfig();
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+
         services.AddScoped<IFileParser<GusHousingListing>, CsvGusHousingListingParser>();
         services.AddScoped<IRedisCacheListingsService, ListingCacheService>();
         services.AddScoped<ISynchronizationJob, SynchronizationJob>();
+        services.AddValidatorsFromAssembly(typeof(GetGusHousingListingsFromCsvQuery).Assembly);
     }
 }
