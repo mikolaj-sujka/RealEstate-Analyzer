@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.AddOrUpdateOtodomHousingListings;
 using RealEstateAnalyzer.Infrastructure.Http.Policies;
 using RealEstateAnalyzer.WebScraping.Abstractions;
 using RealEstateAnalyzer.WebScraping.Domain;

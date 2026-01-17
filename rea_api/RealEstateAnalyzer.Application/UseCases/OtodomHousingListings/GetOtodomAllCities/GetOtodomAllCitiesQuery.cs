@@ -5,11 +5,11 @@ using RealEstateAnalyzer.Infrastructure;
 namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomAllCities;
 
 public record GetOtodomAllCitiesQueryResponse(IReadOnlyList<string> Cities);
-public record GetOtodomAllCitiesQuery : IRequest<IReadOnlyList<GetOtodomAllCitiesQueryResponse>>;
+public record GetOtodomAllCitiesQuery : IRequest<GetOtodomAllCitiesQueryResponse>;
 
-public class GetOtodomAllCitiesQueryHandler(DatabaseContext context) : IRequestHandler<GetOtodomAllCitiesQuery, IReadOnlyList<GetOtodomAllCitiesQueryResponse>>
+public class GetOtodomAllCitiesQueryHandler(DatabaseContext context) : IRequestHandler<GetOtodomAllCitiesQuery, GetOtodomAllCitiesQueryResponse>
 {
-    public async Task<IReadOnlyList<GetOtodomAllCitiesQueryResponse>> Handle(GetOtodomAllCitiesQuery request, CancellationToken cancellationToken)
+    public async Task<GetOtodomAllCitiesQueryResponse> Handle(GetOtodomAllCitiesQuery request, CancellationToken cancellationToken)
     {
         var cities = await context.OtodomHousingListings
             .AsNoTracking()
@@ -17,6 +17,7 @@ public class GetOtodomAllCitiesQueryHandler(DatabaseContext context) : IRequestH
             .Distinct()
             .OrderBy(x => x)
             .ToListAsync(cancellationToken);
-        return new List<GetOtodomAllCitiesQueryResponse> { new(cities) };
+
+        return new GetOtodomAllCitiesQueryResponse ( cities );
     }
 }

@@ -2,7 +2,7 @@
 using Hangfire.MissionControl;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.AddOrUpdateOtodomHousingListings;
 using RealEstateAnalyzer.WebScraping.Abstractions;
 using RealEstateAnalyzer.WebScraping.Domain;
 

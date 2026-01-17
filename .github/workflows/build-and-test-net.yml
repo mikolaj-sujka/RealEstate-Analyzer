@@ -9,7 +9,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -22,4 +22,17 @@ jobs:
     - name: Build
       run: dotnet build rea_api/rea_api.sln --no-restore
     - name: Test
-      run: dotnet test rea_api/rea_api.sln --no-build --verbosity normal
+      run: dotnet test rea_api/rea_api.sln --no-build --verbosity normal --collect:"XPlat Code Coverage" --results-directory coverage
+
+    - name: Report coverage summary
+      shell: pwsh
+      run: |
+        dotnet tool install --global dotnet-reportgenerator-globaltool
+        $env:PATH += ";$env:USERPROFILE\.dotnet\tools"
+        reportgenerator -reports:"coverage/**/coverage.cobertura.xml" -targetdir:"coverage-report" -reporttypes:"HtmlSummary"
+
+    - name: Upload coverage artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-html
+        path: coverage-report

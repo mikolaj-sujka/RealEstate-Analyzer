@@ -10,6 +10,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="appsettings.IntegrationTests.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="appsettings.IntegrationTests.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNetCore.HealthChecks.Redis" Version="9.0.0" />
     <PackageReference Include="Azure.Extensions.AspNetCore.Configuration.Secrets" Version="1.4.0" />
     <PackageReference Include="Azure.Identity" Version="1.15.0" />
@@ -39,4 +47,11 @@
     <ProjectReference Include="..\RealEstateAnalyzer.Infrastructure\RealEstateAnalyzer.Infrastructure.csproj" />
     <ProjectReference Include="..\RealEstateAnalyzer.WebScraping\RealEstateAnalyzer.WebScraping.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Update="appsettings.IntegrationTests.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
 </Project>
