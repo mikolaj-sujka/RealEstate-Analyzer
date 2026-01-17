@@ -84,8 +84,7 @@ public class GetGusHousingListingsCustomRangeQueryHandler(
                 l.AveragePricePerSqm.Price,
                 l.FlatsCompleted.Count,
                 l.FlatsSold.Count,
-                l.TotalValueSold.Amount,
-                l.AverageTotalPrice.Amount
+                l.TotalValueSold.Amount, l.AverageTotalPrice.Amount
             ))
             .ToList();
 

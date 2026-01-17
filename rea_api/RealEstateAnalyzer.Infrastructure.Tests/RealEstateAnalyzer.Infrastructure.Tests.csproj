@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.12" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.12" />
+    <PackageReference Include="xunit.extensibility.core" Version="2.9.3" />
+  </ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\RealEstateAnalyzer.Application\RealEstateAnalyzer.Application.csproj" />
+		<ProjectReference Include="..\RealEstateAnalyzer.Api\RealEstateAnalyzer.Api.csproj" />
+	</ItemGroup>
+
+</Project>

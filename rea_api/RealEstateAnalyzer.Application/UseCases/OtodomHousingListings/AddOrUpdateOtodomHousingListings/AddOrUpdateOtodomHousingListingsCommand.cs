@@ -7,7 +7,7 @@ using RealEstateAnalyzer.Domain.ValueObjects;
 using RealEstateAnalyzer.Infrastructure;
 using RealEstateAnalyzer.WebScraping.Domain;
 
-namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings;
+namespace RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.AddOrUpdateOtodomHousingListings;
 
 public record AddOrUpdateOtodomHousingListingsCommand(IReadOnlyList<OtodomOfferRecord> Listings) : IRequest;
 

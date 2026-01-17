@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.13.35913.81
+# Visual Studio Version 18
+VisualStudioVersion = 18.2.11408.102 d18.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Domain", "RealEstateAnalyzer.Domain\RealEstateAnalyzer.Domain.csproj", "{6D6D1AB2-A948-4290-A293-3D15DB0A0893}"
 EndProject
@@ -26,6 +26,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Http", "RealEstateAnalyzer.Infrastructure.Http\RealEstateAnalyzer.Infrastructure.Http.csproj", "{23859139-FA27-401E-3158-B42795681178}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Hangfire", "RealEstateAnalyzer.Infrastructure.Hangfire\RealEstateAnalyzer.Infrastructure.Hangfire.csproj", "{B31CA827-7AC1-A231-7A64-1739A1DDDA60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{A7E2FBBA-F4DB-47F7-81BE-88D9F3ACE0D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Tests.Integration", "RealEstateAnalyzer.Tests.Integration\RealEstateAnalyzer.Tests.Integration.csproj", "{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealEstateAnalyzer.Infrastructure.Tests", "RealEstateAnalyzer.Infrastructure.Tests\RealEstateAnalyzer.Infrastructure.Tests.csproj", "{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -177,9 +183,37 @@ Global
 		{B31CA827-7AC1-A231-7A64-1739A1DDDA60}.Release|x64.Build.0 = Release|Any CPU
 		{B31CA827-7AC1-A231-7A64-1739A1DDDA60}.Release|x86.ActiveCfg = Release|Any CPU
 		{B31CA827-7AC1-A231-7A64-1739A1DDDA60}.Release|x86.Build.0 = Release|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Debug|x64.Build.0 = Debug|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Debug|x86.Build.0 = Debug|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Release|x64.ActiveCfg = Release|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Release|x64.Build.0 = Release|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Release|x86.ActiveCfg = Release|Any CPU
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494}.Release|x86.Build.0 = Release|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Debug|x64.Build.0 = Debug|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Release|x64.ActiveCfg = Release|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Release|x64.Build.0 = Release|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C22BD00A-DE5C-FF98-A7BB-C58148AB7494} = {A7E2FBBA-F4DB-47F7-81BE-88D9F3ACE0D4}
+		{1210FA40-2E25-DC67-39E9-63B0F7CB2CC7} = {A7E2FBBA-F4DB-47F7-81BE-88D9F3ACE0D4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4C4CE7F8-0BD0-4F4A-9E4F-2DC8B4E7B50A}
