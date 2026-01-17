@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RealEstateAnalyzer.Infrastructure.Tests.Configurators;
 using Xunit;
@@ -28,12 +29,13 @@ namespace RealEstateAnalyzer.Infrastructure.Tests
             return Task.CompletedTask;
         }
 
-        public Task DisposeAsync()
+        public async Task DisposeAsync()
         {
+            await CleanupDatabaseAsync();
+
             _arrangeScope.Dispose();
             _assertScope.Dispose();
-            _factory.Dispose();
-            return Task.CompletedTask;
+            await _factory.DisposeAsync();
         }
 
         protected void Arrange_Database(Action<DatabaseContext> arrange)
@@ -41,6 +43,22 @@ namespace RealEstateAnalyzer.Infrastructure.Tests
             var db = _arrangeScope.ServiceProvider.GetRequiredService<DatabaseContext>();
             arrange(db);
             db.SaveChanges();
+        }
+
+        private async Task CleanupDatabaseAsync()
+        {
+            try
+            {
+                using var scope = _factory.Services.CreateScope();
+                var db = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+                await db.OtodomHousingListings.ExecuteDeleteAsync();
+                await db.GusHousingListings.ExecuteDeleteAsync();
+            }
+            catch
+            {
+                // ignored
+            }
         }
     }
 }

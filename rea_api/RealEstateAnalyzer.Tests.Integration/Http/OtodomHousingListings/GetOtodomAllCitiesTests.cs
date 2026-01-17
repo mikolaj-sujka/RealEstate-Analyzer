@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using RealEstateAnalyzer.Domain.Entities;
+using RealEstateAnalyzer.Application.UseCases.OtodomHousingListings.GetOtodomAllCities;
 using RealEstateAnalyzer.Infrastructure.Tests;
 using RealEstateAnalyzer.Infrastructure.Tests.Configurators;
 using RealEstateAnalyzer.Infrastructure.Tests.Extensions;
@@ -12,7 +12,7 @@ namespace RealEstateAnalyzer.Tests.Integration.Http.OtodomHousingListings
     {
             
         [Fact]
-        public async Task ReturnsDistinctCitiesOrderedAscending()
+        public async Task GetAllCitiesIfExists_ReturnAllCities()
         {
             // Arrange
             Arrange_Database(db =>
@@ -21,10 +21,12 @@ namespace RealEstateAnalyzer.Tests.Integration.Http.OtodomHousingListings
             });
 
             // Act
-            var response = await Client.GetOkResponseAsync<OtodomHousingListing>(ArrangeUrl());
+            var response = await Client.GetOkResponseAsync<GetOtodomAllCitiesQueryResponse>(ArrangeUrl());
 
             // Assert
             response.Should().NotBeNull();
+            response.Cities.Should().HaveCount(1);
+            response.Cities.Should().Contain("Warszawa");
         }
 
         private static string ArrangeUrl()
