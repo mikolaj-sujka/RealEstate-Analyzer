@@ -5,8 +5,9 @@
         public const string CityNameInvalidCharacters = "City name must contain only letters (no digits) and may include spaces or hyphens.";
         public static readonly string CityNameLengthOutOfRange = $"City name must be at most {ValidationConstants.MaxCityNameLength} characters and at least, {ValidationConstants.MinCityNameLength}.";
 
-        public static readonly string YearsBackOutOfRange = $"Years back must be between {ValidationConstants.MinYearsBack} and {ValidationConstants.MaxYearsBack}.";
         public const string YearsFromGreaterThanYearsTo = "Years From must be less than or equal to Years To.";
+
+        public static readonly string YearsBackOutOfRange = $"Years Back must be between current year and {ValidationConstants.MaxYearsBack}.";
 
         public const string MonthsToGreaterThanMonthsFrom = "Months From must be less than or equal to Months To.";
         public const string MonthOutOfRange = "Month must be between 1 and 12.";

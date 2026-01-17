@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net;
 using FluentAssertions;
-using RealEstateAnalyzer.Api.Extensions.ApiErrorExtensions;
+using RealEstateAnalyzer.Application.Extensions.ApiErrorExtensions;
 using Xunit.Sdk;
 
 namespace RealEstateAnalyzer.Infrastructure.Tests.Extensions

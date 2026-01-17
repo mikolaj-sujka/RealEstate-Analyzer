@@ -59,11 +59,11 @@ namespace RealEstateAnalyzer.Application.Validators
         }
 
         public static IRuleBuilderOptions<T, int> YearsBackCorrectConvention<T>(
-            this IRuleBuilder<T, int> ruleBuilder)
+            this IRuleBuilder<T, int> ruleBuilder, int currentYear)
         {
             return ruleBuilder
                 .GreaterThan(ValidationConstants.MaxYearsBack)
-                .LessThanOrEqualTo(ValidationConstants.MinYearsBack)
+                .LessThanOrEqualTo(currentYear)
                 .WithMessage(ValidationErrorMessages.YearsBackOutOfRange);
         }
 

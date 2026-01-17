@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using RealEstateAnalyzer.Application.Abstractions;
 using RealEstateAnalyzer.Application.UseCases.GusHousingListings.GetGusHousingListingsRecentYears;
 using RealEstateAnalyzer.Application.Validators;
 using RealEstateAnalyzer.Infrastructure;
@@ -106,7 +107,7 @@ public class GetGusHousingListingsCustomRangeQueryHandler(
 
 public class GetGusHousingListingsCustomRangeQueryValidator : AbstractValidator<GetGusHousingListingsCustomRangeQuery>
 {
-    public GetGusHousingListingsCustomRangeQueryValidator()
+    public GetGusHousingListingsCustomRangeQueryValidator(IDateTimeProvider dateTimeProvider)
     {
         RuleFor(x => x.CityName)
             .CityNameCorrectConvention();
@@ -116,7 +117,7 @@ public class GetGusHousingListingsCustomRangeQueryValidator : AbstractValidator<
             .WithMessage(ValidationErrorMessages.YearsFromGreaterThanYearsTo);
 
         RuleFor(x => (int)x.YearsFrom)
-            .YearsBackCorrectConvention();
+            .YearsBackCorrectConvention(dateTimeProvider.CurrentYearUtc);
 
         RuleFor(x => x.MonthFrom)
             .LessThan(x => x.MonthTo)

@@ -37,7 +37,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "pipelines", "pipelines", "{
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\build-and-deploy-azure.yml = ..\.github\workflows\build-and-deploy-azure.yml
 		..\.github\workflows\build-and-test-net.yml = ..\.github\workflows\build-and-test-net.yml
-		..\.github\workflows\build-and-test-next.yml = ..\.github\workflows\build-and-test-next.yml
 	EndProjectSection
 EndProject
 Global

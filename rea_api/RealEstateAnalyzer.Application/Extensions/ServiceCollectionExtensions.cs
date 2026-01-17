@@ -27,6 +27,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
         services.AddScoped<IFileParser<GusHousingListing>, CsvGusHousingListingParser>();
+        services.AddSingleton<IDateTimeProvider, SystemDateTimeProviderService>();
         services.AddScoped<IRedisCacheListingsService, ListingCacheService>();
         services.AddScoped<ISynchronizationJob, SynchronizationJob>();
         services.AddValidatorsFromAssembly(typeof(GetGusHousingListingsFromCsvQuery).Assembly);

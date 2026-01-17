@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
+using RealEstateAnalyzer.Application.Validators.ValidationExtensions;
+using ValidationException = RealEstateAnalyzer.Application.Validators.ValidationExtensions.ValidationException;
 
 namespace RealEstateAnalyzer.Application.Behaviors
 {
@@ -9,6 +11,8 @@ namespace RealEstateAnalyzer.Application.Behaviors
         : IPipelineBehavior<TRequest, TResponse>
         where TRequest : notnull
     {
+        private const string DefaultErrorCode = "VALIDATION_ERROR";
+
         public async Task<TResponse> Handle(
             TRequest request,
             RequestHandlerDelegate<TResponse> next,
@@ -28,7 +32,21 @@ namespace RealEstateAnalyzer.Application.Behaviors
                 .ToList();
 
             if (failures.Count != 0)
-                throw new ValidationException(failures);
+            {
+                var ex = new ValidationException();
+
+                foreach (var f in failures)
+                {
+                    var errorCode = string.IsNullOrWhiteSpace(f.ErrorCode) ? DefaultErrorCode : f.ErrorCode;
+
+                    ex.ValidationErrors.Add(new ValidationError(
+                        errorCode: errorCode,
+                        errorMessage: f.ErrorMessage,
+                        fieldName: f.PropertyName));
+                }
+
+                throw ex;
+            }
 
             return await next(cancellationToken);
         }

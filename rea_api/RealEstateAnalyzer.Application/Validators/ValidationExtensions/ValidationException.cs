@@ -1,4 +1,4 @@
-﻿namespace RealEstateAnalyzer.Api.Extensions.ValidationExtensions
+﻿namespace RealEstateAnalyzer.Application.Validators.ValidationExtensions
 {
     public class ValidationException : Exception
     {
